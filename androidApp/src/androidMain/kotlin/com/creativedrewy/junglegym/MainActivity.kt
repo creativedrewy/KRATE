@@ -1,4 +1,4 @@
-package com.myapplication
+package com.creativedrewy.junglegym
 
 import MainView
 import android.os.Bundle
