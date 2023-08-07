@@ -3,6 +3,8 @@ plugins {
     kotlin("native.cocoapods")
     id("com.android.library")
     id("org.jetbrains.compose")
+
+    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
 }
 
 kotlin {
@@ -31,10 +33,20 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
+                implementation(compose.animation)
+
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+
+                implementation("com.moriatsushi.koject:koject-core:1.3.0")
+                implementation("com.moriatsushi.koject:koject-compose-core:1.3.0")
+
+                val voyagerVersion = "1.0.0-rc06"
+                implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
+                implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
             }
         }
+
         val androidMain by getting {
             dependencies {
                 api("androidx.activity:activity-compose:1.6.1")
@@ -42,6 +54,7 @@ kotlin {
                 api("androidx.core:core-ktx:1.9.0")
             }
         }
+
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
@@ -52,6 +65,15 @@ kotlin {
             iosSimulatorArm64Main.dependsOn(this)
         }
     }
+}
+
+dependencies {
+    val processor = "com.moriatsushi.koject:koject-processor-app:1.3.0"
+
+    add("kspAndroid", processor)
+    add("kspIosX64", processor)
+    add("kspIosArm64", processor)
+    add("kspIosSimulatorArm64", processor)
 }
 
 android {
@@ -66,10 +88,12 @@ android {
         minSdk = (findProperty("android.minSdk") as String).toInt()
         targetSdk = (findProperty("android.targetSdk") as String).toInt()
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlin {
         jvmToolchain(11)
     }
