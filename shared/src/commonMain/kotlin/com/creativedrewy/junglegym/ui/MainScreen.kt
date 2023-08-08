@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.creativedrewy.junglegym.MainViewModel
+import com.creativedrewy.junglegym.viewmodel.MainViewModel
 import com.moriatsushi.koject.compose.rememberInject
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource

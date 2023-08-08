@@ -1,4 +1,4 @@
-package com.creativedrewy.junglegym
+package com.creativedrewy.junglegym.repository
 
 import com.moriatsushi.koject.Provides
 
@@ -10,5 +10,3 @@ class PlatformRepository {
     }
 
 }
-
-expect fun getPlatformName(): String
