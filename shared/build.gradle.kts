@@ -1,10 +1,31 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
     id("org.jetbrains.compose")
+    id("kotlinx-serialization")
 
+    id("com.github.gmazzo.buildconfig")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
+    id("de.jensklingenberg.ktorfit") version "1.0.0"
+}
+
+val ktorVersion = "2.3.2"
+val ktorfitVersion = "1.5.0"
+
+configure<de.jensklingenberg.ktorfit.gradle.KtorfitGradleConfiguration> {
+    version = ktorfitVersion
+}
+
+buildConfig {
+    val getImgApiKey: String = gradleLocalProperties(rootDir).getProperty("getImgApiKey")
+
+    className("ApiKeys")
+    packageName("com.creativedrewy.junglegym")
+
+    buildConfigField("String", "GETIMG_API_KEY", "\"$getImgApiKey\"")
 }
 
 kotlin {
@@ -44,6 +65,14 @@ kotlin {
                 val voyagerVersion = "1.0.0-rc06"
                 implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
                 implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
+
+                implementation("de.jensklingenberg.ktorfit:ktorfit-lib:$ktorfitVersion")
+
+                implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+
+                implementation("co.touchlab:kermit:2.0.0-RC5")
             }
         }
 
@@ -74,6 +103,14 @@ dependencies {
     add("kspIosX64", processor)
     add("kspIosArm64", processor)
     add("kspIosSimulatorArm64", processor)
+
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+
+    add("kspCommonMainMetadata", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
+    add("kspAndroid", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
+    add("kspIosX64", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
+    add("kspIosSimulatorArm64", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
 }
 
 android {

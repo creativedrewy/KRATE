@@ -2,6 +2,7 @@ package com.creativedrewy.junglegym.viewmodel
 
 import com.creativedrewy.junglegym.coroutine.Dispatcher
 import com.creativedrewy.junglegym.coroutine.Dispatchers
+import com.creativedrewy.junglegym.repository.GetImgRepository
 import com.creativedrewy.junglegym.repository.PlatformRepository
 import com.moriatsushi.koject.Provides
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 @Provides
 class MainViewModel(
     private val repository: PlatformRepository,
+    private val getImgRepository: GetImgRepository,
     @Dispatcher(Dispatchers.Main)
     private val dispatcher: CoroutineDispatcher
 ) {
@@ -33,6 +35,14 @@ class MainViewModel(
             _userString.update {
                 "This came from ViewModel: ${repository.getPlatformString()}"
             }
+
+            generateImageFromPrompt()
+        }
+    }
+
+    fun generateImageFromPrompt() {
+        coroutineScope.launch {
+            getImgRepository.generateImage("A cat")
         }
     }
 }
