@@ -1,3 +1,5 @@
+package com.creativedrewy.junglegym
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
@@ -19,7 +21,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.transitions.SlideTransition
-import com.creativedrewy.junglegym.ScreenTwo
 import com.moriatsushi.koject.Koject
 import com.moriatsushi.koject.compose.rememberInject
 import com.moriatsushi.koject.start

@@ -1,5 +1,5 @@
-import com.creativedrewy.junglegym.Dispatcher
-import com.creativedrewy.junglegym.Dispatchers
+package com.creativedrewy.junglegym
+
 import com.moriatsushi.koject.Provides
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope

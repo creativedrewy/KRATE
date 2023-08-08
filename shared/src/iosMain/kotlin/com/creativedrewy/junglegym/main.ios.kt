@@ -1,3 +1,5 @@
+package com.creativedrewy.junglegym
+
 import androidx.compose.ui.window.ComposeUIViewController
 
 actual fun getPlatformName(): String = "iOS"
