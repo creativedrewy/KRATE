@@ -1,4 +1,4 @@
-package com.creativedrewy.test
+package com.creativedrewy.junglegym
 
 import com.moriatsushi.koject.Provides
 import kotlinx.coroutines.CoroutineDispatcher

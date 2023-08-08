@@ -19,7 +19,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.transitions.SlideTransition
-import com.creativedrewy.test.ScreenTwo
+import com.creativedrewy.junglegym.ScreenTwo
 import com.moriatsushi.koject.Koject
 import com.moriatsushi.koject.compose.rememberInject
 import com.moriatsushi.koject.start
