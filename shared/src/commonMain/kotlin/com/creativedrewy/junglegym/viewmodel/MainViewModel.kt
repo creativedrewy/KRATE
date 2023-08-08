@@ -1,7 +1,7 @@
 package com.creativedrewy.junglegym.viewmodel
 
-import com.creativedrewy.junglegym.Dispatcher
-import com.creativedrewy.junglegym.Dispatchers
+import com.creativedrewy.junglegym.coroutine.Dispatcher
+import com.creativedrewy.junglegym.coroutine.Dispatchers
 import com.creativedrewy.junglegym.repository.PlatformRepository
 import com.moriatsushi.koject.Provides
 import kotlinx.coroutines.CoroutineDispatcher

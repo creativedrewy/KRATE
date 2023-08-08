@@ -1,4 +1,4 @@
-package com.creativedrewy.junglegym
+package com.creativedrewy.junglegym.coroutine
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
