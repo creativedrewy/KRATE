@@ -57,14 +57,11 @@ class MainViewModel(
 
             val decodedbytes = Base64.decode(imgString)
 
-//            val test = ImageBitmap(512, 512)
-//            test.readPixels(byteArrayToIntArray(decodedbytes))
-//
-//            _viewState.update {
-//                it.copy(
-//                    bitmap = test
-//                )
-//            }
+            _viewState.update {
+                it.copy(
+                    bitmap = null
+                )
+            }
         }
     }
 }
