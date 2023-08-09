@@ -3,6 +3,7 @@ package com.creativedrewy.junglegym.viewmodel
 import androidx.compose.ui.graphics.ImageBitmap
 import com.creativedrewy.junglegym.coroutine.Dispatcher
 import com.creativedrewy.junglegym.coroutine.Dispatchers
+import com.creativedrewy.junglegym.graphics.toImageBitmap
 import com.creativedrewy.junglegym.repository.GetImgRepository
 import com.creativedrewy.junglegym.repository.PlatformRepository
 import com.moriatsushi.koject.Provides
@@ -59,7 +60,7 @@ class MainViewModel(
 
             _viewState.update {
                 it.copy(
-                    bitmap = null
+                    bitmap = decodedbytes.toImageBitmap()
                 )
             }
         }
