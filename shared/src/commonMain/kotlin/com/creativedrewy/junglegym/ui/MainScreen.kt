@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.creativedrewy.junglegym.viewmodel.MainViewModel
+import com.creativedrewy.junglegym.viewmodel.ViewState
 import com.moriatsushi.koject.compose.rememberInject
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
@@ -69,15 +71,21 @@ fun MainContents(
             Text("Generate Image")
         }
 
-        state.bitmap?.let { bmp ->
-            Image(
-                modifier = Modifier
-                    .padding(
-                        top = 16.dp
-                    ),
-                bitmap = bmp,
-                contentDescription = ""
-            )
+        when (state) {
+            is ViewState.Loading -> {
+                CircularProgressIndicator()
+            }
+            is ViewState.Generated -> {
+                Image(
+                    modifier = Modifier
+                        .padding(
+                            top = 16.dp
+                        ),
+                    bitmap = (state as ViewState.Generated).bitmap,
+                    contentDescription = ""
+                )
+            }
+            else -> {}
         }
     }
 }

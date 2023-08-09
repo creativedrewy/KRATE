@@ -18,10 +18,13 @@ import kotlinx.coroutines.launch
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-data class ViewState(
-    val osString: String,
-    val bitmap: ImageBitmap? = null
-)
+sealed class ViewState() {
+    data object Default : ViewState()
+    data object Loading : ViewState()
+    data class Generated(
+        val bitmap: ImageBitmap
+    ): ViewState()
+}
 
 @Provides
 class MainViewModel(
@@ -35,19 +38,23 @@ class MainViewModel(
     private val coroutineScope: CoroutineScope
         get() = CoroutineScope(job + dispatcher)
 
-    private val _viewState: MutableStateFlow<ViewState> = MutableStateFlow(ViewState("OS will show here"))
+    private val _viewState: MutableStateFlow<ViewState> = MutableStateFlow(ViewState.Default)
 
     val viewState: StateFlow<ViewState> = _viewState.asStateFlow()
 
     @OptIn(ExperimentalEncodingApi::class)
     fun generateImageFromPrompt(prompt: String) {
         coroutineScope.launch {
+            _viewState.update {
+                ViewState.Loading
+            }
+
             val imgString = getImgRepository.generateImage(prompt)
 
             val decodedbytes = Base64.decode(imgString)
 
             _viewState.update {
-                it.copy(
+                ViewState.Generated(
                     bitmap = decodedbytes.toImageBitmap()
                 )
             }
