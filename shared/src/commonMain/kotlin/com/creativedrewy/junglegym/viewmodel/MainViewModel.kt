@@ -39,22 +39,10 @@ class MainViewModel(
 
     val viewState: StateFlow<ViewState> = _viewState.asStateFlow()
 
-    fun kickThingsOff() {
-        coroutineScope.launch {
-            _viewState.update {
-                it.copy(
-                    osString = "This came from ViewModel: ${repository.getPlatformString()}"
-                )
-            }
-
-            generateImageFromPrompt()
-        }
-    }
-
     @OptIn(ExperimentalEncodingApi::class)
-    fun generateImageFromPrompt() {
+    fun generateImageFromPrompt(prompt: String) {
         coroutineScope.launch {
-            val imgString = getImgRepository.generateImage("retro spaceship")
+            val imgString = getImgRepository.generateImage(prompt)
 
             val decodedbytes = Base64.decode(imgString)
 

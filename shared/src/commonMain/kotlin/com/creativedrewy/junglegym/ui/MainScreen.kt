@@ -3,6 +3,7 @@ package com.creativedrewy.junglegym.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -14,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -34,8 +36,7 @@ object MainScreen: Screen {
 fun MainContents(
     viewModel: MainViewModel = rememberInject()
 ) {
-    var showImage by remember { mutableStateOf(false) }
-    var greetingText by remember { mutableStateOf("") }
+    var promptText by remember { mutableStateOf("") }
 
     val state by viewModel.viewState.collectAsState()
     val navigator = LocalNavigator.currentOrThrow
@@ -45,28 +46,35 @@ fun MainContents(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(onClick = {
-            showImage = !showImage
-
-            viewModel.kickThingsOff()
-        }) {
-            Text(state.osString)
-        }
-
-        Button(onClick = {
             navigator.push(ScreenTwo)
         }) {
-            Text("Go to Next Screen")
+            Text("Navigate to Next Screen")
         }
 
         TextField(
-            greetingText, onValueChange = {
-                greetingText = it
+            value = promptText,
+            label = {
+                Text("Prompt (e.g. 'A dog wearing a hat')")
+            },
+            onValueChange = {
+                promptText = it
             }
         )
 
+        Button(onClick = {
+            if (promptText.isNotBlank()) {
+                viewModel.generateImageFromPrompt(promptText)
+            }
+        }) {
+            Text("Generate Image")
+        }
+
         state.bitmap?.let { bmp ->
             Image(
-                modifier = Modifier,
+                modifier = Modifier
+                    .padding(
+                        top = 16.dp
+                    ),
                 bitmap = bmp,
                 contentDescription = ""
             )
