@@ -17,6 +17,11 @@ import kotlinx.coroutines.launch
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
+data class ViewState(
+    val osString: String,
+    val bitmap: ImageBitmap? = null
+)
+
 @Provides
 class MainViewModel(
     private val repository: PlatformRepository,
@@ -29,14 +34,16 @@ class MainViewModel(
     private val coroutineScope: CoroutineScope
         get() = CoroutineScope(job + dispatcher)
 
-    private val _userString: MutableStateFlow<String> = MutableStateFlow("This is some text")
+    private val _viewState: MutableStateFlow<ViewState> = MutableStateFlow(ViewState("OS will show here"))
 
-    val list: StateFlow<String> = _userString.asStateFlow()
+    val viewState: StateFlow<ViewState> = _viewState.asStateFlow()
 
     fun doSomething() {
         coroutineScope.launch {
-            _userString.update {
-                "This came from ViewModel: ${repository.getPlatformString()}"
+            _viewState.update {
+                it.copy(
+                    osString = "This came from ViewModel: ${repository.getPlatformString()}"
+                )
             }
 
             generateImageFromPrompt()
@@ -50,16 +57,14 @@ class MainViewModel(
 
             val decodedbytes = Base64.decode(imgString)
 
-            val test = ImageBitmap(512, 512)
-            test.readPixels(byteArrayToIntArray(decodedbytes))
+//            val test = ImageBitmap(512, 512)
+//            test.readPixels(byteArrayToIntArray(decodedbytes))
+//
+//            _viewState.update {
+//                it.copy(
+//                    bitmap = test
+//                )
+//            }
         }
-    }
-
-    private fun byteArrayToIntArray(byteArray: ByteArray): IntArray {
-        val intArray = IntArray(byteArray.size)
-        for (i in byteArray.indices) {
-            intArray[i] = byteArray[i].toInt() and 0xFF
-        }
-        return intArray
     }
 }

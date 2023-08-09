@@ -19,7 +19,6 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.creativedrewy.junglegym.viewmodel.MainViewModel
 import com.moriatsushi.koject.compose.rememberInject
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 
 object MainScreen: Screen {
 
@@ -35,7 +34,7 @@ fun MainContents(
     viewModel: MainViewModel = rememberInject()
 ) {
     var showImage by remember { mutableStateOf(false) }
-    val state by viewModel.list.collectAsState()
+    val state by viewModel.viewState.collectAsState()
 
     val navigator = LocalNavigator.currentOrThrow
 
@@ -48,7 +47,7 @@ fun MainContents(
 
             viewModel.doSomething()
         }) {
-            Text(state)
+            Text(state.osString)
         }
 
         Button(onClick = {
@@ -57,12 +56,20 @@ fun MainContents(
             Text("Go to Next Screen")
         }
 
+        state.bitmap?.let { bmp ->
+            Image(
+                modifier = Modifier,
+                bitmap = bmp,
+                contentDescription = ""
+            )
+        }
+
 //        AnimatedVisibility(showImage) {
-        Image(
-            modifier = Modifier,
-            painter = painterResource("compose-multiplatform.xml"),
-            contentDescription = ""
-        )
+//        Image(
+//            modifier = Modifier,
+//            painter = painterResource("compose-multiplatform.xml"),
+//            contentDescription = ""
+//        )
 //        }
     }
 }

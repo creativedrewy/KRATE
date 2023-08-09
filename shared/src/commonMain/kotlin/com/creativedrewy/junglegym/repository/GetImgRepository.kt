@@ -1,5 +1,6 @@
 package com.creativedrewy.junglegym.repository
 
+import com.creativedrewy.junglegym.ApiKeys
 import com.creativedrewy.junglegym.endpoint.GetImgEndpoints
 import com.creativedrewy.junglegym.endpoint.GetImgRequest
 import com.moriatsushi.koject.Provides
@@ -36,9 +37,12 @@ class GetImgRepository {
 
     @OptIn(ExperimentalEncodingApi::class)
     suspend fun generateImage(textPrompt: String):String {
-        val request = GetImgRequest(prompt = textPrompt)
+        val request = GetImgRequest(
+            prompt = textPrompt,
+//            output_format = "bitmap"
+        )
 
-//        val token = "Bearer ${ApiKeys.GETIMG_API_KEY}"
+        val token = "Bearer ${ApiKeys.GETIMG_API_KEY}"
 //
         //TODO: Need to try/catch this, as it returns totally diff obj on err
 //        val result = getImgEndpoints.textToImage(token, request)
