@@ -1,6 +1,5 @@
 package com.creativedrewy.junglegym.ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -58,11 +57,12 @@ fun MainContents(
             Text("Go to Next Screen")
         }
 
-        AnimatedVisibility(showImage) {
-            Image(
-                painterResource("compose-multiplatform.xml"),
-                null
-            )
-        }
+//        AnimatedVisibility(showImage) {
+        Image(
+            modifier = Modifier,
+            painter = painterResource("compose-multiplatform.xml"),
+            contentDescription = ""
+        )
+//        }
     }
 }
