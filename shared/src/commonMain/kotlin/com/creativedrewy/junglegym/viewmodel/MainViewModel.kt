@@ -39,7 +39,7 @@ class MainViewModel(
 
     val viewState: StateFlow<ViewState> = _viewState.asStateFlow()
 
-    fun doSomething() {
+    fun kickThingsOff() {
         coroutineScope.launch {
             _viewState.update {
                 it.copy(
@@ -54,7 +54,7 @@ class MainViewModel(
     @OptIn(ExperimentalEncodingApi::class)
     fun generateImageFromPrompt() {
         coroutineScope.launch {
-            val imgString = getImgRepository.generateImage("A cat")
+            val imgString = getImgRepository.generateImage("retro spaceship")
 
             val decodedbytes = Base64.decode(imgString)
 

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,8 +35,9 @@ fun MainContents(
     viewModel: MainViewModel = rememberInject()
 ) {
     var showImage by remember { mutableStateOf(false) }
-    val state by viewModel.viewState.collectAsState()
+    var greetingText by remember { mutableStateOf("") }
 
+    val state by viewModel.viewState.collectAsState()
     val navigator = LocalNavigator.currentOrThrow
 
     Column(
@@ -45,7 +47,7 @@ fun MainContents(
         Button(onClick = {
             showImage = !showImage
 
-            viewModel.doSomething()
+            viewModel.kickThingsOff()
         }) {
             Text(state.osString)
         }
@@ -56,6 +58,12 @@ fun MainContents(
             Text("Go to Next Screen")
         }
 
+        TextField(
+            greetingText, onValueChange = {
+                greetingText = it
+            }
+        )
+
         state.bitmap?.let { bmp ->
             Image(
                 modifier = Modifier,
@@ -63,13 +71,5 @@ fun MainContents(
                 contentDescription = ""
             )
         }
-
-//        AnimatedVisibility(showImage) {
-//        Image(
-//            modifier = Modifier,
-//            painter = painterResource("compose-multiplatform.xml"),
-//            contentDescription = ""
-//        )
-//        }
     }
 }
