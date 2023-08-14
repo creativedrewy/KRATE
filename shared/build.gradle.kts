@@ -55,8 +55,7 @@ kotlin {
             dependencies {
                 implementation(project(":profileScreen"))
 
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-                implementation("org.jetbrains.skiko:skiko:0.7.63")
+                implementation(libs.kotlinx.coroutines.core)
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -64,33 +63,31 @@ kotlin {
                 implementation(compose.animation)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
-                implementation("com.moriatsushi.koject:koject-core:1.3.0")
-                implementation("com.moriatsushi.koject:koject-compose-core:1.3.0")
+                implementation(libs.koject.core)
+                implementation(libs.koject.compose.core)
 
-                val voyagerVersion = "1.0.0-rc06"
-                implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
-                implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
+                implementation(libs.voyager.navigator)
+                implementation(libs.voyager.transitions)
 
-                implementation("de.jensklingenberg.ktorfit:ktorfit-lib:$ktorfitVersion")
+                implementation(libs.ktorfit.lib)
 
-                implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                implementation(libs.ktor.client.serialization)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
 
-                implementation("co.touchlab:kermit:2.0.0-RC5")
+                implementation(libs.kermit)
             }
         }
 
         val androidMain by getting {
             dependsOn(commonMain)
             dependencies {
-                api("androidx.activity:activity-compose:1.6.1")
-                api("androidx.appcompat:appcompat:1.6.1")
-                api("androidx.core:core-ktx:1.9.0")
+                api(libs.activity.compose)
+                api(libs.appcompat)
+                api(libs.core.ktx)
             }
         }
 
@@ -114,10 +111,10 @@ dependencies {
     add("kspIosArm64", processor)
     add("kspIosSimulatorArm64", processor)
 
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation(libs.ktor.ktor.client.core)
+    implementation(libs.ktor.ktor.client.cio)
 
-    implementation("com.squareup.okio:okio:3.5.0")
+    implementation(libs.okio)
 
     add("kspCommonMainMetadata", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
     add("kspAndroid", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
