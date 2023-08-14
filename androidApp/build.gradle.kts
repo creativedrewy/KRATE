@@ -22,7 +22,7 @@ android {
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 
     defaultConfig {
-        applicationId = "com.solanamobile.krate.MyApplication"
+        applicationId = "com.solanamobile.krate.KrateApplication"
         minSdk = (findProperty("android.minSdk") as String).toInt()
         targetSdk = (findProperty("android.targetSdk") as String).toInt()
         versionCode = 1
