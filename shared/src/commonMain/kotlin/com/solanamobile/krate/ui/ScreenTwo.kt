@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.solanamobile.krate.screen.Greeting
 
 object ScreenTwo: Screen {
 
@@ -25,12 +26,14 @@ object ScreenTwo: Screen {
         ) {
             val navigator = LocalNavigator.currentOrThrow
 
+            val greeting = Greeting()
+
             Button(
                 onClick = {
                     navigator.pop()
                 }
             ) {
-                Text("Hello World")
+                Text(greeting.greet())
             }
         }
     }
