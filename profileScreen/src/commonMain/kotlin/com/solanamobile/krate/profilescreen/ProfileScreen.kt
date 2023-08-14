@@ -1,4 +1,4 @@
-package com.solanamobile.krate.ui
+package com.solanamobile.krate.profilescreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,28 +12,25 @@ import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.solanamobile.krate.profilescreen.Greeting
 
-object ScreenTwo: Screen {
+object ProfileScreen: Screen {
 
     @Composable
     override fun Content() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Blue),
+                .background(Color.Green),
             contentAlignment = Alignment.Center
         ) {
             val navigator = LocalNavigator.currentOrThrow
-
-            val greeting = Greeting()
 
             Button(
                 onClick = {
                     navigator.pop()
                 }
             ) {
-                Text(greeting.greet())
+                Text("Hello World")
             }
         }
     }

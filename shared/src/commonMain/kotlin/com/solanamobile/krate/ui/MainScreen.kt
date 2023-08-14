@@ -21,6 +21,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.moriatsushi.koject.compose.rememberInject
+import com.solanamobile.krate.profilescreen.ProfileScreen
 import com.solanamobile.krate.viewmodel.MainViewModel
 import com.solanamobile.krate.viewmodel.ViewState
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -48,7 +49,7 @@ fun MainContents(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(onClick = {
-            navigator.push(ScreenTwo)
+            navigator.push(ProfileScreen)
         }) {
             Text("Navigate to Next Screen")
         }
