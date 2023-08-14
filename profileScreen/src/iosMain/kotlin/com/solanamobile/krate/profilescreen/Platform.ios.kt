@@ -1,4 +1,4 @@
-package com.solanamobile.krate.screen
+package com.solanamobile.krate.profilescreen
 
 import platform.UIKit.UIDevice
 

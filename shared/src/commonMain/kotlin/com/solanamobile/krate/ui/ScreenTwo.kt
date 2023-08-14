@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.solanamobile.krate.screen.Greeting
+import com.solanamobile.krate.profilescreen.Greeting
 
 object ScreenTwo: Screen {
 

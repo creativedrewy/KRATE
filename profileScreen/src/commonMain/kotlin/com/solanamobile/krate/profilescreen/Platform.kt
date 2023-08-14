@@ -1,4 +1,4 @@
-package com.solanamobile.krate.screen
+package com.solanamobile.krate.profilescreen
 
 interface Platform {
     val name: String

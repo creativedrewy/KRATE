@@ -1,4 +1,4 @@
-package com.solanamobile.krate.screen
+package com.solanamobile.krate.profilescreen
 
 class AndroidPlatform : Platform {
     override val name: String = "Android ${android.os.Build.VERSION.SDK_INT}"
