@@ -23,7 +23,7 @@ buildConfig {
     val getImgApiKey: String = gradleLocalProperties(rootDir).getProperty("getImgApiKey")
 
     className("ApiKeys")
-    packageName("com.creativedrewy.junglegym")
+    packageName("com.solanamobile.krate")
 
     buildConfigField("String", "GETIMG_API_KEY", "\"$getImgApiKey\"")
 }
@@ -125,7 +125,7 @@ dependencies {
 
 android {
     compileSdk = (findProperty("android.compileSdk") as String).toInt()
-    namespace = "com.creativedrewy.junglegym"
+    namespace = "com.solanamobile.krate"
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
