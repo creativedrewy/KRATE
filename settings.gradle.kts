@@ -1,3 +1,6 @@
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "JungleGym"
 
 include(":androidApp")

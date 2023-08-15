@@ -21,6 +21,7 @@ kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
 koject-core = { group = "com.moriatsushi.koject", name = "koject-core", version.ref = "koject" }
 koject-compose-core = { group = "com.moriatsushi.koject", name = "koject-compose-core", version.ref = "koject" }
+koject-processor-lib = { group = "com.moriatsushi.koject", name = "koject-processor-lib", version.ref = "koject" }
 
 ktor-ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }

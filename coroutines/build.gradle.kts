@@ -58,12 +58,10 @@ kotlin {
 }
 
 dependencies {
-    val processor = "com.moriatsushi.koject:koject-processor-lib:1.3.0"
-
-    add("kspAndroid", processor)
-    add("kspIosX64", processor)
-    add("kspIosArm64", processor)
-    add("kspIosSimulatorArm64", processor)
+    add("kspAndroid", libs.koject.processor.lib)
+    add("kspIosX64", libs.koject.processor.lib)
+    add("kspIosArm64", libs.koject.processor.lib)
+    add("kspIosSimulatorArm64", libs.koject.processor.lib)
 }
 
 android {
