@@ -54,6 +54,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":profileScreen"))
+                api(project(":coroutines"))
 
                 implementation(libs.kotlinx.coroutines.core)
 
@@ -85,6 +86,8 @@ kotlin {
         val androidMain by getting {
             dependsOn(commonMain)
             dependencies {
+
+
                 api(libs.activity.compose)
                 api(libs.appcompat)
                 api(libs.core.ktx)

@@ -2,8 +2,8 @@ package com.solanamobile.krate.viewmodel
 
 import androidx.compose.ui.graphics.ImageBitmap
 import com.moriatsushi.koject.Provides
-import com.solanamobile.krate.coroutine.Dispatcher
-import com.solanamobile.krate.coroutine.Dispatchers
+import com.solanamobile.krate.coroutines.Dispatcher
+import com.solanamobile.krate.coroutines.Dispatchers
 import com.solanamobile.krate.graphics.toImageBitmap
 import com.solanamobile.krate.repository.GetImgRepository
 import com.solanamobile.krate.repository.PlatformRepository

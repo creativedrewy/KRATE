@@ -1,4 +1,4 @@
-package com.solanamobile.krate.coroutine
+package com.solanamobile.krate.coroutines
 
 import com.moriatsushi.koject.Provides
 import kotlinx.coroutines.CoroutineDispatcher
