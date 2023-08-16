@@ -4,11 +4,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.moriatsushi.koject.Provides
-import com.solanamobile.krate.coroutines.Dispatcher
-import com.solanamobile.krate.coroutines.Dispatchers
 import com.solanamobile.krate.createscreen.graphics.toImageBitmap
 import com.solanamobile.krate.createscreen.repository.GetImgRepository
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.io.encoding.Base64
@@ -28,8 +25,6 @@ sealed class ViewState() {
 @Provides
 class CreateScreenViewModel(
     private val getImgRepository: GetImgRepository,
-    @Dispatcher(Dispatchers.Main)
-    private val dispatcher: CoroutineDispatcher
 ): StateScreenModel<ViewState>(ViewState.Default) {
 
     @OptIn(ExperimentalEncodingApi::class)
