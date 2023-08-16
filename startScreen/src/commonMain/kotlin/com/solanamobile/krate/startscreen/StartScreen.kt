@@ -24,9 +24,9 @@ class StartScreen: Screen {
         val scope = rememberCoroutineScope()
 
         scope.launch {
-            delay(2000)
+            delay(500)
 
-            navigator.push(ScreenRegistry.get(NavScreenProvider.CreateScreen))
+            navigator.replace(ScreenRegistry.get(NavScreenProvider.CreateScreen))
         }
 
         Box(
