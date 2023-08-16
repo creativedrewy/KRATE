@@ -7,7 +7,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.moriatsushi.koject.Koject
 import com.moriatsushi.koject.start
-import com.solanamobile.krate.ui.MainScreen
+import com.solanamobile.krate.createscreen.CreateScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -16,7 +16,7 @@ fun App() {
 
     MaterialTheme {
         Navigator(
-            screen = MainScreen
+            screen = CreateScreen
         ) {
             SlideTransition(it)
         }

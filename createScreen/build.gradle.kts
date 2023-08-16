@@ -33,6 +33,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(projects.extension)
+                implementation(projects.coroutines)
 
                 implementation(libs.kotlinx.coroutines.core)
 
@@ -47,6 +48,12 @@ kotlin {
 
                 implementation(libs.koject.core)
                 implementation(libs.koject.compose.core)
+
+                implementation(libs.ktorfit.lib)
+
+                implementation(libs.ktor.client.serialization)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
 
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.transitions)
@@ -80,11 +87,20 @@ kotlin {
     }
 }
 
+val ktorfitVersion = "1.5.0"
+
 dependencies {
     add("kspAndroid", libs.koject.processor.lib)
     add("kspIosX64", libs.koject.processor.lib)
     add("kspIosArm64", libs.koject.processor.lib)
     add("kspIosSimulatorArm64", libs.koject.processor.lib)
+
+    implementation(libs.okio)
+
+    add("kspCommonMainMetadata", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
+    add("kspAndroid", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
+    add("kspIosX64", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
+    add("kspIosSimulatorArm64", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
 }
 
 android {

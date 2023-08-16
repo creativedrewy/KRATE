@@ -61,6 +61,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation(projects.createScreen)
                 implementation(projects.profileScreen)
                 implementation(projects.extension)
                 api(projects.coroutines)
