@@ -18,15 +18,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.solanamobile.krate.createscreen.viewmodel.CreateScreenViewModel
 import com.solanamobile.krate.createscreen.viewmodel.ViewState
+import com.solanamobile.krate.extension.NavScreenProvider
 import com.solanamobile.krate.extension.getScreenModel
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
-object CreateScreen: Screen {
+class CreateScreen: Screen {
 
     @Composable
     override fun Content() {
@@ -57,7 +59,7 @@ fun CreateScreenContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(onClick = {
-//            navigator.push(ProfileScreen)
+            navigator.push(ScreenRegistry.get(NavScreenProvider.ProfileScreen))
         }) {
             Text("Navigate to Next Screen")
         }

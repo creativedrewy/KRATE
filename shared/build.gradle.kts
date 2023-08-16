@@ -44,6 +44,7 @@ kotlin {
             dependencies {
                 implementation(projects.createScreen)
                 implementation(projects.profileScreen)
+                implementation(projects.startScreen)
                 implementation(projects.extension)
                 api(projects.coroutines)
 
