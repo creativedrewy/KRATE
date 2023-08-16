@@ -16,14 +16,14 @@ kotlin {
             }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "profileScreen"
+            baseName = "startScreen"
         }
     }
 
@@ -84,7 +84,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.solanamobile.krate.profilescreen"
+    namespace = "com.solanamobile.krate.startscreen"
     compileSdk = 33
 
     defaultConfig {

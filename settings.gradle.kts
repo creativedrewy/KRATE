@@ -1,3 +1,4 @@
+include(":createScreen")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
@@ -7,6 +8,7 @@ include(":androidApp")
 include(":coroutines")
 include(":profileScreen")
 include(":shared")
+include(":startScreen")
 
 pluginManagement {
     repositories {

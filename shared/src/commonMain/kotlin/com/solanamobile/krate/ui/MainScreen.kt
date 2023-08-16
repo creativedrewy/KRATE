@@ -107,10 +107,6 @@ fun MainContents(
                 val bmp = state.bitmap
                 var imageBitmap by remember(bmp) { mutableStateOf(bmp) }
 
-//                LaunchedEffect(bmp) {
-//                    imageBitmap = bmp
-//                }
-
                 imageBitmap?.let { myBmp ->
                     Image(
                         modifier = Modifier

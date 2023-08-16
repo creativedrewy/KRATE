@@ -4,7 +4,9 @@ plugins {
     id("org.jetbrains.compose")
     id("kotlinx-serialization")
 
+    id("com.github.gmazzo.buildconfig")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
+    id("de.jensklingenberg.ktorfit") version "1.0.0"
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -16,14 +18,14 @@ kotlin {
             }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "profileScreen"
+            baseName = "createScreen"
         }
     }
 
@@ -84,7 +86,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.solanamobile.krate.profilescreen"
+    namespace = "com.solanamobile.krate.createscreen"
     compileSdk = 33
 
     defaultConfig {
