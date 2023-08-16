@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
     kotlin("multiplatform")
@@ -7,25 +6,7 @@ plugins {
     id("org.jetbrains.compose")
     id("kotlinx-serialization")
 
-    id("com.github.gmazzo.buildconfig")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
-    id("de.jensklingenberg.ktorfit") version "1.0.0"
-}
-
-val ktorVersion = "2.3.2"
-val ktorfitVersion = "1.5.0"
-
-configure<de.jensklingenberg.ktorfit.gradle.KtorfitGradleConfiguration> {
-    version = ktorfitVersion
-}
-
-buildConfig {
-    val getImgApiKey: String = gradleLocalProperties(rootDir).getProperty("getImgApiKey")
-
-    className("ApiKeys")
-    packageName("com.solanamobile.krate")
-
-    buildConfigField("String", "GETIMG_API_KEY", "\"$getImgApiKey\"")
 }
 
 kotlin {
@@ -121,16 +102,6 @@ dependencies {
     add("kspIosX64", processor)
     add("kspIosArm64", processor)
     add("kspIosSimulatorArm64", processor)
-
-    implementation(libs.ktor.ktor.client.core)
-    implementation(libs.ktor.ktor.client.cio)
-
-    implementation(libs.okio)
-
-    add("kspCommonMainMetadata", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
-    add("kspAndroid", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
-    add("kspIosX64", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
-    add("kspIosSimulatorArm64", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
 }
 
 android {

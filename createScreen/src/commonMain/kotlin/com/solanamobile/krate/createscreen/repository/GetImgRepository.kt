@@ -1,6 +1,7 @@
 package com.solanamobile.krate.createscreen.repository
 
 import com.moriatsushi.koject.Provides
+import com.solanamobile.krate.createscreen.ApiKeys
 import com.solanamobile.krate.createscreen.endpoint.GetImgEndpoints
 import com.solanamobile.krate.createscreen.endpoint.GetImgRequest
 import de.jensklingenberg.ktorfit.converter.builtin.CallConverterFactory
@@ -40,8 +41,7 @@ class GetImgRepository {
             prompt = textPrompt,
         )
 
-        //val token = "Bearer ${ApiKeys.GETIMG_API_KEY}"
-        val token = "Bearer "
+        val token = "Bearer ${ApiKeys.GETIMG_API_KEY}"
 
         //TODO: Need to try/catch this, as it returns totally diff obj on err
         val result = getImgEndpoints.textToImage(token, request)

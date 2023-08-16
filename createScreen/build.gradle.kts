@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
@@ -7,6 +9,15 @@ plugins {
     id("com.github.gmazzo.buildconfig")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
     id("de.jensklingenberg.ktorfit") version "1.0.0"
+}
+
+buildConfig {
+    val getImgApiKey: String = gradleLocalProperties(rootDir).getProperty("getImgApiKey")
+
+    className("ApiKeys")
+    packageName("com.solanamobile.krate.createscreen")
+
+    buildConfigField("String", "GETIMG_API_KEY", "\"$getImgApiKey\"")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
