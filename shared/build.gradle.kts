@@ -29,6 +29,14 @@ buildConfig {
 }
 
 kotlin {
+    android {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
+        }
+    }
+
     androidTarget()
 
     iosX64()
@@ -54,6 +62,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(projects.profileScreen)
+                implementation(projects.extension)
                 api(projects.coroutines)
 
                 implementation(libs.kotlinx.coroutines.core)

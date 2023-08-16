@@ -18,26 +18,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.moriatsushi.koject.Qualifier
-import com.moriatsushi.koject.compose.rememberInject
+import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.profilescreen.ProfileScreen
 import com.solanamobile.krate.viewmodel.MainViewModel
 import com.solanamobile.krate.viewmodel.ViewState
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-
-@Composable
-public inline fun <reified T : ScreenModel> Screen.getScreenModel(
-    qualifier: Qualifier? = null,
-): T {
-    val viewModel: T = rememberInject()
-
-    return rememberScreenModel(tag = qualifier?.toString()) { viewModel }
-}
 
 object MainScreen: Screen {
 
