@@ -16,24 +16,32 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.moriatsushi.koject.compose.rememberInject
+import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.profilescreen.viewmodel.ProfileScreenViewModel
+import com.solanamobile.krate.profilescreen.viewmodel.SomeState
 
 object ProfileScreen: Screen {
 
     @Composable
     override fun Content() {
-        ProfileScreenContent()
+        val viewModel: ProfileScreenViewModel = getScreenModel()
+        val state by viewModel.state.collectAsState()
+
+        ProfileScreenContent(
+            state = state,
+            onClick = {
+                viewModel.modifyState()
+            }
+        )
     }
 
 }
 
 @Composable
 fun ProfileScreenContent(
-    viewModel: ProfileScreenViewModel = rememberInject()
+    state: SomeState,
+    onClick: () -> Unit
 ) {
-    val state by viewModel.viewState.collectAsState()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -43,9 +51,7 @@ fun ProfileScreenContent(
         val navigator = LocalNavigator.currentOrThrow
 
         Button(
-            onClick = {
-                viewModel.modifyState()
-            }
+            onClick = onClick
         ) {
             Text("Hello World")
         }

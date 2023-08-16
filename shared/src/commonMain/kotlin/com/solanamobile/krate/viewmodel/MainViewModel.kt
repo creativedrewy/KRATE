@@ -2,6 +2,7 @@ package com.solanamobile.krate.viewmodel
 
 import androidx.compose.ui.graphics.ImageBitmap
 import cafe.adriel.voyager.core.model.StateScreenModel
+import cafe.adriel.voyager.core.model.coroutineScope
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.coroutines.Dispatcher
 import com.solanamobile.krate.coroutines.Dispatchers
@@ -9,8 +10,6 @@ import com.solanamobile.krate.graphics.toImageBitmap
 import com.solanamobile.krate.repository.GetImgRepository
 import com.solanamobile.krate.repository.PlatformRepository
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.io.encoding.Base64
@@ -34,14 +33,6 @@ class MainViewModel(
     @Dispatcher(Dispatchers.Main)
     private val dispatcher: CoroutineDispatcher
 ): StateScreenModel<ViewState>(ViewState.Default) {
-    private val job = SupervisorJob()
-
-    private val coroutineScope: CoroutineScope
-        get() = CoroutineScope(job + dispatcher)
-
-//    private val _viewState: MutableStateFlow<ViewState> = MutableStateFlow(ViewState.Default)
-//
-//    val viewState: StateFlow<ViewState> = _viewState.asStateFlow()
 
     @OptIn(ExperimentalEncodingApi::class)
     fun generateImageFromPrompt(prompt: String) {
@@ -51,14 +42,12 @@ class MainViewModel(
             }
 
             val imgString = getImgRepository.generateImage(prompt)
-
             val decodedbytes = Base64.decode(imgString)
 
             mutableState.update {
                 ViewState.Generated(
                     bitmap = decodedbytes.toImageBitmap()
                 )
-//                ViewState.Generated()
             }
         }
     }
