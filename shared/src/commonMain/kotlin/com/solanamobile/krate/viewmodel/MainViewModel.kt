@@ -8,7 +8,6 @@ import com.solanamobile.krate.coroutines.Dispatcher
 import com.solanamobile.krate.coroutines.Dispatchers
 import com.solanamobile.krate.graphics.toImageBitmap
 import com.solanamobile.krate.repository.GetImgRepository
-import com.solanamobile.krate.repository.PlatformRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -28,7 +27,6 @@ sealed class ViewState() {
 
 @Provides
 class MainViewModel(
-    private val repository: PlatformRepository,
     private val getImgRepository: GetImgRepository,
     @Dispatcher(Dispatchers.Main)
     private val dispatcher: CoroutineDispatcher
