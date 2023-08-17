@@ -3,10 +3,10 @@ package com.solanamobile.krate.startscreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -32,7 +32,7 @@ class StartScreen: Screen {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Gray)
+                .background(MaterialTheme.colors.background)
         )
     }
 }

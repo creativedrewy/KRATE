@@ -3,6 +3,7 @@ package com.solanamobile.krate.ui
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
@@ -26,7 +27,13 @@ fun AppScreenContent() {
         }
     }
 
-    MaterialTheme {
+    MaterialTheme(
+        colors = MaterialTheme.colors.copy(
+            background = Color(0xFFF0E7E0),
+            surface = Color(0xFFF0DCD4),
+            primary = Color(0xFFF07C6C),
+        )
+    ) {
         Navigator(
             screen = ScreenRegistry.get(NavScreenProvider.StartScreen)
         ) {
