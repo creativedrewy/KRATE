@@ -1,38 +1,62 @@
 package com.solanamobile.krate.startscreen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import cafe.adriel.voyager.core.registry.ScreenRegistry
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.solanamobile.krate.extension.NavScreenProvider
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class StartScreen: Screen {
 
+    @OptIn(ExperimentalTextApi::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
-        val scope = rememberCoroutineScope()
+//        val scope = rememberCoroutineScope()
+//
+//        scope.launch {
+//            delay(500)
+//
+//            navigator.replace(ScreenRegistry.get(NavScreenProvider.CreateScreen))
+//        }
 
-        scope.launch {
-            delay(500)
-
-            navigator.replace(ScreenRegistry.get(NavScreenProvider.CreateScreen))
-        }
-
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background)
-        )
+                .padding(
+                    top = 183.dp,
+                    start = 24.dp,
+//                    end = 24.dp
+                )
+        ) {
+            Text(
+                text = "CREATORS\nGONNA",
+                color = Color(0xFF172C4A),
+                style = TextStyle.Default.copy(
+                    fontSize = 59.sp,
+                    lineHeight = 60.sp,
+                    drawStyle = Stroke(
+                        miter = 10f,
+                        width = 5f,
+                        join= StrokeJoin.Miter
+                    )
+                )
+            )
+        }
     }
 }
