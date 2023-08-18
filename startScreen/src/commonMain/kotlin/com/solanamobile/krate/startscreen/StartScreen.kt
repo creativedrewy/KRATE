@@ -2,6 +2,7 @@ package com.solanamobile.krate.startscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,9 +25,11 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.solanamobile.krate.extension.NavScreenProvider
 import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.startscreen.ui.AnimatedArrows
 import com.solanamobile.krate.startscreen.viewmodel.StartScreenViewModel
@@ -55,14 +58,6 @@ fun StartScreenContents(
     viewState: StartScreenViewState
 ) {
     val navigator = LocalNavigator.currentOrThrow
-
-//        val scope = rememberCoroutineScope()
-//
-//        scope.launch {
-//            delay(500)
-//
-//            navigator.replace(ScreenRegistry.get(NavScreenProvider.CreateScreen))
-//        }
 
     Column(
         modifier = Modifier
@@ -149,6 +144,10 @@ fun StartScreenContents(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
+                    modifier = Modifier
+                        .clickable {
+                            navigator.replace(ScreenRegistry.get(NavScreenProvider.CreateScreen))
+                        },
                     text = "KRATE NOW",
                     style = MaterialTheme.typography.h3,
                     fontSize = 32.sp,
