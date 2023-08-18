@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
@@ -78,9 +77,7 @@ fun StartScreenContents(
         Text(
             text = "CREATORS\nGONNA",
             color = Color(0xFF172C4A),
-            style = TextStyle.Default.copy(
-                fontSize = 59.sp,
-                lineHeight = 60.sp,
+            style = MaterialTheme.typography.h2.copy(
                 drawStyle = Stroke(
                     miter = 10f,
                     width = 5f,
@@ -145,10 +142,15 @@ fun StartScreenContents(
             )
 
             Row(
+                modifier = Modifier
+                    .padding(
+                        bottom = 26.dp
+                    ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "KRATE NOW",
+                    style = MaterialTheme.typography.h3,
                     fontSize = 32.sp,
                     lineHeight = 60.sp,
                 )
