@@ -27,7 +27,9 @@ class StartScreenViewModel: StateScreenModel<StartScreenViewState>(StartScreenVi
                         resource("KRATE-1.png").readBytes().toImageBitmap(),
                         resource("KRATE-2.png").readBytes().toImageBitmap(),
                         resource("KRATE-3.png").readBytes().toImageBitmap(),
-                        resource("KRATE-4.png").readBytes().toImageBitmap()
+                        resource("KRATE-4.png").readBytes().toImageBitmap(),
+                        resource("icon-caret-line.png").readBytes().toImageBitmap(),
+                        resource("icon-caret-fill.png").readBytes().toImageBitmap()
                     )
                 )
             }

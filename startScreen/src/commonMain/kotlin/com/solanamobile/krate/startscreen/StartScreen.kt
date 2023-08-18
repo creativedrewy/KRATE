@@ -4,11 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -135,18 +137,76 @@ fun StartScreenContents(
                     contentDescription = null
                 )
             }
+
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "KRATE NOW",
+                    fontSize = 32.sp,
+                    lineHeight = 60.sp,
+                )
+
+                Box {
+                    Image(
+                        modifier = Modifier
+                            .height(30.dp)
+                            .width(55.dp),
+                        bitmap = viewState.logos[5],
+                        contentDescription = null
+                    )
+
+                    Image(
+                        modifier = Modifier
+                            .padding(
+                                start = 8.dp
+                            )
+                            .height(30.dp)
+                            .width(55.dp),
+                        bitmap = viewState.logos[5],
+                        contentDescription = null
+                    )
+
+                    Image(
+                        modifier = Modifier
+                            .padding(
+                                start = 16.dp
+                            )
+                            .height(30.dp)
+                            .width(55.dp),
+                        bitmap = viewState.logos[5],
+                        contentDescription = null
+                    )
+
+                    Image(
+                        modifier = Modifier
+                            .padding(
+                                start = 24.dp
+                            )
+                            .height(30.dp)
+                            .width(55.dp),
+                        bitmap = viewState.logos[5],
+                        contentDescription = null
+                    )
+
+                    Image(
+                        modifier = Modifier
+                            .padding(
+                                start = 32.dp
+                            )
+                            .height(30.dp)
+                            .width(55.dp),
+                        bitmap = viewState.logos[6],
+                        contentDescription = null
+                    )
+                }
+            }
         }
-
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-        )
-
-        Text(
-            text = "KRATE NOW",
-            fontSize = 32.sp,
-            lineHeight = 60.sp,
-        )
     }
 }
