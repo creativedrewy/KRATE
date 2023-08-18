@@ -37,4 +37,9 @@ android {
     kotlin {
         jvmToolchain(11)
     }
+
+    dependencies {
+        implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
+        implementation("androidx.compose.foundation:foundation:1.3.1")
+    }
 }
