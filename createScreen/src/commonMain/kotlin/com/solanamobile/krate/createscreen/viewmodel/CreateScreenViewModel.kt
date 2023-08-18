@@ -4,8 +4,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.moriatsushi.koject.Provides
-import com.solanamobile.krate.createscreen.graphics.toImageBitmap
 import com.solanamobile.krate.createscreen.repository.GetImgRepository
+import com.solanamobile.krate.extension.graphics.toImageBitmap
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.io.encoding.Base64

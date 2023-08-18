@@ -6,6 +6,7 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import com.moriatsushi.koject.Provides
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.resource
 
 data class StartScreenViewState(
     val logos: List<ImageBitmap> = listOf()
@@ -17,7 +18,7 @@ class StartScreenViewModel: StateScreenModel<StartScreenViewState>(StartScreenVi
     @OptIn(ExperimentalResourceApi::class)
     fun loadLogos() {
         coroutineScope.launch {
-//            resource("krate-logo.png").readBytes().size
+            resource("krate-logo.png").readBytes().size
         }
     }
     

@@ -1,4 +1,4 @@
-package com.solanamobile.krate.createscreen.graphics
+package com.solanamobile.krate.extension.graphics
 
 import androidx.compose.ui.graphics.ImageBitmap
 

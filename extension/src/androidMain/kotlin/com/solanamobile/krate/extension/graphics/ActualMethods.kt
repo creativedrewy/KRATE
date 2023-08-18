@@ -1,4 +1,4 @@
-package com.solanamobile.krate.createscreen.graphics
+package com.solanamobile.krate.extension.graphics
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

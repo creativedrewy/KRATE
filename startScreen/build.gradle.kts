@@ -40,8 +40,6 @@ kotlin {
                 implementation(compose.animation)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
 
                 implementation(libs.koject.core)
                 implementation(libs.koject.compose.core)
@@ -88,6 +86,8 @@ dependencies {
 android {
     namespace = "com.solanamobile.krate.startscreen"
     compileSdk = 33
+
+    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
         minSdk = 24
