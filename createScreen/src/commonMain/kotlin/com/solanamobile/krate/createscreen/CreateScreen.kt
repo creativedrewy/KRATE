@@ -33,14 +33,12 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.solanamobile.krate.createscreen.viewmodel.CreateScreenViewModel
 import com.solanamobile.krate.createscreen.viewmodel.ViewState
 import com.solanamobile.krate.createscreen.viewmodel.isReady
-import com.solanamobile.krate.extension.NavScreenProvider
 import com.solanamobile.krate.extension.getScreenModel
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
@@ -125,13 +123,10 @@ fun CreateScreenContent(
                 .background(MaterialTheme.colors.background),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(onClick = {
-                navigator.push(ScreenRegistry.get(NavScreenProvider.ProfileScreen))
-            }) {
-                Text("Navigate to Next Screen")
-            }
-
             TextField(
+                modifier = Modifier.padding(
+                    top = 154.dp
+                ),
                 value = promptText,
                 label = {
                     Text("Prompt (e.g. 'A dog wearing a hat')")
@@ -140,20 +135,6 @@ fun CreateScreenContent(
                     promptText = it
                 }
             )
-
-            Button(onClick = {
-                if (promptText.isNotBlank()) {
-                    onClick(promptText)
-                }
-            }) {
-                val text = if (state is ViewState.Generated) {
-                    "You have generated an image!!"
-                } else {
-                    "Generate Image"
-                }
-
-                Text(text)
-            }
 
             when (state) {
                 is ViewState.Loading -> {
