@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +28,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.solanamobile.krate.extension.getScreenModel
+import com.solanamobile.krate.startscreen.ui.AnimatedArrows
 import com.solanamobile.krate.startscreen.viewmodel.StartScreenViewModel
 import com.solanamobile.krate.startscreen.viewmodel.StartScreenViewState
 
@@ -155,59 +155,9 @@ fun StartScreenContents(
                     lineHeight = 60.sp,
                 )
 
-                Box {
-                    Image(
-                        modifier = Modifier
-                            .height(30.dp)
-                            .width(55.dp),
-                        bitmap = viewState.logos[5],
-                        contentDescription = null
-                    )
-
-                    Image(
-                        modifier = Modifier
-                            .padding(
-                                start = 8.dp
-                            )
-                            .height(30.dp)
-                            .width(55.dp),
-                        bitmap = viewState.logos[5],
-                        contentDescription = null
-                    )
-
-                    Image(
-                        modifier = Modifier
-                            .padding(
-                                start = 16.dp
-                            )
-                            .height(30.dp)
-                            .width(55.dp),
-                        bitmap = viewState.logos[5],
-                        contentDescription = null
-                    )
-
-                    Image(
-                        modifier = Modifier
-                            .padding(
-                                start = 24.dp
-                            )
-                            .height(30.dp)
-                            .width(55.dp),
-                        bitmap = viewState.logos[5],
-                        contentDescription = null
-                    )
-
-                    Image(
-                        modifier = Modifier
-                            .padding(
-                                start = 32.dp
-                            )
-                            .height(30.dp)
-                            .width(55.dp),
-                        bitmap = viewState.logos[6],
-                        contentDescription = null
-                    )
-                }
+                AnimatedArrows(
+                    arrowImages = viewState.logos
+                )
             }
         }
     }
