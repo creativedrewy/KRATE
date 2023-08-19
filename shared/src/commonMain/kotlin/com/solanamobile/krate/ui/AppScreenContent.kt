@@ -50,6 +50,7 @@ fun AppScreenContent() {
     )
 
     val typography = Typography(
+        defaultFontFamily = geographNormal,
         h2 = TextStyle(
             fontFamily = geographNormal,
             fontWeight = FontWeight.Black,
@@ -61,6 +62,11 @@ fun AppScreenContent() {
             fontWeight = FontWeight.Black,
             fontSize = 32.sp,
             lineHeight = 60.sp
+        ),
+        h4 = TextStyle(
+            fontFamily = geographNormal,
+            fontWeight = FontWeight.Medium,
+            fontSize = 32.sp
         )
     )
 

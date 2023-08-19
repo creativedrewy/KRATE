@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,8 +16,8 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +29,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
@@ -71,8 +73,6 @@ fun CreateScreenContent(
     resources: List<ImageBitmap>,
     onClick: (text: String) -> Unit
 ) {
-    var promptText by rememberSaveable { mutableStateOf("") }
-
     val navigator = LocalNavigator.currentOrThrow
 
     Scaffold(
@@ -123,14 +123,29 @@ fun CreateScreenContent(
                 .background(MaterialTheme.colors.background),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            var promptText by rememberSaveable { mutableStateOf("What do you want to create today?") }
+
             TextField(
-                modifier = Modifier.padding(
-                    top = 154.dp
-                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 24.dp,
+                        end = 24.dp,
+                        top = 154.dp
+                    )
+                    .onFocusEvent {
+                        if (it.hasFocus) {
+                            promptText = ""
+                        }
+                    },
                 value = promptText,
-                label = {
-                    Text("Prompt (e.g. 'A dog wearing a hat')")
-                },
+                textStyle = MaterialTheme.typography.h4,
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = Color(0xFFF06441),
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
                 onValueChange = {
                     promptText = it
                 }
