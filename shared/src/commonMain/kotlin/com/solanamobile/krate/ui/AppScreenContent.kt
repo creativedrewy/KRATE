@@ -67,6 +67,11 @@ fun AppScreenContent() {
             fontFamily = geographNormal,
             fontWeight = FontWeight.Medium,
             fontSize = 32.sp
+        ),
+        h5 = TextStyle(
+            fontFamily = geographNormal,
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp
         )
     )
 
