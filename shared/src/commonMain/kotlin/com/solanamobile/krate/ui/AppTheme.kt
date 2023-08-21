@@ -52,6 +52,11 @@ fun KrateAppTheme(
         h5 = TextStyle(
             fontFamily = geographNormal,
             fontWeight = FontWeight.Medium,
+            fontSize = 18.sp
+        ),
+        h6 = TextStyle(
+            fontFamily = geographNormal,
+            fontWeight = FontWeight.Medium,
             fontSize = 16.sp
         )
     )

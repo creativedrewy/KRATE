@@ -198,7 +198,7 @@ fun CreateScreenContent(
                             ) {
                                 Text(
                                     text = "CREATE",
-                                    style = MaterialTheme.typography.h5
+                                    style = MaterialTheme.typography.h6
                                 )
                             }
                         }
@@ -289,7 +289,7 @@ fun CreateScreenContent(
                                         top = 26.dp
                                     ),
                                 text = "CREATING...",
-                                style = MaterialTheme.typography.h5,
+                                style = MaterialTheme.typography.h6,
                                 color = MaterialTheme.colors.primary
                             )
                         }
