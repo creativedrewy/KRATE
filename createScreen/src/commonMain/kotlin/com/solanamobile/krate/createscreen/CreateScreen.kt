@@ -2,6 +2,7 @@ package com.solanamobile.krate.createscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -58,7 +59,7 @@ class CreateScreen: Screen {
         CreateScreenContent(
             state,
             resources,
-            onClick = { txt ->
+            onSubmitPrompt = { txt ->
                 viewModel.generateImageFromPrompt(txt)
             }
         )
@@ -70,7 +71,7 @@ class CreateScreen: Screen {
 fun CreateScreenContent(
     state: ViewState,
     resources: List<ImageBitmap>,
-    onClick: (text: String) -> Unit
+    onSubmitPrompt: (text: String) -> Unit
 ) {
     val navigator = LocalNavigator.currentOrThrow
 
@@ -150,32 +151,85 @@ fun CreateScreenContent(
                 }
             )
 
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            )
-
-            Button(
-                modifier = Modifier
-                    .padding(
-                        bottom = 30.dp
+            when (state) {
+                is ViewState.Prompting -> {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
                     )
-                    .size(84.dp),
-                shape = CircleShape,
-                contentPadding = PaddingValues(4.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.primary,
-                    contentColor = Color.White
-                ),
-                onClick = {
 
+                    Button(
+                        modifier = Modifier
+                            .padding(
+                                bottom = 30.dp
+                            )
+                            .size(84.dp),
+                        shape = CircleShape,
+                        contentPadding = PaddingValues(4.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.primary,
+                            contentColor = Color.White
+                        ),
+                        onClick = {
+//                            if (promptText != "What do you want to create today?") {
+                            onSubmitPrompt(promptText)
+//                            }
+                        }
+                    ) {
+                        Text(
+                            text = "CREATE",
+                            style = MaterialTheme.typography.h5
+                        )
+                    }
                 }
-            ) {
-                Text(
-                    text = "CREATE",
-                    style = MaterialTheme.typography.h5
-                )
+                is ViewState.Creating -> {
+                    resources.isReady {
+                        Box(
+                            modifier = Modifier
+                                .padding(
+                                    start = 20.dp,
+                                    end = 20.dp,
+                                    top = 67.dp
+                                )
+                                .fillMaxWidth()
+
+                        ) {
+                            Image(
+                                modifier = Modifier
+                                    .padding(
+                                        top = 25.dp,
+                                        start = 31.dp
+                                    )
+                                    .size(114.dp),
+                                bitmap = resources[1],
+                                contentDescription = null
+                            )
+
+                            Image(
+                                modifier = Modifier
+                                    .padding(
+                                        top = 60.dp,
+                                        start = 130.dp
+                                    )
+                                    .size(84.dp),
+                                bitmap = resources[2],
+                                contentDescription = null
+                            )
+
+                            Image(
+                                modifier = Modifier
+                                    .padding(
+                                        start = 200.dp
+                                    )
+                                    .size(100.dp),
+                                bitmap = resources[3],
+                                contentDescription = null
+                            )
+                        }
+                    }
+                }
+                is ViewState.Generated -> { }
             }
 //            when (state) {
 //                is ViewState.Loading -> {

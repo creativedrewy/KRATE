@@ -13,14 +13,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
-import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 sealed class ViewState() {
 
-    data object Default : ViewState()
+    data object Prompting : ViewState()
 
-    data object Loading : ViewState()
+    data object Creating : ViewState()
 
     data class Generated(
         val bitmap: ImageBitmap? = null
@@ -38,7 +37,7 @@ fun <T> List<T>.isReady(block: @Composable () -> T) {
 @Provides
 class CreateScreenViewModel(
     private val getImgRepository: GetImgRepository,
-): StateScreenModel<ViewState>(ViewState.Default) {
+): StateScreenModel<ViewState>(ViewState.Creating) {
 
     private val _resources: MutableStateFlow<List<ImageBitmap>> = MutableStateFlow(listOf())
 
@@ -48,7 +47,10 @@ class CreateScreenViewModel(
         coroutineScope.launch {
             _resources.update {
                 listOf(
-                    resource("user.png").readBytes().toImageBitmap()
+                    resource("user.png").readBytes().toImageBitmap(),
+                    resource("loading_star.png").readBytes().toImageBitmap(),
+                    resource("loading_circle.png").readBytes().toImageBitmap(),
+                    resource("loading_triangle.png").readBytes().toImageBitmap()
                 )
             }
         }
@@ -58,17 +60,17 @@ class CreateScreenViewModel(
     fun generateImageFromPrompt(prompt: String) {
         coroutineScope.launch {
             mutableState.update {
-                ViewState.Loading
+                ViewState.Creating
             }
 
-            val imgString = getImgRepository.generateImage(prompt)
-            val decodedbytes = Base64.decode(imgString)
-
-            mutableState.update {
-                ViewState.Generated(
-                    bitmap = decodedbytes.toImageBitmap()
-                )
-            }
+//            val imgString = getImgRepository.generateImage(prompt)
+//            val decodedbytes = Base64.decode(imgString)
+//
+//            mutableState.update {
+//                ViewState.Generated(
+//                    bitmap = decodedbytes.toImageBitmap()
+//                )
+//            }
         }
     }
 }
