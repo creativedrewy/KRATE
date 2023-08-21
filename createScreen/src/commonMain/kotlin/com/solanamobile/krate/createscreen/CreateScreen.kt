@@ -70,7 +70,7 @@ class CreateScreen: Screen {
 @Composable
 fun CreateScreenContent(
     state: ViewState,
-    resources: List<ImageBitmap>,
+    resources: Map<String, ImageBitmap>,
     onSubmitPrompt: (text: String) -> Unit
 ) {
     val navigator = LocalNavigator.currentOrThrow
@@ -107,7 +107,7 @@ fun CreateScreenContent(
                             }
                         ) {
                             Image(
-                                bitmap = resources[0],
+                                bitmap = resources["user"]!!,
                                 colorFilter = ColorFilter.tint(Color.White),
                                 contentDescription = null
                             )
@@ -202,7 +202,7 @@ fun CreateScreenContent(
                                         start = 31.dp
                                     )
                                     .size(114.dp),
-                                bitmap = resources[1],
+                                bitmap = resources["star"]!!,
                                 contentDescription = null
                             )
 
@@ -213,7 +213,7 @@ fun CreateScreenContent(
                                         start = 130.dp
                                     )
                                     .size(84.dp),
-                                bitmap = resources[2],
+                                bitmap = resources["circle"]!!,
                                 contentDescription = null
                             )
 
@@ -223,7 +223,7 @@ fun CreateScreenContent(
                                         start = 200.dp
                                     )
                                     .size(100.dp),
-                                bitmap = resources[3],
+                                bitmap = resources["triangle"]!!,
                                 contentDescription = null
                             )
                         }

@@ -27,7 +27,7 @@ sealed class ViewState() {
 }
 
 @Composable
-fun <T> List<T>.isReady(block: @Composable () -> T) {
+fun <T, U> Map<T, U>.isReady(block: @Composable () -> Unit) {
     if (this.isNotEmpty()) {
         block()
     }
@@ -39,18 +39,18 @@ class CreateScreenViewModel(
     private val getImgRepository: GetImgRepository,
 ): StateScreenModel<ViewState>(ViewState.Creating) {
 
-    private val _resources: MutableStateFlow<List<ImageBitmap>> = MutableStateFlow(listOf())
+    private val _resources: MutableStateFlow<Map<String, ImageBitmap>> = MutableStateFlow(mapOf())
 
     val resources = _resources.asStateFlow()
 
     fun loadResources() {
         coroutineScope.launch {
             _resources.update {
-                listOf(
-                    resource("user.png").readBytes().toImageBitmap(),
-                    resource("loading_star.png").readBytes().toImageBitmap(),
-                    resource("loading_circle.png").readBytes().toImageBitmap(),
-                    resource("loading_triangle.png").readBytes().toImageBitmap()
+                mapOf(
+                    "user" to resource("user.png").readBytes().toImageBitmap(),
+                    "star" to resource("loading_star.png").readBytes().toImageBitmap(),
+                    "circle" to resource("loading_circle.png").readBytes().toImageBitmap(),
+                    "triangle" to resource("loading_triangle.png").readBytes().toImageBitmap()
                 )
             }
         }
