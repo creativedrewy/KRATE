@@ -1,5 +1,7 @@
 package com.solanamobile.krate.createscreen
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.EaseInOutQuad
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -75,7 +77,7 @@ class CreateScreen: Screen {
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
+@OptIn(ExperimentalResourceApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun CreateScreenContent(
     state: ViewState,
@@ -160,129 +162,149 @@ fun CreateScreenContent(
                 }
             )
 
-            when (state) {
-                is ViewState.Prompting -> {
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                    )
-
-                    Button(
-                        modifier = Modifier
-                            .padding(
-                                bottom = 30.dp
+            AnimatedContent(
+                targetState = state
+            ) { targetState ->
+                when (targetState) {
+                    ViewState.Prompting -> {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
                             )
-                            .size(84.dp),
-                        shape = CircleShape,
-                        contentPadding = PaddingValues(4.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = MaterialTheme.colors.primary,
-                            contentColor = Color.White
-                        ),
-                        onClick = {
-//                            if (promptText != "What do you want to create today?") {
-                            onSubmitPrompt(promptText)
-//                            }
-                        }
-                    ) {
-                        Text(
-                            text = "CREATE",
-                            style = MaterialTheme.typography.h5
-                        )
-                    }
-                }
-                is ViewState.Creating -> {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        resources.isReady {
-                            Box(
+
+                            Button(
                                 modifier = Modifier
                                     .padding(
-                                        start = 20.dp,
-                                        end = 20.dp,
-                                        top = 67.dp
+                                        bottom = 30.dp
                                     )
-                                    .fillMaxWidth()
+                                    .size(84.dp),
+                                shape = CircleShape,
+                                contentPadding = PaddingValues(4.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = MaterialTheme.colors.primary,
+                                    contentColor = Color.White
+                                ),
+                                onClick = {
+                                    if (promptText != "What do you want to create today?") {
+                                        onSubmitPrompt(promptText)
+                                    }
+                                }
                             ) {
-                                val starAnimPos by rememberInfiniteTransition().animateFloat(
-                                    initialValue = -5f,
-                                    targetValue = 10f,
-                                    animationSpec = infiniteRepeatable(
-                                        animation = tween(350, easing = EaseInOutQuad),
-                                        repeatMode = RepeatMode.Reverse
-                                    )
-                                )
-
-                                val circleAnimPos by rememberInfiniteTransition().animateFloat(
-                                    initialValue = -10f,
-                                    targetValue = 10f,
-                                    animationSpec = infiniteRepeatable(
-                                        animation = tween(400, easing = FastOutLinearInEasing),
-                                        repeatMode = RepeatMode.Reverse
-                                    )
-                                )
-
-                                val triangleAnimPos by rememberInfiniteTransition().animateFloat(
-                                    initialValue = -5f,
-                                    targetValue = 25f,
-                                    animationSpec = infiniteRepeatable(
-                                        animation = tween(300, easing = EaseInOut),
-                                        repeatMode = RepeatMode.Reverse
-                                    )
-                                )
-
-                                Image(
-                                    modifier = Modifier
-                                        .padding(
-                                            top = 25.dp,
-                                            start = 31.dp
-                                        )
-                                        .offset(y = starAnimPos.dp)
-                                        .size(114.dp),
-                                    bitmap = resources["star"]!!,
-                                    contentDescription = null
-                                )
-
-                                Image(
-                                    modifier = Modifier
-                                        .padding(
-                                            top = 60.dp,
-                                            start = 130.dp
-                                        )
-                                        .offset(y = circleAnimPos.dp)
-                                        .size(84.dp),
-                                    bitmap = resources["circle"]!!,
-                                    contentDescription = null
-                                )
-
-                                Image(
-                                    modifier = Modifier
-                                        .padding(
-                                            start = 200.dp
-                                        )
-                                        .offset(y = triangleAnimPos.dp)
-                                        .size(100.dp),
-                                    bitmap = resources["triangle"]!!,
-                                    contentDescription = null
+                                Text(
+                                    text = "CREATE",
+                                    style = MaterialTheme.typography.h5
                                 )
                             }
                         }
-
-                        Text(
+                    }
+                    ViewState.Creating -> {
+                        Column(
                             modifier = Modifier
-                                .padding(
-                                    top = 26.dp
-                                ),
-                            text = "CREATING...",
-                            style = MaterialTheme.typography.h5,
-                            color = MaterialTheme.colors.primary
-                        )
+                                .fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            resources.isReady {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 20.dp,
+                                            end = 20.dp,
+                                            top = 67.dp
+                                        )
+                                        .fillMaxWidth()
+                                ) {
+                                    val starAnimPos by rememberInfiniteTransition().animateFloat(
+                                        initialValue = -5f,
+                                        targetValue = 10f,
+                                        animationSpec = infiniteRepeatable(
+                                            animation = tween(350, easing = EaseInOutQuad),
+                                            repeatMode = RepeatMode.Reverse
+                                        )
+                                    )
+
+                                    val circleAnimPos by rememberInfiniteTransition().animateFloat(
+                                        initialValue = -10f,
+                                        targetValue = 10f,
+                                        animationSpec = infiniteRepeatable(
+                                            animation = tween(400, easing = FastOutLinearInEasing),
+                                            repeatMode = RepeatMode.Reverse
+                                        )
+                                    )
+
+                                    val triangleAnimPos by rememberInfiniteTransition().animateFloat(
+                                        initialValue = -5f,
+                                        targetValue = 25f,
+                                        animationSpec = infiniteRepeatable(
+                                            animation = tween(300, easing = EaseInOut),
+                                            repeatMode = RepeatMode.Reverse
+                                        )
+                                    )
+
+                                    Image(
+                                        modifier = Modifier
+                                            .padding(
+                                                top = 25.dp,
+                                                start = 31.dp
+                                            )
+                                            .offset(y = starAnimPos.dp)
+                                            .size(114.dp),
+                                        bitmap = resources["star"]!!,
+                                        contentDescription = null
+                                    )
+
+                                    Image(
+                                        modifier = Modifier
+                                            .padding(
+                                                top = 60.dp,
+                                                start = 130.dp
+                                            )
+                                            .offset(y = circleAnimPos.dp)
+                                            .size(84.dp),
+                                        bitmap = resources["circle"]!!,
+                                        contentDescription = null
+                                    )
+
+                                    Image(
+                                        modifier = Modifier
+                                            .padding(
+                                                start = 200.dp
+                                            )
+                                            .offset(y = triangleAnimPos.dp)
+                                            .size(100.dp),
+                                        bitmap = resources["triangle"]!!,
+                                        contentDescription = null
+                                    )
+                                }
+                            }
+
+                            Text(
+                                modifier = Modifier
+                                    .padding(
+                                        top = 26.dp
+                                    ),
+                                text = "CREATING...",
+                                style = MaterialTheme.typography.h5,
+                                color = MaterialTheme.colors.primary
+                            )
+                        }
+                    }
+                    is ViewState.Generated -> {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                        ) {
+
+                        }
                     }
                 }
-                is ViewState.Generated -> { }
             }
+
 //            when (state) {
 //                is ViewState.Loading -> {
 //                    CircularProgressIndicator()

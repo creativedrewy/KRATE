@@ -7,6 +7,7 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.createscreen.repository.GetImgRepository
 import com.solanamobile.krate.extension.graphics.toImageBitmap
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -37,7 +38,7 @@ fun <T, U> Map<T, U>.isReady(block: @Composable () -> Unit) {
 @Provides
 class CreateScreenViewModel(
     private val getImgRepository: GetImgRepository,
-): StateScreenModel<ViewState>(ViewState.Creating) {
+): StateScreenModel<ViewState>(ViewState.Prompting) {
 
     private val _resources: MutableStateFlow<Map<String, ImageBitmap>> = MutableStateFlow(mapOf())
 
@@ -63,6 +64,11 @@ class CreateScreenViewModel(
                 ViewState.Creating
             }
 
+            delay(5000)
+
+            mutableState.update {
+                ViewState.Generated()
+            }
 //            val imgString = getImgRepository.generateImage(prompt)
 //            val decodedbytes = Base64.decode(imgString)
 //
