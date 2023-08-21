@@ -32,12 +32,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.solanamobile.krate.createscreen.viewmodel.CreateScreenViewModel
 import com.solanamobile.krate.createscreen.viewmodel.ViewState
 import com.solanamobile.krate.createscreen.viewmodel.isReady
+import com.solanamobile.krate.extension.NavScreenProvider
 import com.solanamobile.krate.extension.getScreenModel
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
@@ -100,7 +102,7 @@ fun CreateScreenContent(
                                 contentColor = Color.White
                             ),
                             onClick = {
-
+                                navigator.push(ScreenRegistry.get(NavScreenProvider.ProfileScreen))
                             }
                         ) {
                             Image(
