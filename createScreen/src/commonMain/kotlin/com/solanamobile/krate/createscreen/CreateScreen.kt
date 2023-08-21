@@ -1,5 +1,13 @@
 package com.solanamobile.krate.createscreen
 
+import androidx.compose.animation.core.EaseInOut
+import androidx.compose.animation.core.EaseInOutQuad
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -8,6 +16,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -184,49 +193,92 @@ fun CreateScreenContent(
                     }
                 }
                 is ViewState.Creating -> {
-                    resources.isReady {
-                        Box(
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        resources.isReady {
+                            Box(
+                                modifier = Modifier
+                                    .padding(
+                                        start = 20.dp,
+                                        end = 20.dp,
+                                        top = 67.dp
+                                    )
+                                    .fillMaxWidth()
+                            ) {
+                                val starAnimPos by rememberInfiniteTransition().animateFloat(
+                                    initialValue = -5f,
+                                    targetValue = 10f,
+                                    animationSpec = infiniteRepeatable(
+                                        animation = tween(350, easing = EaseInOutQuad),
+                                        repeatMode = RepeatMode.Reverse
+                                    )
+                                )
+
+                                val circleAnimPos by rememberInfiniteTransition().animateFloat(
+                                    initialValue = -10f,
+                                    targetValue = 10f,
+                                    animationSpec = infiniteRepeatable(
+                                        animation = tween(400, easing = FastOutLinearInEasing),
+                                        repeatMode = RepeatMode.Reverse
+                                    )
+                                )
+
+                                val triangleAnimPos by rememberInfiniteTransition().animateFloat(
+                                    initialValue = -5f,
+                                    targetValue = 25f,
+                                    animationSpec = infiniteRepeatable(
+                                        animation = tween(300, easing = EaseInOut),
+                                        repeatMode = RepeatMode.Reverse
+                                    )
+                                )
+
+                                Image(
+                                    modifier = Modifier
+                                        .padding(
+                                            top = 25.dp,
+                                            start = 31.dp
+                                        )
+                                        .offset(y = starAnimPos.dp)
+                                        .size(114.dp),
+                                    bitmap = resources["star"]!!,
+                                    contentDescription = null
+                                )
+
+                                Image(
+                                    modifier = Modifier
+                                        .padding(
+                                            top = 60.dp,
+                                            start = 130.dp
+                                        )
+                                        .offset(y = circleAnimPos.dp)
+                                        .size(84.dp),
+                                    bitmap = resources["circle"]!!,
+                                    contentDescription = null
+                                )
+
+                                Image(
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 200.dp
+                                        )
+                                        .offset(y = triangleAnimPos.dp)
+                                        .size(100.dp),
+                                    bitmap = resources["triangle"]!!,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+
+                        Text(
                             modifier = Modifier
                                 .padding(
-                                    start = 20.dp,
-                                    end = 20.dp,
-                                    top = 67.dp
-                                )
-                                .fillMaxWidth()
-
-                        ) {
-                            Image(
-                                modifier = Modifier
-                                    .padding(
-                                        top = 25.dp,
-                                        start = 31.dp
-                                    )
-                                    .size(114.dp),
-                                bitmap = resources["star"]!!,
-                                contentDescription = null
-                            )
-
-                            Image(
-                                modifier = Modifier
-                                    .padding(
-                                        top = 60.dp,
-                                        start = 130.dp
-                                    )
-                                    .size(84.dp),
-                                bitmap = resources["circle"]!!,
-                                contentDescription = null
-                            )
-
-                            Image(
-                                modifier = Modifier
-                                    .padding(
-                                        start = 200.dp
-                                    )
-                                    .size(100.dp),
-                                bitmap = resources["triangle"]!!,
-                                contentDescription = null
-                            )
-                        }
+                                    top = 26.dp
+                                ),
+                            text = "CREATING...",
+                            style = MaterialTheme.typography.h5,
+                            color = MaterialTheme.colors.primary
+                        )
                     }
                 }
                 is ViewState.Generated -> { }
