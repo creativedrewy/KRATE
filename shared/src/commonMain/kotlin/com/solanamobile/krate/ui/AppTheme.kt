@@ -58,6 +58,11 @@ fun KrateAppTheme(
             fontFamily = geographNormal,
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp
+        ),
+        subtitle1 = TextStyle(
+            fontFamily = geographNormal,
+            fontWeight = FontWeight.Medium,
+            fontSize = 14.sp
         )
     )
 
@@ -66,6 +71,7 @@ fun KrateAppTheme(
             background = Color(0xFFF0E7E0),
             surface = Color(0xFFF0DCD4),
             primary = Color(0xFFF07C6C),
+            onSurface = Color(0xFF172C4A)
         ),
         typography = typography
     ) {

@@ -16,14 +16,17 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,13 +37,20 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -98,7 +108,7 @@ class CreateScreen: Screen {
 }
 
 @OptIn(ExperimentalResourceApi::class, ExperimentalAnimationApi::class,
-    ExperimentalFoundationApi::class
+    ExperimentalFoundationApi::class, ExperimentalMaterialApi::class
 )
 @Composable
 fun CreateScreenContent(
@@ -108,127 +118,135 @@ fun CreateScreenContent(
 ) {
     val navigator = LocalNavigator.currentOrThrow
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.background)
-            .padding(
-                top = 44.dp
-            ),
-        topBar = {
-            TopAppBar(
-                backgroundColor = MaterialTheme.colors.background,
-                elevation = 0.dp,
-                title = { },
-                navigationIcon = { },
-                actions = {
-                    resources.isReady {
-                        Button(
-                            modifier = Modifier
-                                .padding(
-                                    end = 20.dp
-                                )
-                                .size(40.dp),
-                            shape = CircleShape,
-                            contentPadding = PaddingValues(4.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = MaterialTheme.colors.primary,
-                                contentColor = Color.White
-                            ),
-                            onClick = {
-                                navigator.push(ScreenRegistry.get(NavScreenProvider.ProfileScreen))
-                            }
-                        ) {
-                            Image(
-                                bitmap = resources["user"]!!,
-                                colorFilter = ColorFilter.tint(Color.White),
-                                contentDescription = null
-                            )
-                        }
-                    }
-                }
-            )
-        }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            var promptText by rememberSaveable { mutableStateOf("What do you want to create today?") }
+    val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
-            val scope = rememberCoroutineScope()
-            val headingAnimation = remember { Animatable(0f) }
-
-            val h1 = MaterialTheme.typography.h4
-            val h2 = MaterialTheme.typography.h5
-
-            val textStyle by remember(headingAnimation.value) {
-                derivedStateOf {
-                    lerp(h1, h2, headingAnimation.value)
-                }
-            }
-
-            var moveHeadingPos = remember { mutableStateOf(false) }
-            val topPadding = animateDpAsState(
-                targetValue = if (!moveHeadingPos.value) 154.dp else 100.dp,
-                animationSpec = tween(600)
-            )
-
-            val focusRequester = remember { FocusRequester() }
-            val focusManager = LocalFocusManager.current
-
-            TextField(
+    ModalBottomSheetLayout(
+        sheetShape = RoundedCornerShape(
+            topStart = 20.dp,
+            topEnd = 20.dp
+        ),
+        sheetBackgroundColor = MaterialTheme.colors.surface,
+        sheetContent = {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(
-                        start = 24.dp,
-                        end = 24.dp,
-                        top = topPadding.value
+                    .height(224.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(
+                            top = 22.dp,
+                            bottom = 28.dp
+                        ),
+                    text = "Save your creation",
+                    color = MaterialTheme.colors.onSurface
+                )
+
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colors.background
+                )
+
+                Row(
+                    modifier = Modifier
+                        .padding(
+                            start = 14.dp,
+                            end = 14.dp
+                        )
+                        .height(54.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Save to Profile"
                     )
-                    .onFocusEvent {
-                        if (it.hasFocus) {
-                            promptText = ""
-                        }
-                    }
-                    .focusRequester(focusRequester),
-                value = promptText,
-                textStyle = textStyle,
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = Color(0xFFF06441),
-                    backgroundColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                onValueChange = {
-                    promptText = it
-                }
-            )
 
-            AnimatedContent(
-                targetState = state
-            ) { targetState ->
-                when (targetState) {
-                    ViewState.Prompting -> {
-                        Column(
+                    Spacer(Modifier.weight(1f))
+
+                    resources.isReady {
+                        Image(
                             modifier = Modifier
-                                .fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Spacer(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f)
-                            )
+                                .size(24.dp)
+                                .clickable {
 
-                            //TODO: Make this dock above the keyboard when typing
+                                },
+                            bitmap = resources["user"]!!,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
+                            contentDescription = null
+                        )
+                    }
+                }
+
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colors.background
+                )
+
+                Row(
+                    modifier = Modifier
+                        .padding(
+                            start = 14.dp,
+                            end = 14.dp
+                        )
+                        .height(54.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Save to Photos"
+                    )
+
+                    Spacer(Modifier.weight(1f))
+
+                    resources.isReady {
+                        Image(
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clickable {
+
+                                },
+                            imageVector = Icons.Outlined.Check,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
+                            contentDescription = null
+                        )
+                    }
+                }
+
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colors.background
+                )
+            }
+        },
+        sheetState = sheetState
+    ) {
+
+        Scaffold(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.background)
+                .padding(
+                    top = 44.dp
+                ),
+            topBar = {
+                TopAppBar(
+                    backgroundColor = MaterialTheme.colors.background,
+                    elevation = 0.dp,
+                    title = { },
+                    navigationIcon = { },
+                    actions = {
+                        resources.isReady {
                             Button(
                                 modifier = Modifier
                                     .padding(
-                                        bottom = 30.dp
+                                        end = 20.dp
                                     )
-                                    .size(84.dp),
+                                    .size(40.dp),
                                 shape = CircleShape,
                                 contentPadding = PaddingValues(4.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -236,188 +254,297 @@ fun CreateScreenContent(
                                     contentColor = Color.White
                                 ),
                                 onClick = {
+                                    navigator.push(ScreenRegistry.get(NavScreenProvider.ProfileScreen))
+                                }
+                            ) {
+                                Image(
+                                    bitmap = resources["user"]!!,
+                                    colorFilter = ColorFilter.tint(Color.White),
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    }
+                )
+            }
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.background),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                var promptText by rememberSaveable { mutableStateOf("What do you want to create today?") }
+
+                val scope = rememberCoroutineScope()
+                val headingAnimation = remember { Animatable(0f) }
+
+                val h1 = MaterialTheme.typography.h4
+                val h2 = MaterialTheme.typography.h5
+
+                val textStyle by remember(headingAnimation.value) {
+                    derivedStateOf {
+                        lerp(h1, h2, headingAnimation.value)
+                    }
+                }
+
+                var moveHeadingPos = remember { mutableStateOf(false) }
+                val topPadding = animateDpAsState(
+                    targetValue = if (!moveHeadingPos.value) 154.dp else 100.dp,
+                    animationSpec = tween(600)
+                )
+
+                val focusRequester = remember { FocusRequester() }
+                val focusManager = LocalFocusManager.current
+
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            start = 24.dp,
+                            end = 24.dp,
+                            top = topPadding.value
+                        )
+                        .onFocusEvent {
+                            if (it.hasFocus) {
+                                promptText = ""
+                            }
+                        }
+                        .focusRequester(focusRequester),
+                    value = promptText,
+                    textStyle = textStyle,
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color(0xFFF06441),
+                        backgroundColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    onValueChange = {
+                        promptText = it
+                    }
+                )
+
+                AnimatedContent(
+                    targetState = state
+                ) { targetState ->
+                    when (targetState) {
+                        ViewState.Prompting -> {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Spacer(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .weight(1f)
+                                )
+
+                                //TODO: Make this dock above the keyboard when typing
+                                Button(
+                                    modifier = Modifier
+                                        .padding(
+                                            bottom = 30.dp
+                                        )
+                                        .size(84.dp),
+                                    shape = CircleShape,
+                                    contentPadding = PaddingValues(4.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        backgroundColor = MaterialTheme.colors.primary,
+                                        contentColor = Color.White
+                                    ),
+                                    onClick = {
 //                                    if (promptText != "What do you want to create today?") {
                                         focusManager.clearFocus()
 
                                         onSubmitPrompt(promptText)
 //                                    }
-                                }
-                            ) {
-                                Text(
-                                    text = "CREATE",
-                                    style = MaterialTheme.typography.h6
-                                )
-                            }
-                        }
-                    }
-                    ViewState.Creating -> {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            resources.isReady {
-                                Box(
-                                    modifier = Modifier
-                                        .padding(
-                                            start = 20.dp,
-                                            end = 20.dp,
-                                            top = 67.dp
-                                        )
-                                        .fillMaxWidth()
+                                    }
                                 ) {
-                                    val starAnimPos by rememberInfiniteTransition().animateFloat(
-                                        initialValue = -5f,
-                                        targetValue = 10f,
-                                        animationSpec = infiniteRepeatable(
-                                            animation = tween(350, easing = EaseInOutQuad),
-                                            repeatMode = RepeatMode.Reverse
-                                        )
-                                    )
-
-                                    val circleAnimPos by rememberInfiniteTransition().animateFloat(
-                                        initialValue = -10f,
-                                        targetValue = 10f,
-                                        animationSpec = infiniteRepeatable(
-                                            animation = tween(400, easing = FastOutLinearInEasing),
-                                            repeatMode = RepeatMode.Reverse
-                                        )
-                                    )
-
-                                    val triangleAnimPos by rememberInfiniteTransition().animateFloat(
-                                        initialValue = -5f,
-                                        targetValue = 25f,
-                                        animationSpec = infiniteRepeatable(
-                                            animation = tween(300, easing = EaseInOut),
-                                            repeatMode = RepeatMode.Reverse
-                                        )
-                                    )
-
-                                    Image(
-                                        modifier = Modifier
-                                            .padding(
-                                                top = 25.dp,
-                                                start = 31.dp
-                                            )
-                                            .offset(y = starAnimPos.dp)
-                                            .size(114.dp),
-                                        bitmap = resources["star"]!!,
-                                        contentDescription = null
-                                    )
-
-                                    Image(
-                                        modifier = Modifier
-                                            .padding(
-                                                top = 60.dp,
-                                                start = 130.dp
-                                            )
-                                            .offset(y = circleAnimPos.dp)
-                                            .size(84.dp),
-                                        bitmap = resources["circle"]!!,
-                                        contentDescription = null
-                                    )
-
-                                    Image(
-                                        modifier = Modifier
-                                            .padding(
-                                                start = 200.dp
-                                            )
-                                            .offset(y = triangleAnimPos.dp)
-                                            .size(100.dp),
-                                        bitmap = resources["triangle"]!!,
-                                        contentDescription = null
+                                    Text(
+                                        text = "CREATE",
+                                        style = MaterialTheme.typography.h6
                                     )
                                 }
                             }
-
-                            Text(
-                                modifier = Modifier
-                                    .padding(
-                                        top = 26.dp
-                                    ),
-                                text = "CREATING...",
-                                style = MaterialTheme.typography.h6,
-                                color = MaterialTheme.colors.primary
-                            )
                         }
-                    }
-                    is ViewState.Generated -> {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            LaunchedEffect(Unit) {
-                                //TODO: Make text input not editable in this state
 
-                                launch {
-                                    headingAnimation.animateTo(1f, tween(600))
-                                }
-                                launch {
-                                    moveHeadingPos.value = true
-                                }
-                            }
-
-                            val lazyListState = rememberLazyListState()
-                            val snapBehavior = rememberSnapFlingBehavior(lazyListState)
-
-                            LazyRow(
+                        ViewState.Creating -> {
+                            Column(
                                 modifier = Modifier
-                                    .padding(
-                                        top = 56.dp
-                                    )
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(18.dp),
-                                contentPadding = PaddingValues(
-                                    start = 20.dp,
-                                    end = 20.dp
-                                ),
-                                state = lazyListState,
-                                flingBehavior = snapBehavior
+                                    .fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                items(listOf(4, 5, 6, 7)) {
+                                resources.isReady {
                                     Box(
                                         modifier = Modifier
-                                            .size(271.dp)
-                                            .clip(RoundedCornerShape(12.dp))
-                                            .background(Color.Red)
+                                            .padding(
+                                                start = 20.dp,
+                                                end = 20.dp,
+                                                top = 67.dp
+                                            )
+                                            .fillMaxWidth()
                                     ) {
+                                        val starAnimPos by rememberInfiniteTransition().animateFloat(
+                                            initialValue = -5f,
+                                            targetValue = 10f,
+                                            animationSpec = infiniteRepeatable(
+                                                animation = tween(350, easing = EaseInOutQuad),
+                                                repeatMode = RepeatMode.Reverse
+                                            )
+                                        )
+
+                                        val circleAnimPos by rememberInfiniteTransition().animateFloat(
+                                            initialValue = -10f,
+                                            targetValue = 10f,
+                                            animationSpec = infiniteRepeatable(
+                                                animation = tween(
+                                                    400,
+                                                    easing = FastOutLinearInEasing
+                                                ),
+                                                repeatMode = RepeatMode.Reverse
+                                            )
+                                        )
+
+                                        val triangleAnimPos by rememberInfiniteTransition().animateFloat(
+                                            initialValue = -5f,
+                                            targetValue = 25f,
+                                            animationSpec = infiniteRepeatable(
+                                                animation = tween(300, easing = EaseInOut),
+                                                repeatMode = RepeatMode.Reverse
+                                            )
+                                        )
+
                                         Image(
                                             modifier = Modifier
-                                                .fillMaxSize(),
-                                            bitmap = resources[resources.keys.toList()[it]]!!,
+                                                .padding(
+                                                    top = 25.dp,
+                                                    start = 31.dp
+                                                )
+                                                .offset(y = starAnimPos.dp)
+                                                .size(114.dp),
+                                            bitmap = resources["star"]!!,
+                                            contentDescription = null
+                                        )
+
+                                        Image(
+                                            modifier = Modifier
+                                                .padding(
+                                                    top = 60.dp,
+                                                    start = 130.dp
+                                                )
+                                                .offset(y = circleAnimPos.dp)
+                                                .size(84.dp),
+                                            bitmap = resources["circle"]!!,
+                                            contentDescription = null
+                                        )
+
+                                        Image(
+                                            modifier = Modifier
+                                                .padding(
+                                                    start = 200.dp
+                                                )
+                                                .offset(y = triangleAnimPos.dp)
+                                                .size(100.dp),
+                                            bitmap = resources["triangle"]!!,
                                             contentDescription = null
                                         )
                                     }
                                 }
-                            }
 
-                            OutlinedButton(
-                                modifier = Modifier
-                                    .padding(
-                                        top = 16.dp
-                                    ),
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Color.Transparent,
-                                    contentColor = MaterialTheme.colors.primary
-                                ),
-                                border = BorderStroke(
-                                    2.dp,
-                                    MaterialTheme.colors.primary
-                                ),
-                                shape = RoundedCornerShape(6.dp),
-                                contentPadding = PaddingValues(12.dp),
-                                onClick = { }
-                            ) {
                                 Text(
-                                    text = "Save",
-                                    style = MaterialTheme.typography.h6
+                                    modifier = Modifier
+                                        .padding(
+                                            top = 26.dp
+                                        ),
+                                    text = "CREATING...",
+                                    style = MaterialTheme.typography.h6,
+                                    color = MaterialTheme.colors.primary
                                 )
+                            }
+                        }
+
+                        is ViewState.Generated -> {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                LaunchedEffect(Unit) {
+                                    //TODO: Make text input not editable in this state
+
+                                    launch {
+                                        headingAnimation.animateTo(1f, tween(600))
+                                    }
+                                    launch {
+                                        moveHeadingPos.value = true
+                                    }
+                                }
+
+                                val lazyListState = rememberLazyListState()
+                                val snapBehavior = rememberSnapFlingBehavior(lazyListState)
+
+                                LazyRow(
+                                    modifier = Modifier
+                                        .padding(
+                                            top = 56.dp
+                                        )
+                                        .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(18.dp),
+                                    contentPadding = PaddingValues(
+                                        start = 20.dp,
+                                        end = 20.dp
+                                    ),
+                                    state = lazyListState,
+                                    flingBehavior = snapBehavior
+                                ) {
+                                    items(listOf(4, 5, 6, 7)) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(271.dp)
+                                                .clip(RoundedCornerShape(12.dp))
+                                                .background(Color.Red)
+                                        ) {
+                                            Image(
+                                                modifier = Modifier
+                                                    .fillMaxSize(),
+                                                bitmap = resources[resources.keys.toList()[it]]!!,
+                                                contentDescription = null
+                                            )
+                                        }
+                                    }
+                                }
+
+                                OutlinedButton(
+                                    modifier = Modifier
+                                        .padding(
+                                            top = 16.dp
+                                        ),
+                                    colors = ButtonDefaults.buttonColors(
+                                        backgroundColor = Color.Transparent,
+                                        contentColor = MaterialTheme.colors.primary
+                                    ),
+                                    border = BorderStroke(
+                                        2.dp,
+                                        MaterialTheme.colors.primary
+                                    ),
+                                    shape = RoundedCornerShape(6.dp),
+                                    contentPadding = PaddingValues(12.dp),
+                                    onClick = {
+                                        scope.launch {
+                                            sheetState.show()
+                                        }
+                                    }
+                                ) {
+                                    Text(
+                                        text = "Save",
+                                        style = MaterialTheme.typography.h6
+                                    )
+                                }
                             }
                         }
                     }
                 }
-            }
 
 //            when (state) {
 //                is ViewState.Loading -> {
@@ -445,6 +572,8 @@ fun CreateScreenContent(
 //                }
 //                else -> {}
 //            }
+            }
+
         }
     }
 }
