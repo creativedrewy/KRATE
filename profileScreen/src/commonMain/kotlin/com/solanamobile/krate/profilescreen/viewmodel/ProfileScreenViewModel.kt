@@ -2,20 +2,12 @@ package com.solanamobile.krate.profilescreen.viewmodel
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import com.moriatsushi.koject.Provides
-import kotlinx.coroutines.flow.update
 
-data class SomeState(
-    val myObj: String = "Hello"
+data class ProfileViewState(
+    val name: String = "Name"
 )
 
 @Provides
-class ProfileScreenViewModel(): StateScreenModel<SomeState>(SomeState()) {
+class ProfileScreenViewModel: StateScreenModel<ProfileViewState>(ProfileViewState()) {
 
-    fun modifyState() {
-        mutableState.update {
-            it.copy(
-                myObj = "You clicked"
-            )
-        }
-    }
 }
