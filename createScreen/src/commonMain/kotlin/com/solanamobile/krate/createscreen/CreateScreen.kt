@@ -12,6 +12,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,6 +35,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -342,7 +344,8 @@ fun CreateScreenContent(
                     is ViewState.Generated -> {
                         Column(
                             modifier = Modifier
-                                .fillMaxSize()
+                                .fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             LaunchedEffect(Unit) {
                                 //TODO: Make text input not editable in this state
@@ -362,7 +365,8 @@ fun CreateScreenContent(
                                 modifier = Modifier
                                     .padding(
                                         top = 56.dp
-                                    ),
+                                    )
+                                    .fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(18.dp),
                                 contentPadding = PaddingValues(
                                     start = 20.dp,
@@ -379,6 +383,29 @@ fun CreateScreenContent(
                                             .background(Color.Red)
                                     )
                                 }
+                            }
+
+                            OutlinedButton(
+                                modifier = Modifier
+                                    .padding(
+                                        top = 16.dp
+                                    ),
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = Color.Transparent,
+                                    contentColor = MaterialTheme.colors.primary
+                                ),
+                                border = BorderStroke(
+                                    2.dp,
+                                    MaterialTheme.colors.primary
+                                ),
+                                shape = RoundedCornerShape(6.dp),
+                                contentPadding = PaddingValues(12.dp),
+                                onClick = { }
+                            ) {
+                                Text(
+                                    text = "Save",
+                                    style = MaterialTheme.typography.h6
+                                )
                             }
                         }
                     }
