@@ -12,8 +12,11 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,7 +26,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
@@ -44,6 +51,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusEvent
@@ -87,7 +95,9 @@ class CreateScreen: Screen {
     }
 }
 
-@OptIn(ExperimentalResourceApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalResourceApi::class, ExperimentalAnimationApi::class,
+    ExperimentalFoundationApi::class
+)
 @Composable
 fun CreateScreenContent(
     state: ViewState,
@@ -210,6 +220,7 @@ fun CreateScreenContent(
                                     .weight(1f)
                             )
 
+                            //TODO: Make this dock above the keyboard when typing
                             Button(
                                 modifier = Modifier
                                     .padding(
@@ -223,11 +234,11 @@ fun CreateScreenContent(
                                     contentColor = Color.White
                                 ),
                                 onClick = {
-                                    if (promptText != "What do you want to create today?") {
+//                                    if (promptText != "What do you want to create today?") {
                                         focusManager.clearFocus()
 
                                         onSubmitPrompt(promptText)
-                                    }
+//                                    }
                                 }
                             ) {
                                 Text(
@@ -341,6 +352,32 @@ fun CreateScreenContent(
                                 }
                                 launch {
                                     moveHeadingPos.value = true
+                                }
+                            }
+
+                            val lazyListState = rememberLazyListState()
+                            val snapBehavior = rememberSnapFlingBehavior(lazyListState)
+
+                            LazyRow(
+                                modifier = Modifier
+                                    .padding(
+                                        top = 56.dp
+                                    ),
+                                horizontalArrangement = Arrangement.spacedBy(18.dp),
+                                contentPadding = PaddingValues(
+                                    start = 20.dp,
+                                    end = 20.dp
+                                ),
+                                state = lazyListState,
+                                flingBehavior = snapBehavior
+                            ) {
+                                items(listOf("1", "2", "3", "4")) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(271.dp)
+                                            .clip(RoundedCornerShape(12.dp))
+                                            .background(Color.Red)
+                                    )
                                 }
                             }
                         }
