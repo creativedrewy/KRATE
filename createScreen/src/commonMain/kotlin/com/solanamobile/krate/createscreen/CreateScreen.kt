@@ -375,13 +375,20 @@ fun CreateScreenContent(
                                 state = lazyListState,
                                 flingBehavior = snapBehavior
                             ) {
-                                items(listOf("1", "2", "3", "4")) {
+                                items(listOf(4, 5, 6, 7)) {
                                     Box(
                                         modifier = Modifier
                                             .size(271.dp)
                                             .clip(RoundedCornerShape(12.dp))
                                             .background(Color.Red)
-                                    )
+                                    ) {
+                                        Image(
+                                            modifier = Modifier
+                                                .fillMaxSize(),
+                                            bitmap = resources[resources.keys.toList()[it]]!!,
+                                            contentDescription = null
+                                        )
+                                    }
                                 }
                             }
 
