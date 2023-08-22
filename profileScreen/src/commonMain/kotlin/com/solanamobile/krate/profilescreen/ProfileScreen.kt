@@ -4,10 +4,16 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
@@ -18,6 +24,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import com.solanamobile.krate.extension.getScreenModel
@@ -56,6 +64,8 @@ fun ProfileScreenContent(
                 .background(MaterialTheme.colors.surface)
         )
 
+        val pagerState = rememberPagerState()
+
         ScrollableTabRow(
             modifier = Modifier
                 .padding(
@@ -64,7 +74,7 @@ fun ProfileScreenContent(
                     end = 24.dp
                 ),
             backgroundColor = MaterialTheme.colors.background,
-            selectedTabIndex = 0,
+            selectedTabIndex = pagerState.currentPage,
             edgePadding = (-16).dp,
             divider = {
                 TabRowDefaults.Divider(
@@ -84,6 +94,53 @@ fun ProfileScreenContent(
                 selected = true,
                 onClick = { },
             )
+        }
+
+        HorizontalPager(
+            modifier = Modifier
+                .padding(
+                    top = 20.dp,
+                    start = 24.dp,
+                    end = 24.dp
+                ),
+            pageCount = 1,
+            state = pagerState,
+            verticalAlignment = Alignment.Top
+        ) { page ->
+            when (page) {
+                0 -> {
+                    Column(
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colors.surface),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .padding(
+                                    top = 72.dp
+                                )
+                                .size(84.dp)
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colors.background)
+                        )
+
+                        Text(
+                            modifier = Modifier
+                                .padding(
+                                    top = 26.dp,
+                                    start = 24.dp,
+                                    end = 24.dp
+                                ),
+                            text = "You don’t have any creations yet. Try creating something and then tapping save to get started.",
+                            style = MaterialTheme.typography.h6,
+                            color = MaterialTheme.colors.onSurface,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
         }
     }
 }
