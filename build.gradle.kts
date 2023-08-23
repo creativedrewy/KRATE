@@ -11,6 +11,6 @@ plugins {
 
 buildscript {
     dependencies {
-        classpath("io.github.skeptick.libres:gradle-plugin:1.2.0-beta01")
+        classpath(libs.libres.gradle.plugin)
     }
 }

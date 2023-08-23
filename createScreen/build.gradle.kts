@@ -68,7 +68,7 @@ kotlin {
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.transitions)
 
-                implementation("io.github.skeptick.libres:libres-compose:1.2.0-beta01")
+                implementation(libs.libres.compose)
 
                 implementation(libs.kermit)
             }

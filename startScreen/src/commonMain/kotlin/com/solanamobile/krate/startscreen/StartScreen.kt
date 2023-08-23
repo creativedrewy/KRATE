@@ -34,6 +34,7 @@ import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.startscreen.ui.AnimatedArrows
 import com.solanamobile.krate.startscreen.viewmodel.StartScreenViewModel
 import com.solanamobile.krate.startscreen.viewmodel.StartScreenViewState
+import io.github.skeptick.libres.compose.painterResource
 
 class StartScreen: Screen {
 
