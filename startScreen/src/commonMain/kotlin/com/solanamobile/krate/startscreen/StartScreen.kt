@@ -43,10 +43,6 @@ class StartScreen: Screen {
         val viewModel: StartScreenViewModel = getScreenModel()
         val state by viewModel.state.collectAsState()
 
-        LaunchedEffect(Unit) {
-            viewModel.loadLogos()
-        }
-
         StartScreenContents(
             viewState = state
         )
@@ -59,11 +55,6 @@ fun StartScreenContents(
     viewState: StartScreenViewState
 ) {
     val navigator = LocalNavigator.currentOrThrow
-
-//    LaunchedEffect(Unit) {
-//        delay(3000)
-//        navigator.replace(ScreenRegistry.get(NavScreenProvider.CreateScreen))
-//    }
 
     Column(
         modifier = Modifier
@@ -87,83 +78,79 @@ fun StartScreenContents(
             )
         )
 
-        if (viewState.logos.isNotEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(210.dp),
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                Image(
-                    bitmap = viewState.logos[0],
-                    contentDescription = null
-                )
-
-                Image(
-                    modifier = Modifier
-                        .padding(
-                            bottom = 33.dp
-                        ),
-                    bitmap = viewState.logos[1],
-                    contentDescription = null
-                )
-
-                Image(
-                    modifier = Modifier
-                        .padding(
-                            bottom = 66.dp
-                        ),
-                    bitmap = viewState.logos[2],
-                    contentDescription = null
-                )
-
-                Image(
-                    modifier = Modifier
-                        .padding(
-                            bottom = 99.dp
-                        ),
-                    bitmap = viewState.logos[3],
-                    contentDescription = null
-                )
-
-                Image(
-                    modifier = Modifier
-                        .padding(
-                            bottom = 132.dp
-                        ),
-                    bitmap = viewState.logos[4],
-                    contentDescription = null
-                )
-            }
-
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(210.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Image(
+                painter = painterResource(Res.image.krate0),
+                contentDescription = null
             )
 
-            Row(
+            Image(
                 modifier = Modifier
                     .padding(
-                        bottom = 26.dp
+                        bottom = 33.dp
                     ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    modifier = Modifier
-                        .clickable {
-                            navigator.replace(ScreenRegistry.get(NavScreenProvider.CreateScreen))
-                        },
-                    text = "KRATE NOW",
-                    style = MaterialTheme.typography.h3,
-                    fontSize = 32.sp,
-                    lineHeight = 60.sp,
-                )
+                painter = painterResource(Res.image.krate1),
+                contentDescription = null
+            )
 
-                AnimatedArrows(
-                    arrowImages = viewState.logos
-                )
-            }
+            Image(
+                modifier = Modifier
+                    .padding(
+                        bottom = 66.dp
+                    ),
+                painter = painterResource(Res.image.krate2),
+                contentDescription = null
+            )
+
+            Image(
+                modifier = Modifier
+                    .padding(
+                        bottom = 99.dp
+                    ),
+                painter = painterResource(Res.image.krate3),
+                contentDescription = null
+            )
+
+            Image(
+                modifier = Modifier
+                    .padding(
+                        bottom = 132.dp
+                    ),
+                painter = painterResource(Res.image.krate4),
+                contentDescription = null
+            )
+        }
+
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        )
+
+        Row(
+            modifier = Modifier
+                .padding(
+                    bottom = 26.dp
+                ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier
+                    .clickable {
+                        navigator.replace(ScreenRegistry.get(NavScreenProvider.CreateScreen))
+                    },
+                text = "KRATE NOW",
+                style = MaterialTheme.typography.h3,
+                fontSize = 32.sp,
+                lineHeight = 60.sp,
+            )
+
+            AnimatedArrows()
         }
     }
 }

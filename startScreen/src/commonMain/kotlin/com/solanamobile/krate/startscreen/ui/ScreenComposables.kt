@@ -9,17 +9,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
+import com.solanamobile.krate.startscreen.Res
+import io.github.skeptick.libres.compose.painterResource
 
 @Composable
-fun AnimatedArrows(
-    arrowImages: List<ImageBitmap>
-) {
+fun AnimatedArrows() {
     Box {
         Image(
             modifier = Modifier
                 .height(30.dp)
                 .width(55.dp),
-            bitmap = arrowImages[5],
+            painter = painterResource(Res.image.icon_caret_line),
             contentDescription = null
         )
 
@@ -30,7 +30,7 @@ fun AnimatedArrows(
                 )
                 .height(30.dp)
                 .width(55.dp),
-            bitmap = arrowImages[5],
+            painter = painterResource(Res.image.icon_caret_line),
             contentDescription = null
         )
 
@@ -41,7 +41,7 @@ fun AnimatedArrows(
                 )
                 .height(30.dp)
                 .width(55.dp),
-            bitmap = arrowImages[5],
+            painter = painterResource(Res.image.icon_caret_line),
             contentDescription = null
         )
 
@@ -52,7 +52,7 @@ fun AnimatedArrows(
                 )
                 .height(30.dp)
                 .width(55.dp),
-            bitmap = arrowImages[5],
+            painter = painterResource(Res.image.icon_caret_line),
             contentDescription = null
         )
 
@@ -63,7 +63,7 @@ fun AnimatedArrows(
                 )
                 .height(30.dp)
                 .width(55.dp),
-            bitmap = arrowImages[6],
+            painter = painterResource(Res.image.icon_caret_fill),
             contentDescription = null
         )
     }

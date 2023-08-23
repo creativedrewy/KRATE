@@ -11,29 +11,10 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
 
 data class StartScreenViewState(
-    val logos: List<ImageBitmap> = listOf()
+    val loaded: Boolean = true
 )
 
 @Provides
 class StartScreenViewModel: StateScreenModel<StartScreenViewState>(StartScreenViewState()) {
-    
-    @OptIn(ExperimentalResourceApi::class)
-    fun loadLogos() {
-        coroutineScope.launch {
-            mutableState.update {
-                it.copy(
-                    logos = listOf(
-                        resource("KRATE-0.png").readBytes().toImageBitmap(),
-                        resource("KRATE-1.png").readBytes().toImageBitmap(),
-                        resource("KRATE-2.png").readBytes().toImageBitmap(),
-                        resource("KRATE-3.png").readBytes().toImageBitmap(),
-                        resource("KRATE-4.png").readBytes().toImageBitmap(),
-                        resource("icon-caret-line.png").readBytes().toImageBitmap(),
-                        resource("icon-caret-fill.png").readBytes().toImageBitmap()
-                    )
-                )
-            }
-        }
-    }
     
 }
