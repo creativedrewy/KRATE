@@ -69,7 +69,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.lerp
 import androidx.compose.ui.unit.dp
@@ -79,9 +78,9 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.solanamobile.krate.createscreen.viewmodel.CreateScreenViewModel
 import com.solanamobile.krate.createscreen.viewmodel.ViewState
-import com.solanamobile.krate.createscreen.viewmodel.isReady
 import com.solanamobile.krate.extension.NavScreenProvider
 import com.solanamobile.krate.extension.getScreenModel
+import io.github.skeptick.libres.compose.painterResource
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
@@ -91,15 +90,13 @@ class CreateScreen: Screen {
     override fun Content() {
         val viewModel: CreateScreenViewModel = getScreenModel()
         val state by viewModel.state.collectAsState()
-        val resources = viewModel.resources.collectAsState().value
 
         LaunchedEffect(Unit) {
-            viewModel.loadResources()
+
         }
 
         CreateScreenContent(
             state,
-            resources,
             onSubmitPrompt = { txt ->
                 viewModel.generateImageFromPrompt(txt)
             }
@@ -113,7 +110,6 @@ class CreateScreen: Screen {
 @Composable
 fun CreateScreenContent(
     state: ViewState,
-    resources: Map<String, ImageBitmap>,
     onSubmitPrompt: (text: String) -> Unit
 ) {
     val navigator = LocalNavigator.currentOrThrow
@@ -165,18 +161,16 @@ fun CreateScreenContent(
 
                     Spacer(Modifier.weight(1f))
 
-                    resources.isReady {
-                        Image(
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clickable {
+                    Image(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable {
 
-                                },
-                            bitmap = resources["user"]!!,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
-                            contentDescription = null
-                        )
-                    }
+                            },
+                        painter = painterResource(Res.image.user),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
+                        contentDescription = null
+                    )
                 }
 
                 Divider(
@@ -201,18 +195,16 @@ fun CreateScreenContent(
 
                     Spacer(Modifier.weight(1f))
 
-                    resources.isReady {
-                        Image(
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clickable {
+                    Image(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable {
 
-                                },
-                            imageVector = Icons.Outlined.Check,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
-                            contentDescription = null
-                        )
-                    }
+                            },
+                        imageVector = Icons.Outlined.Check,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
+                        contentDescription = null
+                    )
                 }
 
                 Divider(
@@ -240,29 +232,27 @@ fun CreateScreenContent(
                     title = { },
                     navigationIcon = { },
                     actions = {
-                        resources.isReady {
-                            Button(
-                                modifier = Modifier
-                                    .padding(
-                                        end = 20.dp
-                                    )
-                                    .size(40.dp),
-                                shape = CircleShape,
-                                contentPadding = PaddingValues(4.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = MaterialTheme.colors.primary,
-                                    contentColor = Color.White
-                                ),
-                                onClick = {
-                                    navigator.push(ScreenRegistry.get(NavScreenProvider.ProfileScreen))
-                                }
-                            ) {
-                                Image(
-                                    bitmap = resources["user"]!!,
-                                    colorFilter = ColorFilter.tint(Color.White),
-                                    contentDescription = null
+                        Button(
+                            modifier = Modifier
+                                .padding(
+                                    end = 20.dp
                                 )
+                                .size(40.dp),
+                            shape = CircleShape,
+                            contentPadding = PaddingValues(4.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.primary,
+                                contentColor = Color.White
+                            ),
+                            onClick = {
+                                navigator.push(ScreenRegistry.get(NavScreenProvider.ProfileScreen))
                             }
+                        ) {
+                            Image(
+                                painter = painterResource(Res.image.user),
+                                colorFilter = ColorFilter.tint(Color.White),
+                                contentDescription = null
+                            )
                         }
                     }
                 )
@@ -375,81 +365,79 @@ fun CreateScreenContent(
                                     .fillMaxSize(),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                resources.isReady {
-                                    Box(
+                                Box(
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 20.dp,
+                                            end = 20.dp,
+                                            top = 67.dp
+                                        )
+                                        .fillMaxWidth()
+                                ) {
+                                    val starAnimPos by rememberInfiniteTransition().animateFloat(
+                                        initialValue = -5f,
+                                        targetValue = 10f,
+                                        animationSpec = infiniteRepeatable(
+                                            animation = tween(350, easing = EaseInOutQuad),
+                                            repeatMode = RepeatMode.Reverse
+                                        )
+                                    )
+
+                                    val circleAnimPos by rememberInfiniteTransition().animateFloat(
+                                        initialValue = -10f,
+                                        targetValue = 10f,
+                                        animationSpec = infiniteRepeatable(
+                                            animation = tween(
+                                                400,
+                                                easing = FastOutLinearInEasing
+                                            ),
+                                            repeatMode = RepeatMode.Reverse
+                                        )
+                                    )
+
+                                    val triangleAnimPos by rememberInfiniteTransition().animateFloat(
+                                        initialValue = -5f,
+                                        targetValue = 25f,
+                                        animationSpec = infiniteRepeatable(
+                                            animation = tween(300, easing = EaseInOut),
+                                            repeatMode = RepeatMode.Reverse
+                                        )
+                                    )
+
+                                    Image(
                                         modifier = Modifier
                                             .padding(
-                                                start = 20.dp,
-                                                end = 20.dp,
-                                                top = 67.dp
+                                                top = 25.dp,
+                                                start = 31.dp
                                             )
-                                            .fillMaxWidth()
-                                    ) {
-                                        val starAnimPos by rememberInfiniteTransition().animateFloat(
-                                            initialValue = -5f,
-                                            targetValue = 10f,
-                                            animationSpec = infiniteRepeatable(
-                                                animation = tween(350, easing = EaseInOutQuad),
-                                                repeatMode = RepeatMode.Reverse
+                                            .offset(y = starAnimPos.dp)
+                                            .size(114.dp),
+                                        painter = painterResource(Res.image.loading_star),
+                                        contentDescription = null
+                                    )
+
+                                    Image(
+                                        modifier = Modifier
+                                            .padding(
+                                                top = 60.dp,
+                                                start = 130.dp
                                             )
-                                        )
+                                            .offset(y = circleAnimPos.dp)
+                                            .size(84.dp),
+                                        painter = painterResource(Res.image.loading_circle),
+                                        contentDescription = null
+                                    )
 
-                                        val circleAnimPos by rememberInfiniteTransition().animateFloat(
-                                            initialValue = -10f,
-                                            targetValue = 10f,
-                                            animationSpec = infiniteRepeatable(
-                                                animation = tween(
-                                                    400,
-                                                    easing = FastOutLinearInEasing
-                                                ),
-                                                repeatMode = RepeatMode.Reverse
+                                    Image(
+                                        modifier = Modifier
+                                            .padding(
+                                                start = 200.dp
                                             )
-                                        )
-
-                                        val triangleAnimPos by rememberInfiniteTransition().animateFloat(
-                                            initialValue = -5f,
-                                            targetValue = 25f,
-                                            animationSpec = infiniteRepeatable(
-                                                animation = tween(300, easing = EaseInOut),
-                                                repeatMode = RepeatMode.Reverse
-                                            )
-                                        )
-
-                                        Image(
-                                            modifier = Modifier
-                                                .padding(
-                                                    top = 25.dp,
-                                                    start = 31.dp
-                                                )
-                                                .offset(y = starAnimPos.dp)
-                                                .size(114.dp),
-                                            bitmap = resources["star"]!!,
-                                            contentDescription = null
-                                        )
-
-                                        Image(
-                                            modifier = Modifier
-                                                .padding(
-                                                    top = 60.dp,
-                                                    start = 130.dp
-                                                )
-                                                .offset(y = circleAnimPos.dp)
-                                                .size(84.dp),
-                                            bitmap = resources["circle"]!!,
-                                            contentDescription = null
-                                        )
-
-                                        Image(
-                                            modifier = Modifier
-                                                .padding(
-                                                    start = 200.dp
-                                                )
-                                                .offset(y = triangleAnimPos.dp)
-                                                .size(100.dp),
-                                            bitmap = resources["triangle"]!!,
-                                            contentDescription = null
-                                        )
-                                    }
+                                            .offset(y = triangleAnimPos.dp)
+                                            .size(100.dp),
+                                        painter = painterResource(Res.image.loading_triangle),
+                                        contentDescription = null
+                                    )
                                 }
 
                                 Text(
@@ -498,7 +486,14 @@ fun CreateScreenContent(
                                     state = lazyListState,
                                     flingBehavior = snapBehavior
                                 ) {
-                                    items(listOf(4, 5, 6, 7)) {
+                                    items(
+                                        listOf(
+                                            Res.image.wallet,
+                                            Res.image.wallet2,
+                                            Res.image.wallet3,
+                                            Res.image.wallet4
+                                        )
+                                    ) {
                                         Box(
                                             modifier = Modifier
                                                 .size(271.dp)
@@ -508,7 +503,7 @@ fun CreateScreenContent(
                                             Image(
                                                 modifier = Modifier
                                                     .fillMaxSize(),
-                                                bitmap = resources[resources.keys.toList()[it]]!!,
+                                                painter = painterResource(it),
                                                 contentDescription = null
                                             )
                                         }

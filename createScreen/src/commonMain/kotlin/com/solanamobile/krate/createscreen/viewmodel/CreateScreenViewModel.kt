@@ -48,14 +48,14 @@ class CreateScreenViewModel(
         coroutineScope.launch {
             _resources.update {
                 mapOf(
-                    "user" to resource("user.png").readBytes().toImageBitmap(),
+                    "star" to resource("loading_star.png").readBytes().toImageBitmap(),
                     "star" to resource("loading_star.png").readBytes().toImageBitmap(),
                     "circle" to resource("loading_circle.png").readBytes().toImageBitmap(),
                     "triangle" to resource("loading_triangle.png").readBytes().toImageBitmap(),
                     "wallet1" to resource("wallet.png").readBytes().toImageBitmap(),
                     "wallet2" to resource("wallet2.png").readBytes().toImageBitmap(),
                     "wallet3" to resource("wallet3.png").readBytes().toImageBitmap(),
-                    "wallet4" to resource("wallet4.png").readBytes().toImageBitmap()
+//                    "wallet4" to resource("wallet4.png").readBytes().toImageBitmap()
                 )
             }
         }

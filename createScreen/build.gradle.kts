@@ -9,6 +9,7 @@ plugins {
     id("com.github.gmazzo.buildconfig")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
     id("de.jensklingenberg.ktorfit") version "1.0.0"
+    id("io.github.skeptick.libres")
 }
 
 buildConfig {
@@ -66,6 +67,8 @@ kotlin {
 
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.transitions)
+
+                implementation("io.github.skeptick.libres:libres-compose:1.2.0-beta01")
 
                 implementation(libs.kermit)
             }

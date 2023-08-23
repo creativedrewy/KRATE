@@ -8,3 +8,9 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
     id("com.github.gmazzo.buildconfig") version "3.1.0"
 }
+
+buildscript {
+    dependencies {
+        classpath("io.github.skeptick.libres:gradle-plugin:1.2.0-beta01")
+    }
+}
