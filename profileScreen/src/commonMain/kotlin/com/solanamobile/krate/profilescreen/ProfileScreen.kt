@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -60,16 +61,60 @@ fun ProfileScreenContent(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(171.dp)
-                .background(MaterialTheme.colors.surface)
-        )
+                .height(238.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(171.dp)
+                    .background(MaterialTheme.colors.surface)
+            )
+
+            Row(
+                modifier = Modifier
+                    .height(83.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Box(
+                    modifier = Modifier
+                        .padding(
+                            start = 20.dp
+                        )
+                        .size(83.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colors.primary)
+                )
+
+                Column(
+                    modifier = Modifier
+                        .padding(
+                            start = 10.dp,
+                            bottom = 10.dp
+                        )
+                ) {
+                    Text(
+                        text = "Username",
+                        style = MaterialTheme.typography.h6,
+                        color = MaterialTheme.colors.primary
+                    )
+
+                    Text(
+                        text = "123Monkey",
+                        style = MaterialTheme.typography.h6,
+                        color = MaterialTheme.colors.primary
+                    )
+                }
+            }
+        }
 
         val pagerState = rememberPagerState()
 
         ScrollableTabRow(
             modifier = Modifier
                 .padding(
-                    top = 80.dp,
+                    top = 24.dp,
                     start = 24.dp,
                     end = 24.dp
                 ),
