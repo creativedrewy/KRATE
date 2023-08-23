@@ -34,7 +34,6 @@ import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.startscreen.ui.AnimatedArrows
 import com.solanamobile.krate.startscreen.viewmodel.StartScreenViewModel
 import com.solanamobile.krate.startscreen.viewmodel.StartScreenViewState
-import kotlinx.coroutines.delay
 
 class StartScreen: Screen {
 
@@ -60,10 +59,10 @@ fun StartScreenContents(
 ) {
     val navigator = LocalNavigator.currentOrThrow
 
-    LaunchedEffect(Unit) {
-        delay(100)
-        navigator.replace(ScreenRegistry.get(NavScreenProvider.CreateScreen))
-    }
+//    LaunchedEffect(Unit) {
+//        delay(3000)
+//        navigator.replace(ScreenRegistry.get(NavScreenProvider.CreateScreen))
+//    }
 
     Column(
         modifier = Modifier

@@ -68,7 +68,7 @@ class CreateScreenViewModel(
                 ViewState.Creating
             }
 
-            delay(500)
+            delay(3000)
 
             mutableState.update {
                 ViewState.Generated()
