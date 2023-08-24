@@ -5,6 +5,7 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.createscreen.repository.GetImgRepository
+import com.solanamobile.krate.createscreen.usecase.ImageGeneratorUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -18,14 +19,14 @@ sealed class ViewState() {
     data object Creating : ViewState()
 
     data class Generated(
-        val bitmap: ImageBitmap? = null
+        val images: List<ImageBitmap> = listOf()
     ): ViewState()
 }
 
 @OptIn(ExperimentalResourceApi::class)
 @Provides
 class CreateScreenViewModel(
-    private val getImgRepository: GetImgRepository,
+    private val imgGeneratorUseCase: ImageGeneratorUseCase,
 ): StateScreenModel<ViewState>(ViewState.Prompting) {
 
     fun resetState() {
@@ -41,19 +42,11 @@ class CreateScreenViewModel(
                 ViewState.Creating
             }
 
-            delay(3000)
+
 
             mutableState.update {
                 ViewState.Generated()
             }
-//            val imgString = getImgRepository.generateImage(prompt)
-//            val decodedbytes = Base64.decode(imgString)
-//
-//            mutableState.update {
-//                ViewState.Generated(
-//                    bitmap = decodedbytes.toImageBitmap()
-//                )
-//            }
         }
     }
 }

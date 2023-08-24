@@ -36,7 +36,7 @@ class GetImgRepository {
     }
 
     @OptIn(ExperimentalEncodingApi::class)
-    suspend fun generateImage(textPrompt: String):String {
+    suspend fun generateImage(textPrompt: String): String {
         val request = GetImgRequest(
             prompt = textPrompt,
         )

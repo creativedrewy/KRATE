@@ -509,8 +509,6 @@ fun CreateScreenContent(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 LaunchedEffect(Unit) {
-                                    //TODO: Make text input not editable in this state
-
                                     launch {
                                         headingAnimation.animateTo(1f, tween(600))
                                     }
