@@ -581,33 +581,6 @@ fun CreateScreenContent(
                         }
                     }
                 }
-
-//            when (state) {
-//                is ViewState.Loading -> {
-//                    CircularProgressIndicator()
-//                }
-//                is ViewState.Generated -> {
-//                    val bmp = state.bitmap
-//                    var imageBitmap by remember(bmp) { mutableStateOf(bmp) }
-//
-//                    imageBitmap?.let { myBmp ->
-//                        Image(
-//                            modifier = Modifier
-//                                .padding(
-//                                    top = 16.dp
-//                                )
-//                                .width(300.dp)
-//                                .height(300.dp)
-//                                .background(Color.LightGray),
-//                            bitmap = myBmp,
-//                            contentScale = ContentScale.None,
-//                            alignment = Alignment.Center,
-//                            contentDescription = ""
-//                        )
-//                    }
-//                }
-//                else -> {}
-//            }
             }
 
         }
