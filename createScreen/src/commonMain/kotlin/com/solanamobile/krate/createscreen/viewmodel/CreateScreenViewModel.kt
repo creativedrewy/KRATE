@@ -42,10 +42,10 @@ class CreateScreenViewModel(
                 ViewState.Creating
             }
 
-
+            val generatedImgs = imgGeneratorUseCase.generateImages(prompt)
 
             mutableState.update {
-                ViewState.Generated()
+                ViewState.Generated(generatedImgs)
             }
         }
     }

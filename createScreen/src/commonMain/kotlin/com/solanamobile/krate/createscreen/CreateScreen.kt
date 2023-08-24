@@ -534,14 +534,7 @@ fun CreateScreenContent(
                                     state = lazyListState,
                                     flingBehavior = snapBehavior
                                 ) {
-                                    items(
-                                        listOf(
-                                            Res.image.wallet,
-                                            Res.image.wallet2,
-                                            Res.image.wallet3,
-                                            Res.image.wallet4
-                                        )
-                                    ) {
+                                    items(targetState.images) {
                                         Box(
                                             modifier = Modifier
                                                 .size(271.dp)
@@ -551,7 +544,7 @@ fun CreateScreenContent(
                                             Image(
                                                 modifier = Modifier
                                                     .fillMaxSize(),
-                                                painter = painterResource(it),
+                                                bitmap = it,
                                                 contentDescription = null
                                             )
                                         }
