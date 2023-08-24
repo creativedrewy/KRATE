@@ -101,10 +101,6 @@ import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
-fun lerp(start: Float, stop: Float, fraction: Float): Float {
-    return (1 - fraction) * start + fraction * stop
-}
-
 class CreateScreen: Screen {
 
     @Composable
@@ -160,39 +156,39 @@ fun CreateScreenContent(
                     color = MaterialTheme.colors.onSurface
                 )
 
-                Divider(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    thickness = 1.dp,
-                    color = MaterialTheme.colors.background
-                )
-
-                Row(
-                    modifier = Modifier
-                        .padding(
-                            start = 14.dp,
-                            end = 14.dp
-                        )
-                        .height(54.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Save to Profile"
-                    )
-
-                    Spacer(Modifier.weight(1f))
-
-                    Image(
-                        modifier = Modifier
-                            .size(24.dp)
-                            .clickable {
-
-                            },
-                        painter = painterResource(Res.image.user),
-                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
-                        contentDescription = null
-                    )
-                }
+//                Divider(
+//                    modifier = Modifier
+//                        .fillMaxWidth(),
+//                    thickness = 1.dp,
+//                    color = MaterialTheme.colors.background
+//                )
+//
+//                Row(
+//                    modifier = Modifier
+//                        .padding(
+//                            start = 14.dp,
+//                            end = 14.dp
+//                        )
+//                        .height(54.dp),
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    Text(
+//                        text = "Save to Profile"
+//                    )
+//
+//                    Spacer(Modifier.weight(1f))
+//
+//                    Image(
+//                        modifier = Modifier
+//                            .size(24.dp)
+//                            .clickable {
+//
+//                            },
+//                        painter = painterResource(Res.image.user),
+//                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
+//                        contentDescription = null
+//                    )
+//                }
 
                 Divider(
                     modifier = Modifier
