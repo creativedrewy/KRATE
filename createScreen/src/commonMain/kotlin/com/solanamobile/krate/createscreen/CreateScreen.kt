@@ -1,6 +1,7 @@
 package com.solanamobile.krate.createscreen
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseInOut
@@ -30,6 +31,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -39,6 +42,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -49,7 +53,9 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -91,14 +97,13 @@ class CreateScreen: Screen {
         val viewModel: CreateScreenViewModel = getScreenModel()
         val state by viewModel.state.collectAsState()
 
-        LaunchedEffect(Unit) {
-
-        }
-
         CreateScreenContent(
             state,
             onSubmitPrompt = { txt ->
                 viewModel.generateImageFromPrompt(txt)
+            },
+            onResetState = {
+                viewModel.resetState()
             }
         )
     }
@@ -110,7 +115,8 @@ class CreateScreen: Screen {
 @Composable
 fun CreateScreenContent(
     state: ViewState,
-    onSubmitPrompt: (text: String) -> Unit
+    onSubmitPrompt: (text: String) -> Unit = { },
+    onResetState: () -> Unit = { }
 ) {
     val navigator = LocalNavigator.currentOrThrow
 
@@ -271,48 +277,92 @@ fun CreateScreenContent(
 
                 val h1 = MaterialTheme.typography.h4
                 val h2 = MaterialTheme.typography.h5
-
                 val textStyle by remember(headingAnimation.value) {
                     derivedStateOf {
                         lerp(h1, h2, headingAnimation.value)
                     }
                 }
 
-                var moveHeadingPos = remember { mutableStateOf(false) }
+                val moveHeadingPos = remember { mutableStateOf(false) }
                 val topPadding = animateDpAsState(
                     targetValue = if (!moveHeadingPos.value) 154.dp else 100.dp,
+                    animationSpec = tween(600)
+                )
+
+                val leftPadding = animateDpAsState(
+                    targetValue = if (!moveHeadingPos.value) 24.dp else 0.dp,
                     animationSpec = tween(600)
                 )
 
                 val focusRequester = remember { FocusRequester() }
                 val focusManager = LocalFocusManager.current
 
-                TextField(
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .padding(
-                            start = 24.dp,
-                            end = 24.dp,
                             top = topPadding.value
                         )
-                        .onFocusEvent {
-                            if (it.hasFocus) {
-                                promptText = ""
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                ) {
+                    TextField(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .padding(
+                                start = 24.dp,
+                                end = leftPadding.value,
+                            )
+                            .onFocusEvent {
+                                if (it.hasFocus) {
+                                    promptText = ""
+                                }
                             }
+                            .focusRequester(focusRequester),
+                        enabled = state !is ViewState.Generated,
+                        value = promptText,
+                        textStyle = textStyle,
+                        colors = TextFieldDefaults.textFieldColors(
+                            textColor = Color(0xFFF06441),
+                            disabledTextColor = Color(0xFFF06441),
+                            backgroundColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent
+                        ),
+                        onValueChange = {
+                            promptText = it
                         }
-                        .focusRequester(focusRequester),
-                    value = promptText,
-                    textStyle = textStyle,
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = Color(0xFFF06441),
-                        backgroundColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    onValueChange = {
-                        promptText = it
+                    )
+
+                    AnimatedVisibility(
+                        visible = moveHeadingPos.value
+                    ) {
+                        IconButton(
+                            modifier = Modifier
+                                .padding(
+                                    top = 4.dp,
+                                    end = 18.dp
+                                ),
+                            onClick = {
+                                moveHeadingPos.value = false
+
+                                scope.launch {
+                                    headingAnimation.animateTo(0f, tween(600))
+                                }
+
+                                onResetState()
+                            }
+                        ) {
+                            Image(
+                                modifier = Modifier
+                                    .size(24.dp),
+                                painter = painterResource(Res.image.edit_icon),
+                                contentDescription = null
+                            )
+                        }
                     }
-                )
+                }
 
                 AnimatedContent(
                     targetState = state

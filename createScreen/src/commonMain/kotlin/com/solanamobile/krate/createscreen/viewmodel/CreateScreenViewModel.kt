@@ -28,6 +28,12 @@ class CreateScreenViewModel(
     private val getImgRepository: GetImgRepository,
 ): StateScreenModel<ViewState>(ViewState.Prompting) {
 
+    fun resetState() {
+        mutableState.update {
+            ViewState.Prompting
+        }
+    }
+
     @OptIn(ExperimentalEncodingApi::class)
     fun generateImageFromPrompt(prompt: String) {
         coroutineScope.launch {
