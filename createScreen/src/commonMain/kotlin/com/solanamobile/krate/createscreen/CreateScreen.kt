@@ -13,6 +13,8 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -35,7 +37,10 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -75,6 +80,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.lerp
 import androidx.compose.ui.unit.dp
@@ -82,6 +89,7 @@ import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import co.touchlab.kermit.Logger
 import com.solanamobile.krate.createscreen.viewmodel.CreateScreenViewModel
 import com.solanamobile.krate.createscreen.viewmodel.ViewState
 import com.solanamobile.krate.extension.NavScreenProvider
@@ -89,6 +97,13 @@ import com.solanamobile.krate.extension.getScreenModel
 import io.github.skeptick.libres.compose.painterResource
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import kotlin.math.absoluteValue
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
+
+fun lerp(start: Float, stop: Float, fraction: Float): Float {
+    return (1 - fraction) * start + fraction * stop
+}
 
 class CreateScreen: Screen {
 
@@ -517,24 +532,32 @@ fun CreateScreenContent(
                                     }
                                 }
 
-                                val lazyListState = rememberLazyListState()
-                                val snapBehavior = rememberSnapFlingBehavior(lazyListState)
+                                val items = listOf(
+                                    Res.image.wallet,
+                                    Res.image.wallet2,
+                                    Res.image.wallet3,
+                                    Res.image.wallet4
+                                )
 
-                                LazyRow(
+                                val pagerState = rememberPagerState()
+                                HorizontalPager(
                                     modifier = Modifier
                                         .padding(
                                             top = 56.dp
-                                        )
-                                        .fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.spacedBy(18.dp),
+                                        ),
+                                    pageCount = items.size,
                                     contentPadding = PaddingValues(
-                                        start = 20.dp,
-                                        end = 20.dp
+                                        start = 40.dp,
+                                        end = 40.dp
                                     ),
-                                    state = lazyListState,
-                                    flingBehavior = snapBehavior
-                                ) {
-                                    items(targetState.images) {
+                                    state = pagerState,
+                                    verticalAlignment = Alignment.Top
+                                ) { page ->
+                                    Logger.v { "page $page" }
+
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
                                         Box(
                                             modifier = Modifier
                                                 .size(271.dp)
@@ -544,38 +567,49 @@ fun CreateScreenContent(
                                             Image(
                                                 modifier = Modifier
                                                     .fillMaxSize(),
-                                                bitmap = it,
+//                                                    bitmap = it,
+                                                painter = painterResource(items[page]),
                                                 contentDescription = null
                                             )
                                         }
-                                    }
-                                }
 
-                                OutlinedButton(
-                                    modifier = Modifier
-                                        .padding(
-                                            top = 16.dp
-                                        ),
-                                    colors = ButtonDefaults.buttonColors(
-                                        backgroundColor = Color.Transparent,
-                                        contentColor = MaterialTheme.colors.primary
-                                    ),
-                                    border = BorderStroke(
-                                        2.dp,
-                                        MaterialTheme.colors.primary
-                                    ),
-                                    shape = RoundedCornerShape(6.dp),
-                                    contentPadding = PaddingValues(12.dp),
-                                    onClick = {
-                                        scope.launch {
-                                            sheetState.show()
+                                        AnimatedVisibility(
+                                            visible = pagerState.currentPageOffsetFraction < 0.1 && pagerState.settledPage == page,
+                                            enter = fadeIn(
+                                                animationSpec = tween(250)
+                                            ),
+                                            exit = fadeOut(
+                                                animationSpec = tween(250)
+                                            )
+                                        ) {
+                                            OutlinedButton(
+                                                modifier = Modifier
+                                                    .padding(
+                                                        top = 16.dp
+                                                    ),
+                                                colors = ButtonDefaults.buttonColors(
+                                                    backgroundColor = Color.Transparent,
+                                                    contentColor = MaterialTheme.colors.primary
+                                                ),
+                                                border = BorderStroke(
+                                                    2.dp,
+                                                    MaterialTheme.colors.primary
+                                                ),
+                                                shape = RoundedCornerShape(6.dp),
+                                                contentPadding = PaddingValues(12.dp),
+                                                onClick = {
+                                                    scope.launch {
+                                                        sheetState.show()
+                                                    }
+                                                }
+                                            ) {
+                                                Text(
+                                                    text = "Save",
+                                                    style = MaterialTheme.typography.h6
+                                                )
+                                            }
                                         }
                                     }
-                                ) {
-                                    Text(
-                                        text = "Save",
-                                        style = MaterialTheme.typography.h6
-                                    )
                                 }
                             }
                         }
