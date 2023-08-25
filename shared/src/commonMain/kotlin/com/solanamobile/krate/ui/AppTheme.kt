@@ -24,7 +24,7 @@ fun KrateAppTheme(
         ),
         font(
             name = "GeographMedium",
-            res = "testgeograph_medium",
+            res = "testgeograph_regular",
             weight = FontWeight.Medium,
             style = FontStyle.Normal
         )
