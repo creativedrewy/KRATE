@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
+import com.solanamobile.krate.extension.compositionlocal.LocalResourceLocator
 import com.solanamobile.krate.startscreen.Res
 import io.github.skeptick.libres.compose.painterResource
 
@@ -56,6 +57,8 @@ fun AnimatedArrows() {
             contentDescription = null
         )
 
+        val resLocator = LocalResourceLocator
+
         Image(
             modifier = Modifier
                 .padding(
@@ -63,7 +66,7 @@ fun AnimatedArrows() {
                 )
                 .height(30.dp)
                 .width(55.dp),
-            painter = painterResource(Res.image.icon_caret_fill),
+            painter = painterResource(resLocator.current.getResource("blah")),
             contentDescription = null
         )
     }

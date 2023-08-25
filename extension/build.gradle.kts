@@ -5,6 +5,7 @@ plugins {
     id("kotlinx-serialization")
 
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
+    id("io.github.skeptick.libres")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -39,6 +40,8 @@ kotlin {
                 implementation(libs.koject.compose.core)
 
                 implementation(libs.voyager.navigator)
+
+                implementation(libs.libres.compose)
             }
         }
 
