@@ -93,6 +93,7 @@ import co.touchlab.kermit.Logger
 import com.solanamobile.krate.createscreen.viewmodel.CreateScreenViewModel
 import com.solanamobile.krate.createscreen.viewmodel.ViewState
 import com.solanamobile.krate.extension.NavScreenProvider
+import com.solanamobile.krate.extension.compositionlocal.LocalResourceLocator
 import com.solanamobile.krate.extension.getScreenModel
 import io.github.skeptick.libres.compose.painterResource
 import kotlinx.coroutines.launch
@@ -130,6 +131,7 @@ fun CreateScreenContent(
     onResetState: () -> Unit = { }
 ) {
     val navigator = LocalNavigator.currentOrThrow
+    val resLocator = LocalResourceLocator.current
 
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
@@ -184,7 +186,7 @@ fun CreateScreenContent(
 //                            .clickable {
 //
 //                            },
-//                        painter = painterResource(Res.image.user),
+//                        painter = painterResource(),
 //                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
 //                        contentDescription = null
 //                    )
@@ -266,7 +268,7 @@ fun CreateScreenContent(
                             }
                         ) {
                             Image(
-                                painter = painterResource(Res.image.user),
+                                painter = painterResource(resLocator.getResource("user")),
                                 colorFilter = ColorFilter.tint(Color.White),
                                 contentDescription = null
                             )
@@ -368,7 +370,7 @@ fun CreateScreenContent(
                             Image(
                                 modifier = Modifier
                                     .size(24.dp),
-                                painter = painterResource(Res.image.edit_icon),
+                                painter = painterResource(resLocator.getResource("edit_icon")),
                                 contentDescription = null
                             )
                         }
@@ -473,7 +475,7 @@ fun CreateScreenContent(
                                             )
                                             .offset(y = starAnimPos.dp)
                                             .size(114.dp),
-                                        painter = painterResource(Res.image.loading_star),
+                                        painter = painterResource(resLocator.getResource("loading_star")),
                                         contentDescription = null
                                     )
 
@@ -485,7 +487,7 @@ fun CreateScreenContent(
                                             )
                                             .offset(y = circleAnimPos.dp)
                                             .size(84.dp),
-                                        painter = painterResource(Res.image.loading_circle),
+                                        painter = painterResource(resLocator.getResource("loading_circle")),
                                         contentDescription = null
                                     )
 
@@ -496,7 +498,7 @@ fun CreateScreenContent(
                                             )
                                             .offset(y = triangleAnimPos.dp)
                                             .size(100.dp),
-                                        painter = painterResource(Res.image.loading_triangle),
+                                        painter = painterResource(resLocator.getResource("loading_triangle")),
                                         contentDescription = null
                                     )
                                 }
@@ -529,10 +531,10 @@ fun CreateScreenContent(
                                 }
 
                                 val items = listOf(
-                                    Res.image.wallet,
-                                    Res.image.wallet2,
-                                    Res.image.wallet3,
-                                    Res.image.wallet4
+                                    resLocator.getResource("wallet"),
+                                    resLocator.getResource("wallet2"),
+                                    resLocator.getResource("wallet3"),
+                                    resLocator.getResource("wallet4")
                                 )
 
                                 val pagerState = rememberPagerState()
