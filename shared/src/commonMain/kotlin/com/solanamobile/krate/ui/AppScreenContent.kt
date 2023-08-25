@@ -29,11 +29,7 @@ fun AppScreenContent() {
         }
     }
 
-    val resLocator = object : ResourceLocator {
-        override fun getResource(name: String): Image {
-            return Res.image.icon_caret_fill
-        }
-    }
+
 
     KrateAppTheme {
         ProvideResourceLocator(

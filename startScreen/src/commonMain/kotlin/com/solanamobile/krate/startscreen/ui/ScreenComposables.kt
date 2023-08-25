@@ -10,17 +10,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import com.solanamobile.krate.extension.compositionlocal.LocalResourceLocator
-import com.solanamobile.krate.startscreen.Res
 import io.github.skeptick.libres.compose.painterResource
 
 @Composable
 fun AnimatedArrows() {
     Box {
+        val resLocator = LocalResourceLocator.current
+
         Image(
             modifier = Modifier
                 .height(30.dp)
                 .width(55.dp),
-            painter = painterResource(Res.image.icon_caret_line),
+            painter = painterResource(resLocator.getResource("icon_caret_line")),
             contentDescription = null
         )
 
@@ -31,7 +32,7 @@ fun AnimatedArrows() {
                 )
                 .height(30.dp)
                 .width(55.dp),
-            painter = painterResource(Res.image.icon_caret_line),
+            painter = painterResource(resLocator.getResource("icon_caret_line")),
             contentDescription = null
         )
 
@@ -42,7 +43,7 @@ fun AnimatedArrows() {
                 )
                 .height(30.dp)
                 .width(55.dp),
-            painter = painterResource(Res.image.icon_caret_line),
+            painter = painterResource(resLocator.getResource("icon_caret_line")),
             contentDescription = null
         )
 
@@ -53,11 +54,9 @@ fun AnimatedArrows() {
                 )
                 .height(30.dp)
                 .width(55.dp),
-            painter = painterResource(Res.image.icon_caret_line),
+            painter = painterResource(resLocator.getResource("icon_caret_line")),
             contentDescription = null
         )
-
-        val resLocator = LocalResourceLocator
 
         Image(
             modifier = Modifier
@@ -66,7 +65,7 @@ fun AnimatedArrows() {
                 )
                 .height(30.dp)
                 .width(55.dp),
-            painter = painterResource(resLocator.current.getResource("blah")),
+            painter = painterResource(resLocator.getResource("icon_caret_fill")),
             contentDescription = null
         )
     }

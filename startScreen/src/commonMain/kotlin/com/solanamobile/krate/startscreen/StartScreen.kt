@@ -30,6 +30,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.solanamobile.krate.extension.NavScreenProvider
+import com.solanamobile.krate.extension.compositionlocal.LocalResourceLocator
 import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.startscreen.ui.AnimatedArrows
 import com.solanamobile.krate.startscreen.viewmodel.StartScreenViewModel
@@ -84,8 +85,10 @@ fun StartScreenContents(
                 .height(210.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
+            val resLocator = LocalResourceLocator.current
+
             Image(
-                painter = painterResource(Res.image.krate0),
+                painter = painterResource(resLocator.getResource("krate0")),
                 contentDescription = null
             )
 
@@ -94,7 +97,7 @@ fun StartScreenContents(
                     .padding(
                         bottom = 33.dp
                     ),
-                painter = painterResource(Res.image.krate1),
+                painter = painterResource(resLocator.getResource("krate1")),
                 contentDescription = null
             )
 
@@ -103,7 +106,7 @@ fun StartScreenContents(
                     .padding(
                         bottom = 66.dp
                     ),
-                painter = painterResource(Res.image.krate2),
+                painter = painterResource(resLocator.getResource("krate2")),
                 contentDescription = null
             )
 
@@ -112,7 +115,7 @@ fun StartScreenContents(
                     .padding(
                         bottom = 99.dp
                     ),
-                painter = painterResource(Res.image.krate3),
+                painter = painterResource(resLocator.getResource("krate3")),
                 contentDescription = null
             )
 
@@ -121,7 +124,7 @@ fun StartScreenContents(
                     .padding(
                         bottom = 132.dp
                     ),
-                painter = painterResource(Res.image.krate4),
+                painter = painterResource(resLocator.getResource("krate4")),
                 contentDescription = null
             )
         }
