@@ -90,50 +90,40 @@ fun StartScreenContents(
                 .height(210.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
-            val resLocator = LocalResourceLocator.current
-//            Image(
-//                bitmap = resLocator.getImageBitmap("krate0"),
-//                contentDescription = null
-//            )
-
             ResourceImage(
                 resourceName = "krate0.png"
             )
 
-            Image(
+            ResourceImage(
                 modifier = Modifier
                     .padding(
                         bottom = 33.dp
                     ),
-                painter = painterResource(resLocator.getResource("krate1")),
-                contentDescription = null
+                resourceName = "krate1.png"
             )
 
-            Image(
+            ResourceImage(
                 modifier = Modifier
                     .padding(
                         bottom = 66.dp
                     ),
-                painter = painterResource(resLocator.getResource("krate2")),
-                contentDescription = null
+                resourceName = "krate2.png"
             )
 
-            Image(
+            ResourceImage(
                 modifier = Modifier
                     .padding(
                         bottom = 99.dp
                     ),
-                painter = painterResource(resLocator.getResource("krate3")),
-                contentDescription = null
+                resourceName = "krate3.png"
             )
 
-            Image(
+            ResourceImage(
                 modifier = Modifier
                     .padding(
                         bottom = 132.dp
                     ),
-                painter = painterResource(resLocator.getResource("krate4")),
-                contentDescription = null
+                resourceName = "krate4.png"
             )
         }
 

@@ -29,11 +29,20 @@ val resLocator = object : ResourceLocator {
         "wallet4" to Res.image.wallet4,
     )
 
+    private val inMemCache = mutableMapOf<String, ImageBitmap>()
+
     override fun getResource(name: String): Image {
         return map[name]!!
     }
 
     override suspend fun getImageBitmap(name: String): ImageBitmap {
-        return resource(name).readBytes().toImageBitmap()
+        return if (inMemCache.containsKey(name)) {
+            inMemCache[name]!!
+        } else {
+            val bmp = resource(name).readBytes().toImageBitmap()
+
+            inMemCache[name] = bmp
+            bmp
+        }
     }
 }

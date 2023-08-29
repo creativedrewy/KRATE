@@ -10,63 +10,57 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import com.solanamobile.krate.extension.compositionlocal.LocalResourceLocator
+import com.solanamobile.krate.extension.ui.ResourceImage
 import io.github.skeptick.libres.compose.painterResource
 
 @Composable
 fun AnimatedArrows() {
     Box {
-        val resLocator = LocalResourceLocator.current
-
-        Image(
+        ResourceImage(
             modifier = Modifier
                 .height(30.dp)
                 .width(55.dp),
-            painter = painterResource(resLocator.getResource("icon_caret_line")),
-            contentDescription = null
+            resourceName = "icon_caret_line.png"
         )
 
-        Image(
+        ResourceImage(
             modifier = Modifier
                 .padding(
                     start = 8.dp
                 )
                 .height(30.dp)
                 .width(55.dp),
-            painter = painterResource(resLocator.getResource("icon_caret_line")),
-            contentDescription = null
+            resourceName = "icon_caret_line.png"
         )
 
-        Image(
+        ResourceImage(
             modifier = Modifier
                 .padding(
                     start = 16.dp
                 )
                 .height(30.dp)
                 .width(55.dp),
-            painter = painterResource(resLocator.getResource("icon_caret_line")),
-            contentDescription = null
+            resourceName = "icon_caret_line.png"
         )
 
-        Image(
+        ResourceImage(
             modifier = Modifier
                 .padding(
                     start = 24.dp
                 )
                 .height(30.dp)
                 .width(55.dp),
-            painter = painterResource(resLocator.getResource("icon_caret_line")),
-            contentDescription = null
+            resourceName = "icon_caret_line.png"
         )
 
-        Image(
+        ResourceImage(
             modifier = Modifier
                 .padding(
                     start = 32.dp
                 )
                 .height(30.dp)
                 .width(55.dp),
-            painter = painterResource(resLocator.getResource("icon_caret_fill")),
-            contentDescription = null
+            resourceName = "icon_caret_fill.png"
         )
     }
 }
