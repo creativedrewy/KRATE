@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import com.solanamobile.krate.extension.compositionlocal.LocalResourceLocator
 import com.solanamobile.krate.extension.ui.ResourceImage
-import io.github.skeptick.libres.compose.painterResource
 
 @Composable
 fun AnimatedArrows() {

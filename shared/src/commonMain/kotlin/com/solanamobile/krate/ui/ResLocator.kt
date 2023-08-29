@@ -1,10 +1,8 @@
 package com.solanamobile.krate.ui
 
 import androidx.compose.ui.graphics.ImageBitmap
-import com.solanamobile.krate.Res
 import com.solanamobile.krate.extension.compositionlocal.ResourceLocator
 import com.solanamobile.krate.extension.graphics.toImageBitmap
-import io.github.skeptick.libres.images.Image
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
 

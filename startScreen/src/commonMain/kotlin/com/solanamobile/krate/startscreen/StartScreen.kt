@@ -39,7 +39,6 @@ import com.solanamobile.krate.extension.ui.ResourceImage
 import com.solanamobile.krate.startscreen.ui.AnimatedArrows
 import com.solanamobile.krate.startscreen.viewmodel.StartScreenViewModel
 import com.solanamobile.krate.startscreen.viewmodel.StartScreenViewState
-import io.github.skeptick.libres.compose.painterResource
 import kotlinx.coroutines.launch
 
 class StartScreen: Screen {

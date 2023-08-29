@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.ImageBitmap
-import io.github.skeptick.libres.images.Image
 
 interface ResourceLocator {
     suspend fun getImageBitmap(name: String): ImageBitmap
