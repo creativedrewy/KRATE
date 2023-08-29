@@ -14,12 +14,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.ExperimentalTextApi
@@ -32,10 +35,12 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.solanamobile.krate.extension.NavScreenProvider
 import com.solanamobile.krate.extension.compositionlocal.LocalResourceLocator
 import com.solanamobile.krate.extension.getScreenModel
+import com.solanamobile.krate.extension.ui.ResourceImage
 import com.solanamobile.krate.startscreen.ui.AnimatedArrows
 import com.solanamobile.krate.startscreen.viewmodel.StartScreenViewModel
 import com.solanamobile.krate.startscreen.viewmodel.StartScreenViewState
 import io.github.skeptick.libres.compose.painterResource
+import kotlinx.coroutines.launch
 
 class StartScreen: Screen {
 
@@ -86,10 +91,13 @@ fun StartScreenContents(
             contentAlignment = Alignment.BottomCenter
         ) {
             val resLocator = LocalResourceLocator.current
+//            Image(
+//                bitmap = resLocator.getImageBitmap("krate0"),
+//                contentDescription = null
+//            )
 
-            Image(
-                painter = painterResource(resLocator.getResource("krate0")),
-                contentDescription = null
+            ResourceImage(
+                resourceName = "krate0.png"
             )
 
             Image(

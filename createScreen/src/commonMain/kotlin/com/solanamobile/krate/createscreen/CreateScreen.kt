@@ -95,7 +95,7 @@ import com.solanamobile.krate.createscreen.viewmodel.ViewState
 import com.solanamobile.krate.extension.NavScreenProvider
 import com.solanamobile.krate.extension.compositionlocal.LocalResourceLocator
 import com.solanamobile.krate.extension.getScreenModel
-import io.github.skeptick.libres.compose.painterResource
+import com.solanamobile.krate.extension.ui.ResourceImage
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import kotlin.math.absoluteValue
@@ -267,10 +267,9 @@ fun CreateScreenContent(
                                 navigator.push(ScreenRegistry.get(NavScreenProvider.ProfileScreen))
                             }
                         ) {
-                            Image(
-                                painter = painterResource(resLocator.getResource("user")),
-                                colorFilter = ColorFilter.tint(Color.White),
-                                contentDescription = null
+                            ResourceImage(
+                                resourceName = "user.png",
+                                colorFilter = ColorFilter.tint(Color.White)
                             )
                         }
                     }
@@ -367,11 +366,10 @@ fun CreateScreenContent(
                                 onResetState()
                             }
                         ) {
-                            Image(
+                            ResourceImage(
                                 modifier = Modifier
                                     .size(24.dp),
-                                painter = painterResource(resLocator.getResource("edit_icon")),
-                                contentDescription = null
+                                resourceName = "edit_icon.png"
                             )
                         }
                     }
@@ -467,7 +465,7 @@ fun CreateScreenContent(
                                         )
                                     )
 
-                                    Image(
+                                    ResourceImage(
                                         modifier = Modifier
                                             .padding(
                                                 top = 25.dp,
@@ -475,11 +473,10 @@ fun CreateScreenContent(
                                             )
                                             .offset(y = starAnimPos.dp)
                                             .size(114.dp),
-                                        painter = painterResource(resLocator.getResource("loading_star")),
-                                        contentDescription = null
+                                        resourceName = "loading_star.png"
                                     )
 
-                                    Image(
+                                    ResourceImage(
                                         modifier = Modifier
                                             .padding(
                                                 top = 60.dp,
@@ -487,19 +484,17 @@ fun CreateScreenContent(
                                             )
                                             .offset(y = circleAnimPos.dp)
                                             .size(84.dp),
-                                        painter = painterResource(resLocator.getResource("loading_circle")),
-                                        contentDescription = null
+                                        resourceName = "loading_circle.png"
                                     )
 
-                                    Image(
+                                    ResourceImage(
                                         modifier = Modifier
                                             .padding(
                                                 start = 200.dp
                                             )
                                             .offset(y = triangleAnimPos.dp)
                                             .size(100.dp),
-                                        painter = painterResource(resLocator.getResource("loading_triangle")),
-                                        contentDescription = null
+                                        resourceName = "loading_triangle.png"
                                     )
                                 }
 
@@ -530,20 +525,13 @@ fun CreateScreenContent(
                                     }
                                 }
 
-                                val items = listOf(
-                                    resLocator.getResource("wallet"),
-                                    resLocator.getResource("wallet2"),
-                                    resLocator.getResource("wallet3"),
-                                    resLocator.getResource("wallet4")
-                                )
-
                                 val pagerState = rememberPagerState()
                                 HorizontalPager(
                                     modifier = Modifier
                                         .padding(
                                             top = 56.dp
                                         ),
-                                    pageCount = items.size,
+                                    pageCount = targetState.images.size,
                                     contentPadding = PaddingValues(
                                         start = 40.dp,
                                         end = 40.dp

@@ -1,9 +1,14 @@
 package com.solanamobile.krate.ui
 
+import androidx.compose.ui.graphics.ImageBitmap
 import com.solanamobile.krate.Res
 import com.solanamobile.krate.extension.compositionlocal.ResourceLocator
+import com.solanamobile.krate.extension.graphics.toImageBitmap
 import io.github.skeptick.libres.images.Image
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.resource
 
+@OptIn(ExperimentalResourceApi::class)
 val resLocator = object : ResourceLocator {
     private val map = mapOf(
         "icon_caret_fill" to Res.image.icon_caret_fill,
@@ -26,5 +31,9 @@ val resLocator = object : ResourceLocator {
 
     override fun getResource(name: String): Image {
         return map[name]!!
+    }
+
+    override suspend fun getImageBitmap(name: String): ImageBitmap {
+        return resource(name).readBytes().toImageBitmap()
     }
 }
