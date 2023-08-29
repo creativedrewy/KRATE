@@ -24,7 +24,7 @@ fun ResourceImage(
     val bmp = remember { mutableStateOf<ImageBitmap?>(null) }
 
     scope.launch {
-        bmp.value = resLocator.getImageBitmap("image/$resourceName")
+        bmp.value = resLocator.getImageBitmap(resourceName)
     }
 
     bmp.value?.let {
