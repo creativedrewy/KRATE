@@ -3,6 +3,7 @@ package com.solanamobile.krate.createscreen.viewmodel
 import androidx.compose.ui.graphics.ImageBitmap
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
+import co.touchlab.kermit.Logger
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.createscreen.repository.GetImgRepository
 import com.solanamobile.krate.createscreen.usecase.ImageGeneratorUseCase
@@ -47,6 +48,14 @@ class CreateScreenViewModel(
             mutableState.update {
                 ViewState.Generated(generatedImgs)
             }
+        }
+    }
+
+    fun saveToPhotos(index: Int) {
+        coroutineScope.launch {
+            val selectedImage = (mutableState.value as ViewState.Generated).images[index]
+
+            Logger.v { "Your id: $selectedImage" }
         }
     }
 }

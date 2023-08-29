@@ -116,6 +116,9 @@ class CreateScreen: Screen {
             },
             onResetState = {
                 viewModel.resetState()
+            },
+            onSavePhoto = { index ->
+                viewModel.saveToPhotos(index)
             }
         )
     }
@@ -128,12 +131,13 @@ class CreateScreen: Screen {
 fun CreateScreenContent(
     state: ViewState,
     onSubmitPrompt: (text: String) -> Unit = { },
-    onResetState: () -> Unit = { }
+    onResetState: () -> Unit = { },
+    onSavePhoto: (Int) -> Unit = { }
 ) {
     val navigator = LocalNavigator.currentOrThrow
-    val resLocator = LocalResourceLocator.current
 
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val pagerState = rememberPagerState()
 
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(
@@ -145,7 +149,10 @@ fun CreateScreenContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(224.dp),
+                    .height(224.dp)
+                    .clickable {
+                        onSavePhoto(pagerState.currentPage)
+                    },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -525,7 +532,6 @@ fun CreateScreenContent(
                                     }
                                 }
 
-                                val pagerState = rememberPagerState()
                                 HorizontalPager(
                                     modifier = Modifier
                                         .padding(
@@ -539,8 +545,6 @@ fun CreateScreenContent(
                                     state = pagerState,
                                     verticalAlignment = Alignment.Top
                                 ) { page ->
-                                    Logger.v { "page $page" }
-
                                     Column(
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
