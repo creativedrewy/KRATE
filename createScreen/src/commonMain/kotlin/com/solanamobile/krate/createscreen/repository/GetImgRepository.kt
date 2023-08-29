@@ -1,13 +1,19 @@
 package com.solanamobile.krate.createscreen.repository
 
+import co.touchlab.kermit.Logger
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.createscreen.ApiKeys
 import com.solanamobile.krate.createscreen.endpoint.GetImgEndpoints
 import com.solanamobile.krate.createscreen.endpoint.GetImgRequest
+import de.jensklingenberg.ktorfit.Ktorfit
+import de.jensklingenberg.ktorfit.converter.Converter
 import de.jensklingenberg.ktorfit.converter.builtin.CallConverterFactory
+import de.jensklingenberg.ktorfit.internal.TypeData
 import de.jensklingenberg.ktorfit.ktorfit
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.onDownload
+import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -25,10 +31,26 @@ class GetImgRepository {
                 install(ContentNegotiation) {
                     json(Json { isLenient = true; ignoreUnknownKeys = true })
                 }
+
+                developmentMode = true
             })
 
             converterFactories(
                 CallConverterFactory()
+//                object: Converter.Factory {
+//                    override fun suspendResponseConverter(
+//                        typeData: TypeData,
+//                        ktorfit: Ktorfit
+//                    ): Converter.SuspendResponseConverter<HttpResponse, *>? {
+//                        return object : Converter.SuspendResponseConverter<HttpResponse, Any> {
+//                            override suspend fun convert(response: HttpResponse): Any {
+//                                Logger.v { ":::::: ANDREW " + response.status.value }
+//
+//                                return response
+//                            }
+//                        }
+//                    }
+//                }
             )
         }
 

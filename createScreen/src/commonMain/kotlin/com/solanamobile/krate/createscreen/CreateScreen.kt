@@ -565,8 +565,7 @@ fun CreateScreenContent(
                                             Image(
                                                 modifier = Modifier
                                                     .fillMaxSize(),
-//                                                    bitmap = it,
-                                                painter = painterResource(items[page]),
+                                                bitmap = targetState.images[page],
                                                 contentDescription = null
                                             )
                                         }
