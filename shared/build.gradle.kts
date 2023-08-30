@@ -82,7 +82,7 @@ kotlin {
                 api(libs.appcompat)
                 api(libs.core.ktx)
 
-                implementation("com.moriatsushi.koject:koject-android-core:1.3.0")
+                implementation(libs.koject.android.core)
             }
         }
 
