@@ -14,7 +14,7 @@ class ImageGeneratorUseCase(
 
     @OptIn(ExperimentalEncodingApi::class)
     suspend fun generateImages(prompt: String): List<ImageBitmap> {
-        val bitmaps = (0..3).map {
+        val bitmaps = (0..0).map {
             val imgString = getImgRepository.generateImage(prompt)
 
             val decodedbytes = Base64.decode(imgString)

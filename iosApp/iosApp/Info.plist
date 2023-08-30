@@ -46,7 +46,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Add photos to library</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>KRATE</string>
+	<string>Read photos from library</string>
 </dict>
 </plist>

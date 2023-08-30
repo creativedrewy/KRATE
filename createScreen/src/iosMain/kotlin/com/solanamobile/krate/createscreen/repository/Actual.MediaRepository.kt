@@ -1,38 +1,41 @@
 package com.solanamobile.krate.createscreen.repository
 
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asSkiaBitmap
 import com.moriatsushi.koject.Provides
+import kotlinx.cinterop.BetaInteropApi
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.addressOf
+import kotlinx.cinterop.convert
+import kotlinx.cinterop.usePinned
+import org.jetbrains.skia.Image
+import platform.Foundation.NSData
+import platform.Foundation.create
+import platform.Photos.PHAssetChangeRequest
 import platform.Photos.PHAuthorizationStatusAuthorized
 import platform.Photos.PHPhotoLibrary
+import platform.UIKit.UIImage
 
 @Provides
 actual class MediaRepository {
+
+    @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
     actual fun saveBitmap(bmp: ImageBitmap) {
         PHPhotoLibrary.requestAuthorization { status ->
             if (status == PHAuthorizationStatusAuthorized) {
+                PHPhotoLibrary.sharedPhotoLibrary().performChanges({
+                    val bytes = Image.makeFromBitmap(bmp.asSkiaBitmap()).encodeToData()!!.bytes
+                    val nsData = bytes.toNSData()
 
+                    val img = UIImage(data = nsData)
+                    PHAssetChangeRequest.creationRequestForAssetFromImage(img)
+                }, null)
             }
         }
     }
 
-    //PHPhotoLibrary.requestAuthorization { status in
-    //        if status == .authorized {
-    //            PHPhotoLibrary.shared().performChanges {
-    //                let request = PHAssetChangeRequest.creationRequestForAsset(from: image)
-    //                request.creationDate = Date()
-    //            } completionHandler: { success, error in
-    //                if success {
-    //                    print("Image saved to Photos directory successfully.")
-    //                } else if let error = error {
-    //                    print("Error saving image: \(error.localizedDescription)")
-    //                }
-    //            }
-    //        } else if status == .denied {
-    //            print("Permission to access Photos denied.")
-    //        } else if status == .notDetermined {
-    //            print("Permission to access Photos not determined.")
-    //        } else if status == .restricted {
-    //            print("Access to Photos is restricted.")
-    //        }
-    //    }
+    @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
+    fun ByteArray.toNSData(): NSData = usePinned {
+        NSData.create(bytes = it.addressOf(0), this.size.convert())
+    }
 }

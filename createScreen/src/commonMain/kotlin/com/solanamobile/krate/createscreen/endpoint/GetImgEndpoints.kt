@@ -17,7 +17,7 @@ data class GetImgRequest(
     val guidance: Double = 7.5,
     val seed: Int = 42,
     val scheduler: String = "dpmsolver++",
-    val output_format: String = "jpeg"
+    val output_format: String = "png"
 )
 
 @Serializable
