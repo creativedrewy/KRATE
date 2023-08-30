@@ -133,10 +133,7 @@ fun CreateScreenContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(224.dp)
-                    .clickable {
-                        onSavePhoto(pagerState.currentPage)
-                    },
+                    .height(224.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -190,13 +187,21 @@ fun CreateScreenContent(
                     color = MaterialTheme.colors.background
                 )
 
+                val scope = rememberCoroutineScope()
                 Row(
                     modifier = Modifier
                         .padding(
                             start = 14.dp,
                             end = 14.dp
                         )
-                        .height(54.dp),
+                        .height(54.dp)
+                        .clickable {
+                            onSavePhoto(pagerState.currentPage)
+
+                            scope.launch {
+                                sheetState.hide()
+                            }
+                        },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
@@ -207,10 +212,7 @@ fun CreateScreenContent(
 
                     Image(
                         modifier = Modifier
-                            .size(24.dp)
-                            .clickable {
-
-                            },
+                            .size(24.dp),
                         imageVector = Icons.Outlined.Check,
                         colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
                         contentDescription = null

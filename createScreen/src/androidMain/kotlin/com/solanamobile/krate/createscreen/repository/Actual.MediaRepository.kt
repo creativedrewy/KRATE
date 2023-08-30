@@ -9,14 +9,19 @@ import android.provider.MediaStore
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import com.moriatsushi.koject.Provides
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Provides
 actual class MediaRepository(
     private val context: Context
 ) {
     actual fun saveBitmap(bmp: ImageBitmap) {
+        val filename = "KRATE_${getDateTimeString()}.png"
+
         val values = ContentValues()
-        values.put(MediaStore.MediaColumns.DISPLAY_NAME, "file.jpg")
+        values.put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
         values.put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
         values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DCIM)
 
@@ -36,5 +41,11 @@ actual class MediaRepository(
 
             throw e
         }
+    }
+
+    private fun getDateTimeString(): String {
+        val dateFormat = SimpleDateFormat("MM_dd_yy_HHmmss", Locale.getDefault())
+
+        return dateFormat.format(Date())
     }
 }
