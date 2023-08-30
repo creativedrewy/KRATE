@@ -30,10 +30,6 @@ class CreateScreenViewModel(
     private val mediaRepository: MediaRepository
 ): StateScreenModel<ViewState>(ViewState.Prompting) {
 
-    init {
-        mediaRepository.saveBitmap()
-    }
-
     fun resetState() {
         mutableState.update {
             ViewState.Prompting
@@ -60,6 +56,8 @@ class CreateScreenViewModel(
             val selectedImage = (mutableState.value as ViewState.Generated).images[index]
 
             Logger.v { "Your id: $selectedImage" }
+
+            mediaRepository.saveBitmap(selectedImage)
         }
     }
 }
