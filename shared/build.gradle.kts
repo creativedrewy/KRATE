@@ -81,6 +81,8 @@ kotlin {
                 api(libs.activity.compose)
                 api(libs.appcompat)
                 api(libs.core.ktx)
+
+                implementation("com.moriatsushi.koject:koject-android-core:1.3.0")
             }
         }
 

@@ -5,9 +5,8 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import co.touchlab.kermit.Logger
 import com.moriatsushi.koject.Provides
-import com.solanamobile.krate.createscreen.repository.GetImgRepository
+import com.solanamobile.krate.createscreen.repository.MediaRepository
 import com.solanamobile.krate.createscreen.usecase.ImageGeneratorUseCase
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -28,7 +27,12 @@ sealed class ViewState() {
 @Provides
 class CreateScreenViewModel(
     private val imgGeneratorUseCase: ImageGeneratorUseCase,
+    private val mediaRepository: MediaRepository
 ): StateScreenModel<ViewState>(ViewState.Prompting) {
+
+    init {
+        mediaRepository.saveBitmap()
+    }
 
     fun resetState() {
         mutableState.update {

@@ -41,5 +41,8 @@ android {
     dependencies {
         implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
         implementation("androidx.compose.foundation:foundation:1.3.1")
+
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
+        implementation("com.moriatsushi.koject:koject-android-core:1.3.0")
     }
 }
