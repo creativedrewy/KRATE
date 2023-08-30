@@ -12,6 +12,11 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import kotlin.io.encoding.ExperimentalEncodingApi
 
+data class GeneratedImg(
+    val bitmap: ImageBitmap,
+    val isSaved: Boolean = false
+)
+
 sealed class ViewState() {
 
     data object Prompting : ViewState()
@@ -19,7 +24,7 @@ sealed class ViewState() {
     data object Creating : ViewState()
 
     data class Generated(
-        val images: List<ImageBitmap> = listOf()
+        val images: List<GeneratedImg> = listOf()
     ): ViewState()
 }
 
@@ -43,7 +48,11 @@ class CreateScreenViewModel(
                 ViewState.Creating
             }
 
-            val generatedImgs = imgGeneratorUseCase.generateImages(prompt)
+            val generatedImgs = imgGeneratorUseCase.generateImages(prompt).map {
+                GeneratedImg(
+                    bitmap = it,
+                )
+            }
 
             mutableState.update {
                 ViewState.Generated(generatedImgs)
@@ -57,7 +66,20 @@ class CreateScreenViewModel(
 
             Logger.v { "Your id: $selectedImage" }
 
-            mediaRepository.saveBitmap(selectedImage)
+            mediaRepository.saveBitmap(selectedImage.bitmap)
+
+            mutableState.update {
+                val state = (it as ViewState.Generated)
+
+                state.copy(
+                    images = state.images.mapIndexed { i, item ->
+                        GeneratedImg(
+                            bitmap = item.bitmap,
+                            isSaved = i == index
+                        )
+                    }
+                )
+            }
         }
     }
 }

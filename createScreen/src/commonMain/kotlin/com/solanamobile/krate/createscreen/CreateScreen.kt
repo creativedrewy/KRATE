@@ -20,8 +20,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -34,11 +32,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -58,9 +51,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -80,8 +71,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.lerp
 import androidx.compose.ui.unit.dp
@@ -89,18 +78,13 @@ import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import co.touchlab.kermit.Logger
 import com.solanamobile.krate.createscreen.viewmodel.CreateScreenViewModel
 import com.solanamobile.krate.createscreen.viewmodel.ViewState
 import com.solanamobile.krate.extension.NavScreenProvider
-import com.solanamobile.krate.extension.compositionlocal.LocalResourceLocator
 import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.extension.ui.ResourceImage
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import kotlin.math.absoluteValue
-import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 class CreateScreen: Screen {
 
@@ -548,6 +532,8 @@ fun CreateScreenContent(
                                     Column(
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
+                                        val generatedImg = targetState.images[page]
+
                                         Box(
                                             modifier = Modifier
                                                 .size(271.dp)
@@ -557,7 +543,7 @@ fun CreateScreenContent(
                                             Image(
                                                 modifier = Modifier
                                                     .fillMaxSize(),
-                                                bitmap = targetState.images[page],
+                                                bitmap = generatedImg.bitmap,
                                                 contentDescription = null
                                             )
                                         }
@@ -587,13 +573,15 @@ fun CreateScreenContent(
                                                 shape = RoundedCornerShape(6.dp),
                                                 contentPadding = PaddingValues(12.dp),
                                                 onClick = {
-                                                    scope.launch {
-                                                        sheetState.show()
+                                                    if (!generatedImg.isSaved) {
+                                                        scope.launch {
+                                                            sheetState.show()
+                                                        }
                                                     }
                                                 }
                                             ) {
                                                 Text(
-                                                    text = "Save",
+                                                    text =  if (generatedImg.isSaved) "Saved!" else "Save",
                                                     style = MaterialTheme.typography.h6
                                                 )
                                             }
