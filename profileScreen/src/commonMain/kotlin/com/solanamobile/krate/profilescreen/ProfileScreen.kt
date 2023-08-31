@@ -6,17 +6,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScrollableTabRow
@@ -32,12 +35,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.solanamobile.krate.extension.getScreenModel
+import com.solanamobile.krate.extension.ui.ResourceImage
 import com.solanamobile.krate.profilescreen.viewmodel.ProfileScreenViewModel
 import com.solanamobile.krate.profilescreen.viewmodel.ProfileViewState
 
@@ -99,7 +104,7 @@ fun ProfileScreenContent(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(194.dp)
+                    .wrapContentHeight()
             ) {
                 Box(
                     modifier = Modifier
@@ -108,42 +113,49 @@ fun ProfileScreenContent(
                         .background(MaterialTheme.colors.surface)
                 )
 
-                Row(
+                Column(
                     modifier = Modifier
-                        .height(83.dp)
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter),
-                    verticalAlignment = Alignment.Bottom
+                        .padding(
+                            top = 64.dp
+                        )
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Box(
+                    ResourceImage(
                         modifier = Modifier
-                            .padding(
-                                start = 20.dp
-                            )
-                            .size(83.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colors.primary)
+                            .width(92.dp)
+                            .height(84.dp),
+                        resourceName = "profile_top.png"
                     )
 
-                    Column(
+                    Button(
                         modifier = Modifier
                             .padding(
-                                start = 10.dp,
-                                bottom = 10.dp
-                            )
+                                top = 14.dp
+                            ),
+                        onClick = { },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.primary,
+                            disabledBackgroundColor = MaterialTheme.colors.primary
+                        ),
+                        enabled = false
                     ) {
                         Text(
-                            text = "Username",
-                            style = MaterialTheme.typography.h6,
-                            color = MaterialTheme.colors.primary
-                        )
-
-                        Text(
-                            text = "123Monkey",
-                            style = MaterialTheme.typography.h6,
-                            color = MaterialTheme.colors.primary
+                            text = "Claim Profile",
+                            color = Color(0xFF0D1F33),
+                            style = MaterialTheme.typography.h6
                         )
                     }
+
+                    Text(
+                        modifier = Modifier
+                            .padding(
+                                top = 8.dp
+                            ),
+                        text = "(Coming Soon)",
+                        color = Color.Black,
+                        style = MaterialTheme.typography.h6
+                    )
                 }
             }
 
@@ -169,7 +181,7 @@ fun ProfileScreenContent(
                 Tab(
                     text = {
                         Text(
-                            text = "Creations",
+                            text = "Your Krate",
                             color = MaterialTheme.colors.onSurface,
                             style = MaterialTheme.typography.h6
                         )
