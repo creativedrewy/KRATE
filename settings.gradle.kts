@@ -9,6 +9,7 @@ include(":shared")
 include(":startScreen")
 include(":createScreen")
 include(":extension")
+include(":underdogApi")
 
 pluginManagement {
     repositories {
