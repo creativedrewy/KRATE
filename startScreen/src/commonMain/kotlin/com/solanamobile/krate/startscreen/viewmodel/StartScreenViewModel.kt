@@ -1,14 +1,11 @@
 package com.solanamobile.krate.startscreen.viewmodel
 
-import androidx.compose.ui.graphics.ImageBitmap
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
+import co.touchlab.kermit.Logger
 import com.moriatsushi.koject.Provides
-import com.solanamobile.krate.extension.graphics.toImageBitmap
-import kotlinx.coroutines.flow.update
+import foundation.metaplex.solanaeddsa.SolanaEddsa
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.resource
 
 data class StartScreenViewState(
     val loaded: Boolean = true
@@ -16,5 +13,13 @@ data class StartScreenViewState(
 
 @Provides
 class StartScreenViewModel: StateScreenModel<StartScreenViewState>(StartScreenViewState()) {
-    
+
+    init {
+        coroutineScope.launch {
+            val blah = SolanaEddsa.generateKeypair()
+
+            Logger.v { "Your Pubkey: ${blah.publicKey}" }
+        }
+    }
+
 }

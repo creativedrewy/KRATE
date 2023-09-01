@@ -46,6 +46,12 @@ kotlin {
 
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.transitions)
+
+                implementation(libs.kermit)
+
+                implementation("foundation.metaplex:solanaeddsa:0.1.3")
+                implementation("foundation.metaplex:solanainterfaces:0.1.3")
+                implementation("foundation.metaplex:solanapublickeys:0.1.3")
             }
         }
 

@@ -1,5 +1,3 @@
-include(":createScreen")
-
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "JungleGym"
@@ -9,6 +7,8 @@ include(":coroutines")
 include(":profileScreen")
 include(":shared")
 include(":startScreen")
+include(":createScreen")
+include(":extension")
 
 pluginManagement {
     repositories {
@@ -40,4 +40,3 @@ dependencyResolutionManagement {
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
-include(":extension")
