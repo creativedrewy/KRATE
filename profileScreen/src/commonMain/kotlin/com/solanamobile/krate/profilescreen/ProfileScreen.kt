@@ -201,40 +201,36 @@ fun ProfileScreenContent(
                 pageCount = 1,
                 state = pagerState,
                 verticalAlignment = Alignment.Top
-            ) { page ->
-                when (page) {
-                    0 -> {
-                        Column(
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(MaterialTheme.colors.surface),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(
-                                        top = 72.dp
-                                    )
-                                    .size(84.dp)
-                                    .clip(CircleShape)
-                                    .background(MaterialTheme.colors.background)
+            ) { _ ->
+                Column(
+                    modifier = Modifier
+                        .aspectRatio(1f)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colors.surface),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .padding(
+                                top = 72.dp
                             )
+                            .size(84.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colors.background)
+                    )
 
-                            Text(
-                                modifier = Modifier
-                                    .padding(
-                                        top = 26.dp,
-                                        start = 24.dp,
-                                        end = 24.dp
-                                    ),
-                                text = "You don’t have any creations yet. Try creating something and then tapping save to get started.",
-                                style = MaterialTheme.typography.h6,
-                                color = MaterialTheme.colors.onSurface,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
+                    Text(
+                        modifier = Modifier
+                            .padding(
+                                top = 26.dp,
+                                start = 24.dp,
+                                end = 24.dp
+                            ),
+                        text = "You don’t have any creations yet. Try creating something and then tapping save to get started.",
+                        style = MaterialTheme.typography.h6,
+                        color = MaterialTheme.colors.onSurface,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
