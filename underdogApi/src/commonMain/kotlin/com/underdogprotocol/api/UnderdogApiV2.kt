@@ -33,13 +33,7 @@ class UnderdogApiV2(
         apiEndpoints = ktorfit.create()
     }
 
-    suspend fun mintNft(): CreateNftResponse {
-        val request = CreateNftRequest(
-            name = "KRATE Creation",
-            image = "https://placekitten.com/512/512",
-            receiverAddress = "i5Ww8XokvATpEL8xmu8uXQhjSQMGzgHeB9N8VSDzX3p"
-        )
-
+    suspend fun mintNft(request: CreateNftRequest): CreateNftResponse {
         return withContext(Dispatchers.IO) {
             apiEndpoints.createNft("Bearer ${Keys.API_KEY}", "1", request)
         }

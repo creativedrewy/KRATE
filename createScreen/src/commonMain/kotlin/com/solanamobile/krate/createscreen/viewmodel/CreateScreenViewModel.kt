@@ -7,6 +7,7 @@ import co.touchlab.kermit.Logger
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.createscreen.repository.MediaRepository
 import com.solanamobile.krate.createscreen.usecase.ImageGeneratorUseCase
+import com.underdogprotocol.api.CreateNftRequest
 import com.underdogprotocol.api.UnderdogApiV2
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -55,8 +56,14 @@ class CreateScreenViewModel(
 //                )
 //            }
 
+            val request = CreateNftRequest(
+                name = "KRATE Creation",
+                image = "https://placekitten.com/512/512",
+                receiverAddress = "i5Ww8XokvATpEL8xmu8uXQhjSQMGzgHeB9N8VSDzX3p"
+            )
+
             val api = UnderdogApiV2(true)
-            val result = api.mintNft()
+            val result = api.mintNft(request)
 
             Logger.v { "Your result code: ${result.code}, id: ${result.transactionId}, message: ${result.message}" }
 

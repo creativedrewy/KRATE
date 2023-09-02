@@ -22,4 +22,7 @@ data class CreateNftResponse(
     val message: String = "",
     val projectIdId: Int = -1,
     val transactionId: String = ""
-)
+) {
+    val isSuccess
+        get() = code == -1 && message == ""
+}
