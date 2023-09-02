@@ -10,7 +10,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 
-class UnderdogApi(
+class UnderdogApiV2(
     private val isDevnet: Boolean = false
 ) {
 
@@ -33,21 +33,15 @@ class UnderdogApi(
         apiEndpoints = ktorfit.create()
     }
 
-    suspend fun mintNft() {
+    suspend fun mintNft(): CreateNftResponse {
         val request = CreateNftRequest(
             name = "KRATE Creation",
             image = "https://placekitten.com/512/512",
             receiverAddress = "i5Ww8XokvATpEL8xmu8uXQhjSQMGzgHeB9N8VSDzX3p"
         )
 
-        val result = withContext(Dispatchers.IO) {
-            apiEndpoints.createNft(Keys.API_KEY, "1", request)
+        return withContext(Dispatchers.IO) {
+            apiEndpoints.createNft("Bearer ${Keys.API_KEY}", "1", request)
         }
-
-//        if (result.code == -1) {
-//
-//        } else {
-//
-//        }
     }
 }

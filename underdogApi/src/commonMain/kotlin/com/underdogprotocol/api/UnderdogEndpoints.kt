@@ -13,9 +13,9 @@ interface UnderdogEndpoints {
         "accept: application/json",
         "content-type: application/json"
     )
-    @POST("/projects/{projectId}/nfts")
+    @POST("projects/{projectId}/nfts")
     suspend fun createNft(
-        @Header("authorization: Bearer ") apiKey: String,
+        @Header("authorization") apiKey: String,
         @Path("projectId") projId: String,
         @Body requestData: CreateNftRequest
     ): CreateNftResponse

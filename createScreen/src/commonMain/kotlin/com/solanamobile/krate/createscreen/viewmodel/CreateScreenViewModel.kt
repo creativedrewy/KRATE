@@ -7,6 +7,7 @@ import co.touchlab.kermit.Logger
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.createscreen.repository.MediaRepository
 import com.solanamobile.krate.createscreen.usecase.ImageGeneratorUseCase
+import com.underdogprotocol.api.UnderdogApiV2
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -48,14 +49,20 @@ class CreateScreenViewModel(
                 ViewState.Creating
             }
 
-            val generatedImgs = imgGeneratorUseCase.generateImages(prompt).map {
-                GeneratedImg(
-                    bitmap = it,
-                )
-            }
+//            val generatedImgs = imgGeneratorUseCase.generateImages(prompt).map {
+//                GeneratedImg(
+//                    bitmap = it,
+//                )
+//            }
+
+            val api = UnderdogApiV2(true)
+            val result = api.mintNft()
+
+            Logger.v { "Your result code: ${result.code}, id: ${result.transactionId}, message: ${result.message}" }
 
             mutableState.update {
-                ViewState.Generated(generatedImgs)
+//                ViewState.Generated(generatedImgs)
+                ViewState.Generated(listOf())
             }
         }
     }

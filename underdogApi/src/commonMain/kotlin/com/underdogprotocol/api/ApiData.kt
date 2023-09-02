@@ -23,9 +23,3 @@ data class CreateNftResponse(
     val projectIdId: Int = -1,
     val transactionId: String = ""
 )
-
-//{
-//  "projectId": 1,
-//  "transactionId": "90447fe1-5c2d-4a9c-b26f-4d867137041a",
-//  "nftId": 4
-//}
