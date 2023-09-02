@@ -5,6 +5,7 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import co.touchlab.kermit.Logger
 import com.moriatsushi.koject.Provides
+import com.solanamobile.krate.createscreen.ApiKeys
 import com.solanamobile.krate.createscreen.repository.MediaRepository
 import com.solanamobile.krate.createscreen.usecase.ImageGeneratorUseCase
 import com.underdogprotocol.api.CreateNftRequest
@@ -79,7 +80,7 @@ class CreateScreenViewModel(
             )
 
             val api = UnderdogApiV2(true)
-            val result = api.mintNft(request)
+            val result = api.mintNft(request, ApiKeys.NFT_API_KEY)
 
             Logger.v(tag = "Andrew") { "Your result code: ${result.code}, id: ${result.transactionId}, message: ${result.message}" }
 

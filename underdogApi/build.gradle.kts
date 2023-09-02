@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
@@ -6,18 +5,8 @@ plugins {
     id("com.android.library")
     id("kotlinx-serialization")
 
-    id("com.github.gmazzo.buildconfig")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
     id("de.jensklingenberg.ktorfit") version "1.0.0"
-}
-
-buildConfig {
-    val underdogApiKey: String = gradleLocalProperties(rootDir).getProperty("underdogApiKey")
-
-    className("Keys")
-    packageName("com.underdogprotocol.api")
-
-    buildConfigField("String", "API_KEY", "\"$underdogApiKey\"")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)

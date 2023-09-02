@@ -13,11 +13,13 @@ plugins {
 
 buildConfig {
     val getImgApiKey: String = gradleLocalProperties(rootDir).getProperty("getImgApiKey")
+    val underdogApiKey: String = gradleLocalProperties(rootDir).getProperty("underdogApiKey")
 
     className("ApiKeys")
     packageName("com.solanamobile.krate.createscreen")
 
     buildConfigField("String", "GETIMG_API_KEY", "\"$getImgApiKey\"")
+    buildConfigField("String", "NFT_API_KEY", "\"$underdogApiKey\"")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
