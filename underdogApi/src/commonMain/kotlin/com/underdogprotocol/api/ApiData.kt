@@ -26,3 +26,21 @@ data class CreateNftResponse(
     val isSuccess
         get() = code == -1 && message == ""
 }
+
+data class ListNftsResponse(
+    val page: Int,
+    val limit: Int,
+    val totalPages: Int,
+    val totalResults: Int,
+    val results: List<NftData>
+)
+
+data class NftData(
+    val id: Int,
+    val status: String,
+    val projectId: Int,
+    val mintAddress: String,
+    val ownerAddress: String,
+    val name: String,
+    val image: String
+)

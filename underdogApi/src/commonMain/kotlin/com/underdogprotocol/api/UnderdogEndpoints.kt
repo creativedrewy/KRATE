@@ -5,10 +5,10 @@ import de.jensklingenberg.ktorfit.http.Header
 import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Path
+import de.jensklingenberg.ktorfit.http.Query
 
 interface UnderdogEndpoints {
 
-    //
     @Headers(
         "accept: application/json",
         "content-type: application/json"
@@ -20,4 +20,11 @@ interface UnderdogEndpoints {
         @Body requestData: CreateNftRequest
     ): CreateNftResponse
 
+    suspend fun listNfts(
+        @Header("authorization") apiKey: String,
+        @Path("projectId") projId: String,
+        @Query("page") page: Int? = null,
+        @Query("limit") limit: Int? = null,
+        @Query("ownerAddress") ownerAddress: String? = null
+    ): ListNftsResponse
 }
