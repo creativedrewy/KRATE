@@ -80,7 +80,7 @@ class CreateScreenViewModel(
             )
 
             val api = UnderdogApiV2(true)
-            val result = api.mintNft(request, ApiKeys.NFT_API_KEY)
+            val result = api.mintNft(request, 1, ApiKeys.NFT_API_KEY)
 
             Logger.v(tag = "Andrew") { "Your result code: ${result.code}, id: ${result.transactionId}, message: ${result.message}" }
 

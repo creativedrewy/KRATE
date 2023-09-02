@@ -33,9 +33,9 @@ class UnderdogApiV2(
         apiEndpoints = ktorfit.create()
     }
 
-    suspend fun mintNft(request: CreateNftRequest, apiKey: String): CreateNftResponse {
+    suspend fun mintNft(request: CreateNftRequest, projectId: Int, apiKey: String): CreateNftResponse {
         return withContext(Dispatchers.IO) {
-            apiEndpoints.createNft("Bearer ${apiKey}", "1", request)
+            apiEndpoints.createNft("Bearer ${apiKey}", projectId.toString(), request)
         }
     }
 }
