@@ -14,6 +14,10 @@ class UnderdogApiV2(
     private val isDevnet: Boolean = false
 ) {
 
+    private fun String.asBearer(): String {
+        return "Bearer $this"
+    }
+
     private val apiEndpoints: UnderdogEndpoints
 
     init {
@@ -35,7 +39,13 @@ class UnderdogApiV2(
 
     suspend fun mintNft(request: CreateNftRequest, projectId: Int, apiKey: String): CreateNftResponse {
         return withContext(Dispatchers.IO) {
-            apiEndpoints.createNft("Bearer ${apiKey}", projectId.toString(), request)
+            apiEndpoints.createNft(apiKey.asBearer(), projectId.toString(), request)
+        }
+    }
+
+    suspend fun listNfts(projectId: Int, apiKey: String, ownerAddress: String) {
+        return withContext(Dispatchers.IO) {
+            apiEndpoints.listNfts(apiKey.asBearer(), projectId.toString(), ownerAddress = ownerAddress)
         }
     }
 }
