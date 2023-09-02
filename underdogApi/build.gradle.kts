@@ -1,6 +1,5 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
-import org.jetbrains.kotlin.konan.properties.hasProperty
 
 plugins {
     kotlin("multiplatform")
@@ -13,14 +12,12 @@ plugins {
 }
 
 buildConfig {
-    if (gradleLocalProperties(rootDir).hasProperty("underdogApiKey")) {
-        val underdogApiKey: String = gradleLocalProperties(rootDir).getProperty("underdogApiKey")
+    val underdogApiKey: String = gradleLocalProperties(rootDir).getProperty("underdogApiKey")
 
-        className("ApiKeys")
-        packageName("com.underdogprotocol.api")
+    className("Keys")
+    packageName("com.underdogprotocol.api")
 
-        buildConfigField("String", "API_KEY", "\"$underdogApiKey\"")
-    }
+    buildConfigField("String", "API_KEY", "\"$underdogApiKey\"")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)

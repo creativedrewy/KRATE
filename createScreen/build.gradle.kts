@@ -45,6 +45,7 @@ kotlin {
             dependencies {
                 implementation(projects.extension)
                 implementation(projects.coroutines)
+                implementation(projects.underdogApi)
 
                 implementation(libs.kotlinx.coroutines.core)
 

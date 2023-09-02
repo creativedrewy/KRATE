@@ -18,6 +18,6 @@ interface UnderdogEndpoints {
         @Header("authorization: Bearer ") apiKey: String,
         @Path("projectId") projId: String,
         @Body requestData: CreateNftRequest
-    )
+    ): CreateNftResponse
 
 }
