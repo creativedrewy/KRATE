@@ -43,7 +43,7 @@ class UnderdogApiV2(
         }
     }
 
-    suspend fun listNfts(projectId: Int, apiKey: String, ownerAddress: String) {
+    suspend fun listNfts(projectId: Int, apiKey: String, ownerAddress: String): ListNftsResponse {
         return withContext(Dispatchers.IO) {
             apiEndpoints.listNfts(apiKey.asBearer(), projectId.toString(), ownerAddress = ownerAddress)
         }

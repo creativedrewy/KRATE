@@ -27,6 +27,7 @@ data class CreateNftResponse(
         get() = code == -1 && message == ""
 }
 
+@Serializable
 data class ListNftsResponse(
     val page: Int,
     val limit: Int,
@@ -35,6 +36,7 @@ data class ListNftsResponse(
     val results: List<NftData>
 )
 
+@Serializable
 data class NftData(
     val id: Int,
     val status: String,

@@ -30,6 +30,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -52,6 +53,10 @@ object ProfileScreen: Screen {
     override fun Content() {
         val viewModel: ProfileScreenViewModel = getScreenModel()
         val state by viewModel.state.collectAsState()
+
+        LaunchedEffect(Unit) {
+            viewModel.loadMintedNfts()
+        }
 
         ProfileScreenContent(
             state = state

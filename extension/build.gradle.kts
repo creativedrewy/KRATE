@@ -1,10 +1,24 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("org.jetbrains.compose")
     id("kotlinx-serialization")
 
+    id("com.github.gmazzo.buildconfig")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
+}
+
+buildConfig {
+    val getImgApiKey: String = gradleLocalProperties(rootDir).getProperty("getImgApiKey")
+    val underdogApiKey: String = gradleLocalProperties(rootDir).getProperty("underdogApiKey")
+
+    className("ApiKeys")
+    packageName("com.solanamobile.krate.extensions")
+
+    buildConfigField("String", "GETIMG_API_KEY", "\"$getImgApiKey\"")
+    buildConfigField("String", "NFT_API_KEY", "\"$underdogApiKey\"")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
