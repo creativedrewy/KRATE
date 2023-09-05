@@ -589,8 +589,10 @@ fun CreateScreenContent(
                                                 shape = RoundedCornerShape(6.dp),
                                                 contentPadding = PaddingValues(12.dp),
                                                 onClick = {
-                                                    scope.launch {
-                                                        sheetState.show()
+                                                    if (!generatedImg.isSaved) {
+                                                        scope.launch {
+                                                            sheetState.show()
+                                                        }
                                                     }
                                                 }
                                             ) {

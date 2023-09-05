@@ -102,15 +102,7 @@ class CreateScreenViewModel(
             mutableState.update {
                 val state = (it as ViewState.Generated)
 
-                state.copy(
-                    images = state.images.mapIndexed { i, item ->
-                        GeneratedImg(
-                            imgSrc = item.imgSrc,
-                            bitmap = item.bitmap,
-                            isSaved = i == index
-                        )
-                    }
-                )
+                it
             }
         }
     }
