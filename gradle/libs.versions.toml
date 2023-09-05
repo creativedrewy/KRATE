@@ -9,7 +9,8 @@ koject = "1.3.0"
 ktor = "2.3.2"
 ktorfit-lib = "1.5.0"
 okio = "3.5.0"
-voyager = "1.0.0-rc06"
+voyager = "1.0.0-rc07"
+image-loader = "1.6.5"
 
 [libraries]
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin-reflect" }
@@ -38,3 +39,5 @@ okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+
+image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "image-loader" }

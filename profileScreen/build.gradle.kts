@@ -50,6 +50,8 @@ kotlin {
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.transitions)
 
+                api(libs.image.loader)
+
                 implementation(libs.kermit)
             }
         }

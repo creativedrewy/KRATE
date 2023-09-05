@@ -36,7 +36,7 @@ kotlin {
             isStatic = true
         }
 
-        extraSpecAttributes["resources"] = "['src/commonMain/resources/**']"
+//        extraSpecAttributes["resources"] = "['src/commonMain/resources/**']"
     }
 
     sourceSets {
