@@ -2,6 +2,7 @@ package com.solanamobile.krate.startscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -129,14 +130,16 @@ fun StartScreenContents(
             modifier = Modifier
                 .padding(
                     bottom = 26.dp
-                ),
-            verticalAlignment = Alignment.CenterVertically
+                )
+                .fillMaxWidth()
+                .clickable {
+                    navigator.replace(ScreenRegistry.get(NavScreenProvider.CreateScreen))
+                },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                modifier = Modifier
-                    .clickable {
-                        navigator.replace(ScreenRegistry.get(NavScreenProvider.CreateScreen))
-                    },
+                modifier = Modifier,
                 text = "KRATE NOW",
                 style = MaterialTheme.typography.h3,
                 fontSize = 32.sp,
