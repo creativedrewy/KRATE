@@ -3,7 +3,6 @@ package com.solanamobile.krate.createscreen.viewmodel
 import androidx.compose.ui.graphics.ImageBitmap
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import co.touchlab.kermit.Logger
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.createscreen.ApiKeys
 import com.solanamobile.krate.createscreen.repository.MediaRepository
@@ -65,13 +64,9 @@ class CreateScreenViewModel(
         }
     }
 
-    fun saveToPhotos(index: Int) {
+    fun saveToProfile(index: Int) {
         coroutineScope.launch {
             val selectedImage = (mutableState.value as ViewState.Generated).images[index]
-
-            Logger.v { "Your id: $selectedImage" }
-
-//            mediaRepository.saveBitmap(selectedImage.bitmap)
 
             val request = CreateNftRequest(
                 name = "KRATE Creation",
@@ -80,9 +75,29 @@ class CreateScreenViewModel(
             )
 
             val api = UnderdogApiV2(true)
-            val result = api.mintNft(request, 1, ApiKeys.NFT_API_KEY)
+            api.mintNft(request, 1, ApiKeys.NFT_API_KEY)
 
-            Logger.v(tag = "Andrew") { "Your result code: ${result.code}, id: ${result.transactionId}, message: ${result.message}" }
+            mutableState.update {
+                val state = (it as ViewState.Generated)
+
+                state.copy(
+                    images = state.images.mapIndexed { i, item ->
+                        GeneratedImg(
+                            imgSrc = item.imgSrc,
+                            bitmap = item.bitmap,
+                            isSaved = i == index
+                        )
+                    }
+                )
+            }
+        }
+    }
+
+    fun saveToPhotos(index: Int) {
+        coroutineScope.launch {
+            val selectedImage = (mutableState.value as ViewState.Generated).images[index]
+
+            mediaRepository.saveBitmap(selectedImage.bitmap)
 
             mutableState.update {
                 val state = (it as ViewState.Generated)

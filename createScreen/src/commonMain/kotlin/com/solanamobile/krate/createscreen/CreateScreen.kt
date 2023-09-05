@@ -52,6 +52,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -98,10 +99,13 @@ class CreateScreen: Screen {
             onSubmitPrompt = { txt ->
                 viewModel.generateImageFromPrompt(txt)
             },
-            onResetState = {
+            resetState = {
                 viewModel.resetState()
             },
-            onSavePhoto = { index ->
+            saveToProfile = { index ->
+                viewModel.saveToProfile(index)
+            },
+            saveToPhotos = { index ->
                 viewModel.saveToPhotos(index)
             }
         )
@@ -115,8 +119,9 @@ class CreateScreen: Screen {
 fun CreateScreenContent(
     state: ViewState,
     onSubmitPrompt: (text: String) -> Unit = { },
-    onResetState: () -> Unit = { },
-    onSavePhoto: (Int) -> Unit = { }
+    resetState: () -> Unit = { },
+    saveToProfile: (Int) -> Unit = { },
+    saveToPhotos: (Int) -> Unit = { }
 ) {
     val navigator = LocalNavigator.currentOrThrow
 
@@ -138,6 +143,8 @@ fun CreateScreenContent(
                     .height(224.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                val scope = rememberCoroutineScope()
+
                 Text(
                     modifier = Modifier
                         .padding(
@@ -148,40 +155,6 @@ fun CreateScreenContent(
                     color = MaterialTheme.colors.onSurface
                 )
 
-//                Divider(
-//                    modifier = Modifier
-//                        .fillMaxWidth(),
-//                    thickness = 1.dp,
-//                    color = MaterialTheme.colors.background
-//                )
-//
-//                Row(
-//                    modifier = Modifier
-//                        .padding(
-//                            start = 14.dp,
-//                            end = 14.dp
-//                        )
-//                        .height(54.dp),
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    Text(
-//                        text = "Save to Profile"
-//                    )
-//
-//                    Spacer(Modifier.weight(1f))
-//
-//                    Image(
-//                        modifier = Modifier
-//                            .size(24.dp)
-//                            .clickable {
-//
-//                            },
-//                        painter = painterResource(),
-//                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
-//                        contentDescription = null
-//                    )
-//                }
-
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -189,7 +162,6 @@ fun CreateScreenContent(
                     color = MaterialTheme.colors.background
                 )
 
-                val scope = rememberCoroutineScope()
                 Row(
                     modifier = Modifier
                         .padding(
@@ -198,7 +170,48 @@ fun CreateScreenContent(
                         )
                         .height(54.dp)
                         .clickable {
-                            onSavePhoto(pagerState.currentPage)
+                            saveToProfile(pagerState.currentPage)
+
+                            scope.launch {
+                                sheetState.hide()
+                            }
+                        },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Save to Profile"
+                    )
+
+                    Spacer(Modifier.weight(1f))
+
+                    Image(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable {
+
+                            },
+                        imageVector = Icons.Outlined.Person,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
+                        contentDescription = null
+                    )
+                }
+
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colors.background
+                )
+
+                Row(
+                    modifier = Modifier
+                        .padding(
+                            start = 14.dp,
+                            end = 14.dp
+                        )
+                        .height(54.dp)
+                        .clickable {
+                            saveToPhotos(pagerState.currentPage)
 
                             scope.launch {
                                 sheetState.hide()
@@ -358,7 +371,7 @@ fun CreateScreenContent(
                                     headingAnimation.animateTo(0f, tween(600))
                                 }
 
-                                onResetState()
+                                resetState()
                             }
                         ) {
                             ResourceImage(
@@ -576,10 +589,8 @@ fun CreateScreenContent(
                                                 shape = RoundedCornerShape(6.dp),
                                                 contentPadding = PaddingValues(12.dp),
                                                 onClick = {
-                                                    if (!generatedImg.isSaved) {
-                                                        scope.launch {
-                                                            sheetState.show()
-                                                        }
+                                                    scope.launch {
+                                                        sheetState.show()
                                                     }
                                                 }
                                             ) {
