@@ -10,6 +10,7 @@ include(":startScreen")
 include(":createScreen")
 include(":extension")
 include(":underdogApi")
+include(":ComposePlaceholder")
 
 pluginManagement {
     repositories {
