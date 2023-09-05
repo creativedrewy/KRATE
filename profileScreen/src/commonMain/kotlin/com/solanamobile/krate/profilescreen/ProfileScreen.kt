@@ -4,6 +4,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -42,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.seiko.imageloader.rememberImagePainter
 import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.extension.ui.ResourceImage
 import com.solanamobile.krate.profilescreen.viewmodel.ProfileScreenViewModel
@@ -164,7 +168,9 @@ fun ProfileScreenContent(
                 }
             }
 
-            val pagerState = rememberPagerState()
+            val pagerState = rememberPagerState(
+                pageCount = { 1 }
+            )
 
             ScrollableTabRow(
                 modifier = Modifier
@@ -203,39 +209,62 @@ fun ProfileScreenContent(
                         start = 24.dp,
                         end = 24.dp
                     ),
-                pageCount = 1,
                 state = pagerState,
                 verticalAlignment = Alignment.Top
             ) { _ ->
+                val scrollState = rememberScrollState()
+
                 Column(
                     modifier = Modifier
-                        .aspectRatio(1f)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(MaterialTheme.colors.surface),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .fillMaxSize()
+                        .scrollable(
+                            state = scrollState,
+                            orientation = Orientation.Vertical
+                        )
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .padding(
-                                top = 72.dp
+                    if (state.images.isEmpty()) {
+                        Column(
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(MaterialTheme.colors.surface),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .padding(
+                                        top = 72.dp
+                                    )
+                                    .size(84.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colors.background)
                             )
-                            .size(84.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colors.background)
-                    )
 
-                    Text(
-                        modifier = Modifier
-                            .padding(
-                                top = 26.dp,
-                                start = 24.dp,
-                                end = 24.dp
-                            ),
-                        text = "You don’t have any creations yet. Try creating something and then tapping save to get started.",
-                        style = MaterialTheme.typography.h6,
-                        color = MaterialTheme.colors.onSurface,
-                        textAlign = TextAlign.Center
-                    )
+                            Text(
+                                modifier = Modifier
+                                    .padding(
+                                        top = 26.dp,
+                                        start = 24.dp,
+                                        end = 24.dp
+                                    ),
+                                text = "You don’t have any creations yet. Try creating something and then tapping save to get started.",
+                                style = MaterialTheme.typography.h6,
+                                color = MaterialTheme.colors.onSurface,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    } else {
+                        state.images.forEach { img ->
+                            val painter = rememberImagePainter(img)
+
+                            Image(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                painter = painter,
+                                contentDescription = null
+                            )
+                        }
+                    }
                 }
             }
         }

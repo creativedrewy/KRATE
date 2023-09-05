@@ -121,7 +121,9 @@ fun CreateScreenContent(
     val navigator = LocalNavigator.currentOrThrow
 
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(
+        pageCount = { (state as? ViewState.Generated)?.images?.size ?: 0 }
+    )
 
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(
@@ -523,7 +525,6 @@ fun CreateScreenContent(
                                         .padding(
                                             top = 56.dp
                                         ),
-                                    pageCount = targetState.images.size,
                                     contentPadding = PaddingValues(
                                         start = 40.dp,
                                         end = 40.dp
