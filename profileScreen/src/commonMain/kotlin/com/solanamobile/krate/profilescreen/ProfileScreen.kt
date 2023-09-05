@@ -4,10 +4,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,13 +15,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScrollableTabRow
@@ -204,67 +206,75 @@ fun ProfileScreenContent(
 
             HorizontalPager(
                 modifier = Modifier
-                    .padding(
-                        top = 20.dp,
-                        start = 24.dp,
-                        end = 24.dp
-                    ),
+                    .fillMaxSize(),
                 state = pagerState,
                 verticalAlignment = Alignment.Top
             ) { _ ->
-                val scrollState = rememberScrollState()
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .scrollable(
-                            state = scrollState,
-                            orientation = Orientation.Vertical
-                        )
-                ) {
-                    if (state.images.isEmpty()) {
-                        Column(
+                if (state.images.isEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .padding(
+                                top = 16.dp,
+                                start = 24.dp,
+                                end = 24.dp
+                            )
+                            .aspectRatio(1f)
+                            .background(MaterialTheme.colors.surface),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Box(
                             modifier = Modifier
-                                .aspectRatio(1f)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(MaterialTheme.colors.surface),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(
-                                        top = 72.dp
-                                    )
-                                    .size(84.dp)
-                                    .clip(CircleShape)
-                                    .background(MaterialTheme.colors.background)
-                            )
+                                .padding(
+                                    top = 72.dp
+                                )
+                                .size(84.dp)
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colors.background)
+                        )
 
-                            Text(
-                                modifier = Modifier
-                                    .padding(
-                                        top = 26.dp,
-                                        start = 24.dp,
-                                        end = 24.dp
-                                    ),
-                                text = "You don’t have any creations yet. Try creating something and then tapping save to get started.",
-                                style = MaterialTheme.typography.h6,
-                                color = MaterialTheme.colors.onSurface,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    } else {
-                        state.images.forEach { img ->
-                            val painter = rememberImagePainter(img)
-
-                            Image(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                painter = painter,
-                                contentDescription = null
-                            )
-                        }
+                        Text(
+                            modifier = Modifier
+                                .padding(
+                                    top = 26.dp,
+                                    start = 24.dp,
+                                    end = 24.dp
+                                ),
+                            text = "You don’t have any creations yet. Try creating something and then tapping save to get started.",
+                            style = MaterialTheme.typography.h6,
+                            color = MaterialTheme.colors.onSurface,
+                            textAlign = TextAlign.Center
+                        )
                     }
+                } else {
+                    LazyVerticalGrid(
+                        columns = GridCells.Adaptive(128.dp),
+                        contentPadding = PaddingValues(
+                            start = 18.dp,
+                            top = 16.dp,
+                            end = 18.dp,
+                        ),
+                        content = {
+                            items(state.images) { img ->
+                                Card(
+                                    backgroundColor = Color.Red,
+                                    modifier = Modifier
+                                        .padding(6.dp)
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(8.dp)),
+                                    elevation = 0.dp,
+                                ) {
+                                    val painter = rememberImagePainter(img)
+
+                                    Image(
+                                        modifier = Modifier
+                                            .fillMaxSize(),
+                                        painter = painter,
+                                        contentDescription = null
+                                    )
+                                }
+                            }
+                        }
+                    )
                 }
             }
         }
