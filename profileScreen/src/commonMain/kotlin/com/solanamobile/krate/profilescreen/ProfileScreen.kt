@@ -213,7 +213,7 @@ fun ProfileScreenContent(
                 state = pagerState,
                 verticalAlignment = Alignment.Top
             ) { _ ->
-                if (state.images.isEmpty()) {
+                if (state !is ProfileViewState.Loaded) {
                     Column(
                         modifier = Modifier
                             .padding(
@@ -225,7 +225,7 @@ fun ProfileScreenContent(
                             .clip(RoundedCornerShape(12.dp))
                             .background(MaterialTheme.colors.surface)
                             .placeholder(
-                                visible = true,
+                                visible = state is ProfileViewState.Loading,
                                 color = MaterialTheme.colors.surface,
                                 highlight = PlaceholderHighlight.shimmer(
                                     highlightColor = MaterialTheme.colors.background,
