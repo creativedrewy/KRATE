@@ -52,6 +52,9 @@ import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.extension.ui.ResourceImage
 import com.solanamobile.krate.profilescreen.viewmodel.ProfileScreenViewModel
 import com.solanamobile.krate.profilescreen.viewmodel.ProfileViewState
+import com.solanamobile.placeholder.PlaceholderHighlight
+import com.solanamobile.placeholder.placeholder
+import com.solanamobile.placeholder.shimmer
 
 object ProfileScreen: Screen {
 
@@ -219,7 +222,15 @@ fun ProfileScreenContent(
                                 end = 24.dp
                             )
                             .aspectRatio(1f)
-                            .background(MaterialTheme.colors.surface),
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colors.surface)
+                            .placeholder(
+                                visible = true,
+                                color = MaterialTheme.colors.surface,
+                                highlight = PlaceholderHighlight.shimmer(
+                                    highlightColor = MaterialTheme.colors.background,
+                                ),
+                            ),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Box(

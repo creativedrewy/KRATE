@@ -30,6 +30,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation(projects.composePlaceholder)
                 implementation(projects.underdogApi)
                 implementation(projects.extension)
 
