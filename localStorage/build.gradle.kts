@@ -1,15 +1,13 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    id("org.jetbrains.compose")
-    id("kotlinx-serialization")
 
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    android {
+    androidTarget {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "17"
@@ -23,7 +21,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "startScreen"
+            baseName = "localStorage"
         }
     }
 
@@ -31,28 +29,12 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(projects.extension)
-                implementation(projects.localStorage)
-
                 implementation(libs.kotlinx.coroutines.core)
-
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material)
-                implementation(compose.animation)
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
 
                 implementation(libs.koject.core)
                 implementation(libs.koject.compose.core)
 
-                implementation(libs.voyager.navigator)
-                implementation(libs.voyager.transitions)
-
                 implementation(libs.kermit)
-
-                implementation(libs.solanaeddsa)
-                implementation(libs.solanainterfaces)
-                implementation(libs.solanapublickeys)
             }
         }
 
@@ -64,11 +46,6 @@ kotlin {
 
         val androidMain by getting {
             dependsOn(commonMain)
-            dependencies {
-                api(libs.activity.compose)
-                api(libs.appcompat)
-                api(libs.core.ktx)
-            }
         }
 
         val iosX64Main by getting
@@ -91,7 +68,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.solanamobile.krate.startscreen"
+    namespace = "com.solanamobile.krate.localstorage"
     compileSdk = 33
 
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")

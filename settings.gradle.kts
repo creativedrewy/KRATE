@@ -11,6 +11,7 @@ include(":createScreen")
 include(":extension")
 include(":underdogApi")
 include(":ComposePlaceholder")
+include(":localStorage")
 
 pluginManagement {
     repositories {
