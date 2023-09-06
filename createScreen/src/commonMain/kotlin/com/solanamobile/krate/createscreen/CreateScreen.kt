@@ -290,7 +290,8 @@ fun CreateScreenContent(
                     .background(MaterialTheme.colors.background),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                var promptText by rememberSaveable { mutableStateOf("What do you want to create today?") }
+                val startString = "What do you want to create today?"
+                var promptText by rememberSaveable { mutableStateOf(startString) }
 
                 val scope = rememberCoroutineScope()
                 val headingAnimation = remember { Animatable(0f) }
@@ -413,11 +414,11 @@ fun CreateScreenContent(
                                         contentColor = Color.White
                                     ),
                                     onClick = {
-//                                    if (promptText != "What do you want to create today?") {
-                                        focusManager.clearFocus()
+                                        if (promptText != startString && promptText.isNotBlank()) {
+                                            focusManager.clearFocus()
 
-                                        onSubmitPrompt(promptText)
-//                                    }
+                                            onSubmitPrompt(promptText)
+                                        }
                                     }
                                 ) {
                                     Text(
