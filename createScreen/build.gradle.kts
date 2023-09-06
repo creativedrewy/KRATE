@@ -48,6 +48,7 @@ kotlin {
                 implementation(projects.extension)
                 implementation(projects.coroutines)
                 implementation(projects.underdogApi)
+                api(projects.localStorage)
 
                 implementation(libs.kotlinx.coroutines.core)
 

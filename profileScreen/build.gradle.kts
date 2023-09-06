@@ -33,6 +33,7 @@ kotlin {
                 implementation(projects.composePlaceholder)
                 implementation(projects.underdogApi)
                 implementation(projects.extension)
+                api(projects.localStorage)
 
                 implementation(libs.kotlinx.coroutines.core)
 

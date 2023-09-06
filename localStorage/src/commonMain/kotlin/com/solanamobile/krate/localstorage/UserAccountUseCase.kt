@@ -10,6 +10,9 @@ class UserAccountUseCase(
     private val prefsRepo: EncryptedPrefsRepository
 ) {
 
+    val userAddress: String
+        get() = prefsRepo.getStringPref(accountKeyName)
+
     fun accountExists(): Boolean {
         return prefsRepo.hasKeyValue(accountKeyName) && prefsRepo.hasKeyValue(secretKeyName)
     }

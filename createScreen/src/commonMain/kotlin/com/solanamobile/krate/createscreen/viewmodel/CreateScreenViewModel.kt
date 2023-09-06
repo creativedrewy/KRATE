@@ -7,6 +7,7 @@ import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.createscreen.ApiKeys
 import com.solanamobile.krate.createscreen.repository.MediaRepository
 import com.solanamobile.krate.createscreen.usecase.ImageGeneratorUseCase
+import com.solanamobile.krate.localstorage.UserAccountUseCase
 import com.underdogprotocol.api.CreateNftRequest
 import com.underdogprotocol.api.UnderdogApiV2
 import kotlinx.coroutines.flow.update
@@ -35,7 +36,8 @@ sealed class ViewState() {
 @Provides
 class CreateScreenViewModel(
     private val imgGeneratorUseCase: ImageGeneratorUseCase,
-    private val mediaRepository: MediaRepository
+    private val mediaRepository: MediaRepository,
+    private val acctUseCase: UserAccountUseCase
 ): StateScreenModel<ViewState>(ViewState.Prompting) {
 
     fun resetState() {
@@ -71,7 +73,7 @@ class CreateScreenViewModel(
             val request = CreateNftRequest(
                 name = "KRATE Creation",
                 image = selectedImage.imgSrc,
-                receiverAddress = "i5Ww8XokvATpEL8xmu8uXQhjSQMGzgHeB9N8VSDzX3p"
+                receiverAddress = acctUseCase.userAddress
             )
 
             val api = UnderdogApiV2(true)

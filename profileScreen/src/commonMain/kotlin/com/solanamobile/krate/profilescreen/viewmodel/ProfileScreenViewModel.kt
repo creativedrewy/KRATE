@@ -4,6 +4,7 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.extensions.ApiKeys
+import com.solanamobile.krate.localstorage.UserAccountUseCase
 import com.underdogprotocol.api.UnderdogApiV2
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -19,7 +20,9 @@ sealed class ProfileViewState {
 }
 
 @Provides
-class ProfileScreenViewModel: StateScreenModel<ProfileViewState>(ProfileViewState.Default) {
+class ProfileScreenViewModel(
+    private val acctUseCase: UserAccountUseCase
+): StateScreenModel<ProfileViewState>(ProfileViewState.Default) {
 
     private val api = UnderdogApiV2(true)
 
@@ -29,7 +32,7 @@ class ProfileScreenViewModel: StateScreenModel<ProfileViewState>(ProfileViewStat
                 ProfileViewState.Loading
             }
 
-            val myNfts = api.listNfts(1, ApiKeys.NFT_API_KEY, "i5Ww8XokvATpEL8xmu8uXQhjSQMGzgHeB9N8VSDzX3p")
+            val myNfts = api.listNfts(1, ApiKeys.NFT_API_KEY, acctUseCase.userAddress)
 
             mutableState.update {
                 ProfileViewState.Loaded(
