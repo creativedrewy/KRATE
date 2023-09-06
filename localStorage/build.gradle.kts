@@ -35,6 +35,8 @@ kotlin {
                 implementation(libs.koject.compose.core)
 
                 implementation(libs.kermit)
+
+                implementation("com.liftric:kvault:1.10.0")
             }
         }
 
