@@ -40,7 +40,7 @@ kotlin {
                 implementation(libs.solanainterfaces)
                 implementation(libs.solanapublickeys)
 
-                implementation("com.liftric:kvault:1.10.0")
+                implementation("com.russhwolf:multiplatform-settings-no-arg:1.0.0")
             }
         }
 

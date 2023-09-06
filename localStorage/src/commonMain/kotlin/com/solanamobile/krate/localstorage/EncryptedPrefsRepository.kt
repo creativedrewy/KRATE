@@ -10,15 +10,14 @@ class EncryptedPrefsRepository(
 ) {
 
     fun hasKeyValue(key: String): Boolean {
-        return dataStore.vault.existsObject(key)
+        return dataStore.settings.hasKey(key)
     }
 
     fun saveStringPref(key: String, value: String) {
-        dataStore.vault.set(key, stringValue = value)
+        dataStore.settings.putString(key, value)
     }
 
     fun getStringPref(key: String): String {
-        return dataStore.vault.string(key)
-            ?: throw IllegalArgumentException("Could not find pref value with provided key. Please check for existence before retrieving.")
+        return dataStore.settings.getString(key, "")
     }
 }

@@ -1,7 +1,9 @@
 package com.solanamobile.krate.localstorage
 
-import com.liftric.kvault.KVault
+import com.moriatsushi.koject.Provides
+import com.russhwolf.settings.Settings
 
-expect class VaultDataStore {
-    val vault: KVault
+@Provides
+class VaultDataStore {
+    val settings = Settings()
 }
