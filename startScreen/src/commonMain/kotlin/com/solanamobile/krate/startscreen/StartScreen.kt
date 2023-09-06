@@ -32,6 +32,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.solanamobile.krate.extension.NavScreenProvider
 import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.extension.ui.ResourceImage
+import com.solanamobile.krate.extension.ui.navBarBottomPadding
 import com.solanamobile.krate.startscreen.ui.AnimatedArrows
 import com.solanamobile.krate.startscreen.viewmodel.StartScreenViewModel
 import com.solanamobile.krate.startscreen.viewmodel.StartScreenViewState
@@ -67,8 +68,9 @@ fun StartScreenContents(
             .padding(
                 top = 183.dp,
                 start = 20.dp,
-                end = 20.dp
+                end = 10.dp
             )
+            .navBarBottomPadding()
     ) {
         Text(
             text = "CREATORS\nGONNA",
@@ -134,7 +136,7 @@ fun StartScreenContents(
         Row(
             modifier = Modifier
                 .padding(
-                    bottom = 26.dp
+                    bottom = 8.dp
                 )
                 .fillMaxWidth()
                 .clickable {
