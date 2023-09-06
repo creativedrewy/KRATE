@@ -31,7 +31,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(projects.extension)
-                implementation(projects.localStorage)
+                api(projects.localStorage)
 
                 implementation(libs.kotlinx.coroutines.core)
 
@@ -89,6 +89,10 @@ dependencies {
     add("kspIosArm64", libs.koject.processor.lib)
     add("kspIosSimulatorArm64", libs.koject.processor.lib)
 }
+
+//ksp {
+//    arg("startScreen", project.name)
+//}
 
 android {
     namespace = "com.solanamobile.krate.startscreen"
