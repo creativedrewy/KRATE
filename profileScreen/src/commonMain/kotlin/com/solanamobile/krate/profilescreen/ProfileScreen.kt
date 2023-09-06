@@ -50,6 +50,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.seiko.imageloader.rememberImagePainter
 import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.extension.ui.ResourceImage
+import com.solanamobile.krate.extension.ui.statusBarTopPadding
 import com.solanamobile.krate.profilescreen.viewmodel.ProfileScreenViewModel
 import com.solanamobile.krate.profilescreen.viewmodel.ProfileViewState
 import com.solanamobile.placeholder.PlaceholderHighlight
@@ -84,10 +85,8 @@ fun ProfileScreenContent(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
-            .padding(
-                top = 44.dp
-            ),
+            .background(MaterialTheme.colors.surface)
+            .statusBarTopPadding(),
         topBar = {
             TopAppBar(
                 backgroundColor = MaterialTheme.colors.surface,
@@ -105,6 +104,7 @@ fun ProfileScreenContent(
                         imageVector = Icons.Default.Close,
                         contentDescription = null
                     )
+
                 }
             )
         }
