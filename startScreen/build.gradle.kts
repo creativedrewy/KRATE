@@ -49,9 +49,9 @@ kotlin {
 
                 implementation(libs.kermit)
 
-                implementation("foundation.metaplex:solanaeddsa:0.1.3")
-                implementation("foundation.metaplex:solanainterfaces:0.1.3")
-                implementation("foundation.metaplex:solanapublickeys:0.1.3")
+                implementation(libs.solanaeddsa)
+                implementation(libs.solanainterfaces)
+                implementation(libs.solanapublickeys)
             }
         }
 

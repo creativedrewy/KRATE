@@ -9,6 +9,7 @@ koject = "1.3.0"
 ktor = "2.3.2"
 ktorfit-lib = "1.5.0"
 okio = "3.5.0"
+solanakmp = "0.1.3"
 voyager = "1.0.0-rc07"
 image-loader = "1.6.5"
 
@@ -41,3 +42,7 @@ voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", vers
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 
 image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "image-loader" }
+
+solanaeddsa = { module = "foundation.metaplex:solanaeddsa", version.ref = "solanakmp" }
+solanapublickeys = { module = "foundation.metaplex:solanapublickeys", version.ref = "solanakmp" }
+solanainterfaces = { module = "foundation.metaplex:solanainterfaces", version.ref = "solanakmp" }
