@@ -49,10 +49,6 @@ kotlin {
                 implementation(libs.voyager.transitions)
 
                 implementation(libs.kermit)
-
-                implementation(libs.solanaeddsa)
-                implementation(libs.solanainterfaces)
-                implementation(libs.solanapublickeys)
             }
         }
 
@@ -89,10 +85,6 @@ dependencies {
     add("kspIosArm64", libs.koject.processor.lib)
     add("kspIosSimulatorArm64", libs.koject.processor.lib)
 }
-
-//ksp {
-//    arg("startScreen", project.name)
-//}
 
 android {
     namespace = "com.solanamobile.krate.startscreen"

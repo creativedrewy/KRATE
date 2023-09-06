@@ -36,6 +36,10 @@ kotlin {
 
                 implementation(libs.kermit)
 
+                implementation(libs.solanaeddsa)
+                implementation(libs.solanainterfaces)
+                implementation(libs.solanapublickeys)
+
                 implementation("com.liftric:kvault:1.10.0")
             }
         }
