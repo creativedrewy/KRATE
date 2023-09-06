@@ -135,9 +135,6 @@ fun StartScreenContents(
 
         Row(
             modifier = Modifier
-                .padding(
-                    bottom = 8.dp
-                )
                 .fillMaxWidth()
                 .clickable {
                     navigator.replace(ScreenRegistry.get(NavScreenProvider.CreateScreen))

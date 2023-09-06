@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -20,7 +19,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -42,7 +40,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -213,81 +210,62 @@ fun ProfileScreenContent(
                 state = pagerState,
                 verticalAlignment = Alignment.Top
             ) { _ ->
-                if (state !is ProfileViewState.Loaded) {
-                    Column(
-                        modifier = Modifier
-                            .padding(
-                                top = 16.dp,
-                                start = 24.dp,
-                                end = 24.dp
-                            )
-                            .aspectRatio(1f)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(MaterialTheme.colors.surface)
-                            .placeholder(
-                                visible = state is ProfileViewState.Loading,
-                                color = MaterialTheme.colors.surface,
-                                highlight = PlaceholderHighlight.shimmer(
-                                    highlightColor = MaterialTheme.colors.background,
-                                ),
-                            ),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .padding(
-                                    top = 72.dp
-                                )
-                                .size(84.dp)
-                                .clip(CircleShape)
-                                .background(MaterialTheme.colors.background)
-                        )
-
-                        Text(
-                            modifier = Modifier
-                                .padding(
-                                    top = 26.dp,
-                                    start = 24.dp,
-                                    end = 24.dp
-                                ),
-                            text = "You don’t have any creations yet. Try creating something and then tapping save to get started.",
-                            style = MaterialTheme.typography.h6,
-                            color = MaterialTheme.colors.onSurface,
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                val images = if (state !is ProfileViewState.Loaded) {
+                    listOf("", "")
                 } else {
-                    LazyVerticalGrid(
-                        columns = GridCells.Adaptive(128.dp),
-                        contentPadding = PaddingValues(
-                            start = 18.dp,
-                            top = 16.dp,
-                            end = 18.dp,
-                        ),
-                        content = {
-                            items(state.images) { img ->
-                                Card(
-                                    backgroundColor = Color.Red,
-                                    modifier = Modifier
-                                        .padding(6.dp)
-                                        .fillMaxWidth()
-                                        .clip(RoundedCornerShape(8.dp)),
-                                    elevation = 0.dp,
-                                ) {
-                                    val painter = rememberImagePainter(img)
-
-                                    Image(
-                                        modifier = Modifier
-                                            .fillMaxSize(),
-                                        painter = painter,
-                                        contentDescription = null
-                                    )
-                                }
-                            }
-                        }
-                    )
+                    state.images
                 }
+
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(
+                        start = 18.dp,
+                        top = 16.dp,
+                        end = 18.dp,
+                    ),
+                    content = {
+                        items(images) { img ->
+                            ProfileImageCard(
+                                imgPath = img,
+                                isLoading = state is ProfileViewState.Loading
+                            )
+                        }
+                    }
+                )
             }
         }
+    }
+}
+
+@Composable
+fun ProfileImageCard(
+    imgPath: String,
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false
+) {
+    Card(
+        modifier = modifier
+            .padding(6.dp)
+            .fillMaxSize()
+            .aspectRatio(1f)
+            .clip(RoundedCornerShape(8.dp))
+            .placeholder(
+                visible = isLoading,
+                color = MaterialTheme.colors.surface,
+                highlight = PlaceholderHighlight.shimmer(
+                    highlightColor = MaterialTheme.colors.background,
+                ),
+            ),
+        elevation = 0.dp,
+    ) {
+        val painter = rememberImagePainter(imgPath)
+
+        Image(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.surface),
+            painter = painter,
+            contentDescription = null
+        )
     }
 }

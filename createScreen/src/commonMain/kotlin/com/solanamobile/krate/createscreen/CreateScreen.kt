@@ -249,9 +249,6 @@ fun CreateScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background)
-                .padding(
-                    top = 10.dp
-                )
                 .statusBarTopPadding(),
             topBar = {
                 TopAppBar(
@@ -399,7 +396,7 @@ fun CreateScreenContent(
                                 Button(
                                     modifier = Modifier
                                         .padding(
-                                            bottom = 8.dp
+                                            bottom = 4.dp
                                         )
                                         .keyboardBottomPadding()
                                         .size(84.dp),
