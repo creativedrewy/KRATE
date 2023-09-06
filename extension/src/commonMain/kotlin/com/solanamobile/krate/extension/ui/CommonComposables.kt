@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,6 +16,13 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ImageBitmap
 import com.solanamobile.krate.extension.compositionlocal.LocalResourceLocator
 import kotlinx.coroutines.launch
+
+@Composable
+fun Modifier.statusBarTopPadding(): Modifier {
+    return this.padding(
+        top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    )
+}
 
 @Composable
 fun Modifier.navBarBottomPadding(): Modifier {

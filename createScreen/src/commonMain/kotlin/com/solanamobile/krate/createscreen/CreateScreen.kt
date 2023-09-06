@@ -2,7 +2,6 @@ package com.solanamobile.krate.createscreen
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.EaseInOutQuad
@@ -86,8 +85,8 @@ import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.extension.ui.ResourceImage
 import com.solanamobile.krate.extension.ui.keyboardBottomPadding
 import com.solanamobile.krate.extension.ui.navBarBottomPadding
+import com.solanamobile.krate.extension.ui.statusBarTopPadding
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 class CreateScreen: Screen {
 
@@ -114,7 +113,7 @@ class CreateScreen: Screen {
     }
 }
 
-@OptIn(ExperimentalResourceApi::class, ExperimentalAnimationApi::class,
+@OptIn(
     ExperimentalFoundationApi::class, ExperimentalMaterialApi::class
 )
 @Composable
@@ -246,14 +245,14 @@ fun CreateScreenContent(
         },
         sheetState = sheetState
     ) {
-
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background)
                 .padding(
-                    top = 44.dp
-                ),
+                    top = 10.dp
+                )
+                .statusBarTopPadding(),
             topBar = {
                 TopAppBar(
                     backgroundColor = MaterialTheme.colors.background,
