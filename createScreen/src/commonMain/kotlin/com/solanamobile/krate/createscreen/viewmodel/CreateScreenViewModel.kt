@@ -118,6 +118,8 @@ class CreateScreenViewModel(
 
     fun saveToPhotos(index: Int) {
         coroutineScope.launch {
+            _savingState.update { SavingState.Saving }
+
             val selectedImage = (mutableState.value as ViewState.Generated).images[index]
 
             mediaRepository.saveBitmap(selectedImage.bitmap)
@@ -125,6 +127,8 @@ class CreateScreenViewModel(
             mutableState.update {
                 (it as ViewState.Generated)
             }
+
+            _savingState.update { SavingState.Saved }
         }
     }
 }

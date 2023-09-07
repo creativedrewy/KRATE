@@ -51,9 +51,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -203,13 +201,21 @@ fun CreateScreenContent(
 
                     Spacer(Modifier.weight(1f))
 
-                    Image(
-                        modifier = Modifier
-                            .size(24.dp),
-                        imageVector = if (itemSaved) Icons.Outlined.CheckCircle else Icons.Outlined.Person,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
-                        contentDescription = null
-                    )
+                    if (itemSaved) {
+                        Image(
+                            modifier = Modifier
+                                .size(24.dp),
+                            imageVector = Icons.Outlined.CheckCircle,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
+                            contentDescription = null
+                        )
+                    } else {
+                        ResourceImage(
+                            modifier = Modifier
+                                .size(24.dp),
+                            resourceName = "save_to_profile.png",
+                        )
+                    }
                 }
 
                 Divider(
@@ -241,12 +247,10 @@ fun CreateScreenContent(
 
                     Spacer(Modifier.weight(1f))
 
-                    Image(
+                    ResourceImage(
                         modifier = Modifier
                             .size(24.dp),
-                        imageVector = Icons.Outlined.Check,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
-                        contentDescription = null
+                        resourceName = "save_to_images.png",
                     )
                 }
 
