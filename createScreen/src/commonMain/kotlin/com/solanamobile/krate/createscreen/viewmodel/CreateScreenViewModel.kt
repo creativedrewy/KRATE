@@ -6,7 +6,10 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.createscreen.repository.MediaRepository
 import com.solanamobile.krate.createscreen.usecase.ImageGeneratorUseCase
+import com.solanamobile.krate.extensions.ApiKeys
 import com.solanamobile.krate.localstorage.UserAccountUseCase
+import com.underdogprotocol.api.CreateNftRequest
+import com.underdogprotocol.api.UnderdogApiV2
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -54,6 +57,10 @@ class CreateScreenViewModel(
         }
     }
 
+    fun finishSave() {
+        _savingState.update { SavingState.Resting }
+    }
+
     @OptIn(ExperimentalEncodingApi::class)
     fun generateImageFromPrompt(prompt: String) {
         coroutineScope.launch {
@@ -61,7 +68,7 @@ class CreateScreenViewModel(
                 ViewState.Creating
             }
 
-            val generatedImgs = imgGeneratorUseCase.generateImages(prompt).map {
+            val generatedImgs = imgGeneratorUseCase.generateImages(prompt, 1).map {
                 GeneratedImg(
                     imgSrc = it.sourceBytes,
                     bitmap = it.bitmap,
@@ -78,34 +85,34 @@ class CreateScreenViewModel(
         coroutineScope.launch {
             _savingState.update { SavingState.Saving }
 
-//            val selectedImage = (mutableState.value as ViewState.Generated).images[index]
-//
-//            val request = CreateNftRequest(
-//                name = "KRATE Creation",
-//                image = selectedImage.imgSrc,
-//                receiverAddress = acctUseCase.userAddress
-//            )
-//
-//            val api = UnderdogApiV2(true)
-//            api.mintNft(request, 1, ApiKeys.NFT_API_KEY)
+            val selectedImage = (mutableState.value as ViewState.Generated).images[index]
 
-            delay(10000)
+            val request = CreateNftRequest(
+                name = "KRATE Creation",
+                image = selectedImage.imgSrc,
+                receiverAddress = acctUseCase.userAddress
+            )
+
+            val api = UnderdogApiV2(true)
+            api.mintNft(request, 1, ApiKeys.NFT_API_KEY)
+
+            delay(3000)
 
             _savingState.update { SavingState.Saved }
 
-//            mutableState.update {
-//                val state = (it as ViewState.Generated)
-//
-//                state.copy(
-//                    images = state.images.mapIndexed { i, item ->
-//                        GeneratedImg(
-//                            imgSrc = item.imgSrc,
-//                            bitmap = item.bitmap,
-//                            isSavedToProfile = i == index
-//                        )
-//                    }
-//                )
-//            }
+            mutableState.update {
+                val state = (it as ViewState.Generated)
+
+                state.copy(
+                    images = state.images.mapIndexed { i, item ->
+                        GeneratedImg(
+                            imgSrc = item.imgSrc,
+                            bitmap = item.bitmap,
+                            isSavedToProfile = i == index
+                        )
+                    }
+                )
+            }
         }
     }
 
