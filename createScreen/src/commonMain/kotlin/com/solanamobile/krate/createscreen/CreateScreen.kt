@@ -355,7 +355,7 @@ fun CreateScreenContent(
                                     end = leftPadding.value,
                                 )
                                 .onFocusEvent {
-                                    if (it.hasFocus) {
+                                    if (it.hasFocus && promptText == startString) {
                                         promptText = ""
                                     }
                                 }
