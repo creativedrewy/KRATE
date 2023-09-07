@@ -52,6 +52,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -158,6 +159,9 @@ fun CreateScreenContent(
                     .height(224.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                val currentItem = (state as? ViewState.Generated)?.images?.get(pagerState.currentPage)
+                val itemSaved = currentItem?.isSavedToProfile == true
+
                 Text(
                     modifier = Modifier
                         .padding(
@@ -182,24 +186,27 @@ fun CreateScreenContent(
                             end = 14.dp
                         )
                         .height(54.dp)
-                        .clickable {
+                        .clickable(
+                            enabled = !itemSaved
+                        ) {
+                            scope.launch {
+                                sheetState.hide()
+                            }
+
                             saveToProfile(pagerState.currentPage)
                         },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Save to Profile"
+                        text = if (itemSaved) "Already Saved to Profile" else "Save to Profile"
                     )
 
                     Spacer(Modifier.weight(1f))
 
                     Image(
                         modifier = Modifier
-                            .size(24.dp)
-                            .clickable {
-
-                            },
-                        imageVector = Icons.Outlined.Person,
+                            .size(24.dp),
+                        imageVector = if (itemSaved) Icons.Outlined.CheckCircle else Icons.Outlined.Person,
                         colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
                         contentDescription = null
                     )
@@ -220,6 +227,10 @@ fun CreateScreenContent(
                         )
                         .height(54.dp)
                         .clickable {
+                            scope.launch {
+                                sheetState.hide()
+                            }
+
                             saveToPhotos(pagerState.currentPage)
                         },
                     verticalAlignment = Alignment.CenterVertically
@@ -590,15 +601,13 @@ fun CreateScreenContent(
                                                     shape = RoundedCornerShape(6.dp),
                                                     contentPadding = PaddingValues(12.dp),
                                                     onClick = {
-                                                        if (!generatedImg.isSavedToProfile) {
-                                                            scope.launch {
-                                                                sheetState.show()
-                                                            }
+                                                        scope.launch {
+                                                            sheetState.show()
                                                         }
                                                     }
                                                 ) {
                                                     Text(
-                                                        text =  if (generatedImg.isSavedToProfile) "Saved!" else "Save",
+                                                        text =  "Save",
                                                         style = MaterialTheme.typography.h6
                                                     )
                                                 }
