@@ -68,7 +68,7 @@ class CreateScreenViewModel(
                 ViewState.Creating
             }
 
-            val generatedImgs = imgGeneratorUseCase.generateImages(prompt, 1).map {
+            val generatedImgs = imgGeneratorUseCase.generateImages(prompt).map {
                 GeneratedImg(
                     imgSrc = it.sourceBytes,
                     bitmap = it.bitmap,
