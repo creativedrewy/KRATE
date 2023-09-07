@@ -4,12 +4,12 @@ import androidx.compose.ui.graphics.ImageBitmap
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.moriatsushi.koject.Provides
-import com.solanamobile.krate.createscreen.ApiKeys
 import com.solanamobile.krate.createscreen.repository.MediaRepository
 import com.solanamobile.krate.createscreen.usecase.ImageGeneratorUseCase
 import com.solanamobile.krate.localstorage.UserAccountUseCase
-import com.underdogprotocol.api.CreateNftRequest
-import com.underdogprotocol.api.UnderdogApiV2
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -18,18 +18,22 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 data class GeneratedImg(
     val imgSrc: String,
     val bitmap: ImageBitmap,
-    val isSaved: Boolean = false
+    val isSavedToProfile: Boolean = false
 )
 
 sealed class ViewState() {
-
     data object Prompting : ViewState()
-
     data object Creating : ViewState()
 
     data class Generated(
         val images: List<GeneratedImg> = listOf()
     ): ViewState()
+}
+
+sealed class SavingState() {
+    data object Resting: SavingState()
+    data object Saving: SavingState()
+    data object Saved: SavingState()
 }
 
 @OptIn(ExperimentalResourceApi::class)
@@ -39,6 +43,10 @@ class CreateScreenViewModel(
     private val mediaRepository: MediaRepository,
     private val acctUseCase: UserAccountUseCase
 ): StateScreenModel<ViewState>(ViewState.Prompting) {
+
+    private val _savingState = MutableStateFlow<SavingState>(SavingState.Resting)
+
+    val savingState = _savingState.asStateFlow()
 
     fun resetState() {
         mutableState.update {
@@ -68,30 +76,36 @@ class CreateScreenViewModel(
 
     fun saveToProfile(index: Int) {
         coroutineScope.launch {
-            val selectedImage = (mutableState.value as ViewState.Generated).images[index]
+            _savingState.update { SavingState.Saving }
 
-            val request = CreateNftRequest(
-                name = "KRATE Creation",
-                image = selectedImage.imgSrc,
-                receiverAddress = acctUseCase.userAddress
-            )
+//            val selectedImage = (mutableState.value as ViewState.Generated).images[index]
+//
+//            val request = CreateNftRequest(
+//                name = "KRATE Creation",
+//                image = selectedImage.imgSrc,
+//                receiverAddress = acctUseCase.userAddress
+//            )
+//
+//            val api = UnderdogApiV2(true)
+//            api.mintNft(request, 1, ApiKeys.NFT_API_KEY)
 
-            val api = UnderdogApiV2(true)
-            api.mintNft(request, 1, ApiKeys.NFT_API_KEY)
+            delay(10000)
 
-            mutableState.update {
-                val state = (it as ViewState.Generated)
+            _savingState.update { SavingState.Saved }
 
-                state.copy(
-                    images = state.images.mapIndexed { i, item ->
-                        GeneratedImg(
-                            imgSrc = item.imgSrc,
-                            bitmap = item.bitmap,
-                            isSaved = i == index
-                        )
-                    }
-                )
-            }
+//            mutableState.update {
+//                val state = (it as ViewState.Generated)
+//
+//                state.copy(
+//                    images = state.images.mapIndexed { i, item ->
+//                        GeneratedImg(
+//                            imgSrc = item.imgSrc,
+//                            bitmap = item.bitmap,
+//                            isSavedToProfile = i == index
+//                        )
+//                    }
+//                )
+//            }
         }
     }
 
@@ -102,9 +116,7 @@ class CreateScreenViewModel(
             mediaRepository.saveBitmap(selectedImage.bitmap)
 
             mutableState.update {
-                val state = (it as ViewState.Generated)
-
-                it
+                (it as ViewState.Generated)
             }
         }
     }

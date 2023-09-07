@@ -583,7 +583,7 @@ fun CreateScreenContent(
                                                 shape = RoundedCornerShape(6.dp),
                                                 contentPadding = PaddingValues(12.dp),
                                                 onClick = {
-                                                    if (!generatedImg.isSaved) {
+                                                    if (!generatedImg.isSavedToProfile) {
                                                         scope.launch {
                                                             sheetState.show()
                                                         }
@@ -591,7 +591,7 @@ fun CreateScreenContent(
                                                 }
                                             ) {
                                                 Text(
-                                                    text =  if (generatedImg.isSaved) "Saved!" else "Save",
+                                                    text =  if (generatedImg.isSavedToProfile) "Saved!" else "Save",
                                                     style = MaterialTheme.typography.h6
                                                 )
                                             }
