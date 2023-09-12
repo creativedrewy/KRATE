@@ -84,6 +84,7 @@ import com.solanamobile.krate.createscreen.viewmodel.CreateScreenViewModel
 import com.solanamobile.krate.createscreen.viewmodel.SavingState
 import com.solanamobile.krate.createscreen.viewmodel.ViewState
 import com.solanamobile.krate.extension.NavScreenProvider
+import com.solanamobile.krate.extension.compositionlocal.LocalResourceLocator
 import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.extension.ui.ResourceImage
 import com.solanamobile.krate.extension.ui.keyboardBottomPadding
@@ -99,11 +100,22 @@ class CreateScreen: Screen {
         val state by viewModel.state.collectAsState()
         val savingState by viewModel.savingState.collectAsState()
 
+        val resLocator = LocalResourceLocator.current
+        val scope = rememberCoroutineScope()
+
         CreateScreenContent(
             state = state,
             savingState = savingState,
             onSubmitPrompt = { txt ->
-                viewModel.generateImageFromPrompt(txt)
+                //viewModel.generateImageFromPrompt(txt)
+
+                scope.launch {
+                    val srcImage = resLocator.getResourceBytes("me_src.png")
+                    val maskImg = resLocator.getResourceBytes("me_mask.png")
+
+                    viewModel.inpaintImageFromPrompt(txt, srcImage, maskImg)
+                }
+
             },
             resetState = {
                 viewModel.resetState()

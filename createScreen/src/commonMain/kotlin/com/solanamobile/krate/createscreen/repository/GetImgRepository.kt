@@ -1,19 +1,13 @@
 package com.solanamobile.krate.createscreen.repository
 
-import co.touchlab.kermit.Logger
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.createscreen.ApiKeys
 import com.solanamobile.krate.createscreen.endpoint.GetImgEndpoints
 import com.solanamobile.krate.createscreen.endpoint.GetImgRequest
-import de.jensklingenberg.ktorfit.Ktorfit
-import de.jensklingenberg.ktorfit.converter.Converter
 import de.jensklingenberg.ktorfit.converter.builtin.CallConverterFactory
-import de.jensklingenberg.ktorfit.internal.TypeData
 import de.jensklingenberg.ktorfit.ktorfit
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.onDownload
-import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -64,11 +58,26 @@ class GetImgRepository {
         )
 
         val token = "Bearer ${ApiKeys.GETIMG_API_KEY}"
-
-        //TODO: Need to try/catch this, as it returns totally diff obj on err
         val result = getImgEndpoints.textToImage(token, request)
 
         return result.image
     }
 
+    suspend fun inpaintImage(prompt: String, srcImg: String, maskImg: String): String {
+        val request = GetImgRequest(
+            prompt = prompt,
+            image = srcImg,
+            mask_image = maskImg
+        )
+
+        val token = "Bearer ${ApiKeys.GETIMG_API_KEY}"
+        val result = getImgEndpoints.inpaintImage(token, request)
+
+//        Logger.v { ":::: ERROR: ${result.error?.message}" }
+//        Logger.v { ":::: ERROR: ${result.error?.code}" }
+//        Logger.v { ":::: ERROR: ${result.error?.param}" }
+//        Logger.v { ":::: ERROR: ${result.error?.type}" }
+
+        return result.image
+    }
 }

@@ -81,6 +81,25 @@ class CreateScreenViewModel(
         }
     }
 
+    fun inpaintImageFromPrompt(prompt: String, sourceImage: ByteArray, maskImage: ByteArray) {
+        coroutineScope.launch {
+            mutableState.update {
+                ViewState.Creating
+            }
+
+            val generatedImgs = imgGeneratorUseCase.inpaintImage(prompt, sourceImage, maskImage).map {
+                GeneratedImg(
+                    imgSrc = it.sourceBytes,
+                    bitmap = it.bitmap,
+                )
+            }
+
+            mutableState.update {
+                ViewState.Generated(generatedImgs)
+            }
+        }
+    }
+
     fun saveToProfile(index: Int) {
         coroutineScope.launch {
             _savingState.update { SavingState.Saving }
