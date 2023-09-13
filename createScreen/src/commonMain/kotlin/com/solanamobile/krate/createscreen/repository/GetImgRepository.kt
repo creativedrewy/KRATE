@@ -65,6 +65,7 @@ class GetImgRepository {
 
     suspend fun inpaintImage(prompt: String, srcImg: String, maskImg: String): String {
         val request = GetImgRequest(
+            model = "realistic-vision-v1-3-inpainting",
             prompt = prompt,
             image = srcImg,
             mask_image = maskImg
