@@ -72,6 +72,8 @@ kotlin {
                 api(libs.activity.compose)
                 api(libs.appcompat)
                 api(libs.core.ktx)
+
+                implementation("com.google.accompanist:accompanist-permissions:0.29.2-rc")
             }
         }
 

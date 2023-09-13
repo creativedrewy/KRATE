@@ -29,48 +29,60 @@ class CameraScreen: Screen {
 
 @Composable
 fun CameraScreenContent() {
+    val permissionState = getPermissions()
+
     Box(
         modifier = Modifier
             .background(MaterialTheme.colors.background)
             .fillMaxSize()
     ) {
-        ResourceImage(
-            modifier = Modifier
-                .padding(
-                    top = 120.dp,
-                )
-                .width(85.dp)
-                .height(89.dp),
-            resourceName = "camera_lines.png"
-        )
-
-        Column(
-            modifier = Modifier
-                .padding(
-                    top = 236.dp,
-                    start = 24.dp
-                )
-        ) {
-            Text(
-                text = "KRATE\nNEEDS\nACCESS\nTO YOUR\n CAMERA",
-                color = Color(0xFF172C4A),
-                style = MaterialTheme.typography.h2.copy(
-                    fontSize = 48.sp,
-                    lineHeight = 48.sp
-                )
-            )
-
+        if (!permissionState.isGranted) {
             ResourceImage(
                 modifier = Modifier
                     .padding(
-                        top = 31.dp
+                        top = 120.dp,
                     )
-                    .size(96.dp)
-                    .clickable {
-
-                    },
-                resourceName = "ok_lines.png"
+                    .width(85.dp)
+                    .height(89.dp),
+                resourceName = "camera_lines.png"
             )
+
+            Column(
+                modifier = Modifier
+                    .padding(
+                        top = 236.dp,
+                        start = 24.dp
+                    )
+            ) {
+                Text(
+                    text = "KRATE\nNEEDS\nACCESS\nTO YOUR\n CAMERA",
+                    color = Color(0xFF172C4A),
+                    style = MaterialTheme.typography.h2.copy(
+                        fontSize = 48.sp,
+                        lineHeight = 48.sp
+                    )
+                )
+
+                ResourceImage(
+                    modifier = Modifier
+                        .padding(
+                            top = 31.dp
+                        )
+                        .size(96.dp)
+                        .clickable {
+                            permissionState.requestAction()
+                        },
+                    resourceName = "ok_lines.png"
+                )
+            }
         }
     }
 }
+
+expect class PermissionState {
+    val isGranted: Boolean
+    val requestAction: () -> Unit
+}
+
+@Composable
+expect fun getPermissions(): PermissionState
