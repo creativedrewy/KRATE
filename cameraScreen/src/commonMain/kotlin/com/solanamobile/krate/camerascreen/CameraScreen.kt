@@ -29,14 +29,14 @@ class CameraScreen: Screen {
 
 @Composable
 fun CameraScreenContent() {
-    val permissionState = getPermissions()
+    val permissionState = getPermissionState()
 
     Box(
         modifier = Modifier
             .background(MaterialTheme.colors.background)
             .fillMaxSize()
     ) {
-        if (!permissionState.isGranted) {
+        if (!permissionState.allGranted) {
             ResourceImage(
                 modifier = Modifier
                     .padding(
@@ -80,9 +80,9 @@ fun CameraScreenContent() {
 }
 
 expect class PermissionState {
-    val isGranted: Boolean
+    val allGranted: Boolean
     val requestAction: () -> Unit
 }
 
 @Composable
-expect fun getPermissions(): PermissionState
+expect fun getPermissionState(): PermissionState

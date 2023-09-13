@@ -9,14 +9,14 @@ actual class PermissionState(
     granted: Boolean,
     action: () -> Unit
 ) {
-    actual val isGranted: Boolean = granted
+    actual val allGranted: Boolean = granted
 
     actual val requestAction: () -> Unit = action
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-actual fun getPermissions(): PermissionState {
+actual fun getPermissionState(): PermissionState {
     val cameraPermissionState = rememberMultiplePermissionsState(
         listOf(
             Manifest.permission.CAMERA
