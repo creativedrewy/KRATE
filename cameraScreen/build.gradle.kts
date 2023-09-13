@@ -1,14 +1,13 @@
-
 plugins {
     kotlin("multiplatform")
-    kotlin("native.cocoapods")
     id("com.android.library")
     id("org.jetbrains.compose")
-    id("kotlinx-serialization")
 
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
+    id("de.jensklingenberg.ktorfit") version "1.0.0"
 }
 
+@OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
     android {
         compilations.all {
@@ -18,34 +17,23 @@ kotlin {
         }
     }
 
-    androidTarget()
-
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
-    cocoapods {
-        version = "1.0.0"
-        summary = "Krate root module"
-        homepage = "https://solanamobile.com"
-        ios.deploymentTarget = "14.1"
-        podfile = project.file("../iosApp/Podfile")
-
-        framework {
-            baseName = "shared"
-            isStatic = true
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = "cameraScreen"
         }
     }
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(projects.createScreen)
-                implementation(projects.cameraScreen)
-                implementation(projects.profileScreen)
-                implementation(projects.startScreen)
                 implementation(projects.extension)
-                api(projects.coroutines)
+                implementation(projects.coroutines)
+                implementation(projects.underdogApi)
+                api(projects.localStorage)
 
                 implementation(libs.kotlinx.coroutines.core)
 
@@ -55,14 +43,9 @@ kotlin {
                 implementation(compose.animation)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
 
                 implementation(libs.koject.core)
                 implementation(libs.koject.compose.core)
-
-                implementation(libs.voyager.navigator)
-                implementation(libs.voyager.transitions)
 
                 implementation(libs.ktorfit.lib)
 
@@ -70,7 +53,16 @@ kotlin {
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.serialization.kotlinx.json)
 
+                implementation(libs.voyager.navigator)
+                implementation(libs.voyager.transitions)
+
                 implementation(libs.kermit)
+            }
+        }
+
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
             }
         }
 
@@ -80,8 +72,6 @@ kotlin {
                 api(libs.activity.compose)
                 api(libs.appcompat)
                 api(libs.core.ktx)
-
-                implementation(libs.koject.android.core)
             }
         }
 
@@ -97,37 +87,29 @@ kotlin {
     }
 }
 
-dependencies {
-    val processor = "com.moriatsushi.koject:koject-processor-app:1.3.0"
+val ktorfitVersion = "1.5.0"
 
-    add("kspAndroid", processor)
-    add("kspIosX64", processor)
-    add("kspIosArm64", processor)
-    add("kspIosSimulatorArm64", processor)
+dependencies {
+    add("kspAndroid", libs.koject.processor.lib)
+    add("kspIosX64", libs.koject.processor.lib)
+    add("kspIosArm64", libs.koject.processor.lib)
+    add("kspIosSimulatorArm64", libs.koject.processor.lib)
+
+    implementation(libs.okio)
+
+    add("kspCommonMainMetadata", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
+    add("kspAndroid", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
+    add("kspIosX64", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
+    add("kspIosSimulatorArm64", "de.jensklingenberg.ktorfit:ktorfit-ksp:$ktorfitVersion")
 }
 
 android {
-    compileSdk = (findProperty("android.compileSdk") as String).toInt()
-    namespace = "com.solanamobile.krate"
+    namespace = "com.solanamobile.krate.camerascreen"
+    compileSdk = 33
 
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].res.srcDirs(
-        "src/androidMain/res",
-        "src/commonMain/resources"
-    )
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        minSdk = (findProperty("android.minSdk") as String).toInt()
-        targetSdk = (findProperty("android.targetSdk") as String).toInt()
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlin {
-        jvmToolchain(11)
+        minSdk = 24
     }
 }
