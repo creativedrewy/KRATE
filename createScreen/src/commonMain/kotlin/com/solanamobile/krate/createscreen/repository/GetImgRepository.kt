@@ -73,11 +73,6 @@ class GetImgRepository {
         val token = "Bearer ${ApiKeys.GETIMG_API_KEY}"
         val result = getImgEndpoints.inpaintImage(token, request)
 
-//        Logger.v { ":::: ERROR: ${result.error?.message}" }
-//        Logger.v { ":::: ERROR: ${result.error?.code}" }
-//        Logger.v { ":::: ERROR: ${result.error?.param}" }
-//        Logger.v { ":::: ERROR: ${result.error?.type}" }
-
         return result.image
     }
 }
