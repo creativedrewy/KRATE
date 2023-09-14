@@ -75,6 +75,8 @@ fun CameraScreenContent() {
                     resourceName = "ok_lines.png"
                 )
             }
+        } else {
+            CameraPreview()
         }
     }
 }
@@ -86,3 +88,6 @@ expect class PermissionState {
 
 @Composable
 expect fun getPermissionState(): PermissionState
+
+@Composable
+expect fun CameraPreview()

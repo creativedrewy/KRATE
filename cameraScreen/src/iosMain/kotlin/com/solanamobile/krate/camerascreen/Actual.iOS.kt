@@ -12,3 +12,8 @@ actual class PermissionState {
 actual fun getPermissionState(): PermissionState {
     TODO()
 }
+
+@Composable
+actual fun CameraPreview() {
+    TODO()
+}
