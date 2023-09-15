@@ -16,6 +16,7 @@ actual fun getPermissionState(): PermissionState {
 
 @Composable
 actual fun CameraPreview(
+    maskImage: ImageBitmap,
     photoTaken: (ImageBitmap) -> Unit
 ) {
     TODO()

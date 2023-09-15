@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -22,7 +23,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import com.solanamobile.krate.extension.compositionlocal.LocalResourceLocator
 import com.solanamobile.krate.extension.ui.ResourceImage
+import kotlinx.coroutines.launch
 
 class CameraScreen: Screen {
 
@@ -36,8 +39,16 @@ class CameraScreen: Screen {
 fun CameraScreenContent() {
     val permissionState = getPermissionState()
 
+    val scope = rememberCoroutineScope()
     var isPhotoTaken = remember { mutableStateOf(false) }
     var takenPhoto = remember { mutableStateOf<ImageBitmap?>(null) }
+
+    val resources = LocalResourceLocator.current
+
+    val mask = remember { mutableStateOf<ImageBitmap?>(null) }
+    scope.launch {
+        mask.value = resources.getImageBitmap("photo_overlay.png")
+    }
 
     Box(
         modifier = Modifier
@@ -84,13 +95,16 @@ fun CameraScreenContent() {
                 )
             }
         } else if (!isPhotoTaken.value) {
-            CameraPreview(
-                photoTaken = {
-                    takenPhoto.value = it
+            mask.value?.let { maskImage ->
+                CameraPreview(
+                    maskImage = maskImage,
+                    photoTaken = {
+                        takenPhoto.value = it
 
-                    isPhotoTaken.value = true
-                }
-            )
+                        isPhotoTaken.value = true
+                    }
+                )
+            }
         } else {
             takenPhoto.value?.let {
                 Image(
@@ -116,5 +130,6 @@ expect fun getPermissionState(): PermissionState
 
 @Composable
 expect fun CameraPreview(
+    maskImage: ImageBitmap,
     photoTaken: (ImageBitmap) -> Unit
 )

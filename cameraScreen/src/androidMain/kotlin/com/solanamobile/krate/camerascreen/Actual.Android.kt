@@ -10,9 +10,12 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -25,14 +28,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
@@ -77,6 +75,7 @@ private val executor = Executors.newSingleThreadExecutor()
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 actual fun CameraPreview(
+    maskImage: ImageBitmap,
     photoTaken: (ImageBitmap) -> Unit
 ) {
     val context = LocalContext.current
@@ -109,90 +108,67 @@ actual fun CameraPreview(
 
     var (screenWidth, screenHeight) = remember { Pair(0, 0) }
 
-    Box(
-        modifier = Modifier
-            .onSizeChanged {
-                screenWidth = it.width
-                screenHeight = it.height
-            }
-            .drawWithContent {
-                drawContent()
+    Box {
+        AndroidView(
+            modifier = Modifier.fillMaxSize(),
+            factory = { previewView },
+        )
 
-                drawRect(
-                    Color.Black,
-                    alpha = 0.3f
+        Image(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth()
+                .aspectRatio(1f),
+            bitmap = maskImage,
+            contentDescription = null
+        )
+
+        Button(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(
+                    bottom = 16.dp
                 )
+                .navBarBottomPadding()
+                .size(84.dp),
+            shape = CircleShape,
+            contentPadding = PaddingValues(4.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = Color.White
+            ),
+            onClick = {
+                imageCapture.takePicture(executor, object : ImageCapture.OnImageCapturedCallback() {
+                    override fun onCaptureSuccess(image: ImageProxy) {
+                        val byteArray: ByteArray = image.planes[0].buffer.moveToByteArray()
 
-                val ovalW = 180.dp.toPx()
-                val ovalH = 265.dp.toPx()
+                        val srcPhoto = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 
-                drawOval(
-                    color = Color.Red,
-                    size = Size(
-                        width = ovalW,
-                        height = ovalH
-                    ),
-                    topLeft = Offset(
-                        x = (screenWidth / 2) - (ovalW / 2),
-                        y = (screenHeight / 2) - (ovalH / 2)
-                    ),
-                    blendMode = BlendMode.Clear
-                )
-            }
-    ) {
-        Box {
-            AndroidView(
-                modifier = Modifier.fillMaxSize(),
-                factory = { previewView },
-            )
+                        val rotatedBmp = if (srcPhoto.height > srcPhoto.width) {
+                            val rotMat = Matrix()
+                            rotMat.setRotate(90f)
 
-            Button(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(
-                        bottom = 16.dp
-                    )
-                    .navBarBottomPadding()
-                    .size(84.dp),
-                shape = CircleShape,
-                contentPadding = PaddingValues(4.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.primary,
-                    contentColor = Color.White
-                ),
-                onClick = {
-                    imageCapture.takePicture(executor, object : ImageCapture.OnImageCapturedCallback() {
-                        override fun onCaptureSuccess(image: ImageProxy) {
-                            val byteArray: ByteArray = image.planes[0].buffer.moveToByteArray()
-
-                            val srcPhoto = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-
-                            val rotatedBmp = if (srcPhoto.height > srcPhoto.width) {
-                                val rotMat = Matrix()
-                                rotMat.setRotate(90f)
-
-                                Bitmap.createBitmap(srcPhoto, 0, 0, srcPhoto.width, srcPhoto.height, rotMat, false)
-                            } else {
-                                srcPhoto
-                            }
-
-                            val (w, h) = rotatedBmp.width to rotatedBmp.height
-                            val squareImg = Bitmap.createBitmap(rotatedBmp, 0, ((h.toDouble() - w.toDouble()) / 2).toInt(), w, w)
-
-                            val imageBitmap = squareImg.asImageBitmap()
-                            image.close()
-
-                            photoTaken(imageBitmap)
+                            Bitmap.createBitmap(srcPhoto, 0, 0, srcPhoto.width, srcPhoto.height, rotMat, false)
+                        } else {
+                            srcPhoto
                         }
 
-                    })
-                }
-            ) {
-                Text(
-                    text = "START",
-                    style = MaterialTheme.typography.h6
-                )
+                        val (w, h) = rotatedBmp.width to rotatedBmp.height
+                        val squareImg = Bitmap.createBitmap(rotatedBmp, 0, ((h.toDouble() - w.toDouble()) / 2).toInt(), w, w)
+
+                        val imageBitmap = squareImg.asImageBitmap()
+                        image.close()
+
+                        photoTaken(imageBitmap)
+                    }
+
+                })
             }
+        ) {
+            Text(
+                text = "START",
+                style = MaterialTheme.typography.h6
+            )
         }
     }
 }
