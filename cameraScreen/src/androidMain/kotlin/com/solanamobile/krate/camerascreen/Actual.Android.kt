@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
@@ -108,9 +109,22 @@ actual fun CameraPreview(
 
     var (screenWidth, screenHeight) = remember { Pair(0, 0) }
 
-    Box {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .onSizeChanged {
+                screenWidth = it.width
+                screenHeight = it.height
+            }
+    ) {
         AndroidView(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .padding(
+                    start = 20.dp,
+                    end = 20.dp
+                )
+                .align(Alignment.Center)
+                .fillMaxWidth(),
             factory = { previewView },
         )
 
@@ -144,7 +158,7 @@ actual fun CameraPreview(
 
                         val srcPhoto = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 
-                        val rotatedBmp = if (srcPhoto.height > srcPhoto.width) {
+                        val portraitBmp = if (srcPhoto.width > srcPhoto.height) {
                             val rotMat = Matrix()
                             rotMat.setRotate(90f)
 
@@ -153,10 +167,17 @@ actual fun CameraPreview(
                             srcPhoto
                         }
 
-                        val (w, h) = rotatedBmp.width to rotatedBmp.height
-                        val squareImg = Bitmap.createBitmap(rotatedBmp, 0, ((h.toDouble() - w.toDouble()) / 2).toInt(), w, w)
+                        val (w, h) = portraitBmp.width to portraitBmp.height
+                        val trimmedBmp = if (w > screenWidth) {
+//                            Bitmap.createBitmap(portraitBmp, ((w.toDouble() - screenWidth.toDouble()) / 2).toInt(), 0, screenWidth, h)
+                            portraitBmp
+                        } else {
+                            portraitBmp
+                        }
 
+                        val squareImg = Bitmap.createBitmap(trimmedBmp, 0, ((trimmedBmp.height.toDouble() - trimmedBmp.width.toDouble()) / 2).toInt(), trimmedBmp.width, trimmedBmp.width)
                         val imageBitmap = squareImg.asImageBitmap()
+
                         image.close()
 
                         photoTaken(imageBitmap)

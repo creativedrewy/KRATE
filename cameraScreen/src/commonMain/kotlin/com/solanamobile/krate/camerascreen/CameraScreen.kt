@@ -106,15 +106,26 @@ fun CameraScreenContent() {
                 )
             }
         } else {
-            takenPhoto.value?.let {
-                Image(
-                    modifier = Modifier
-                        .size(300.dp)
-                        .background(Color.Gray),
-                    contentScale = ContentScale.Fit,
-                    bitmap = it,
-                    contentDescription = null
-                )
+            takenPhoto.value?.let { photo ->
+                Box {
+                    Image(
+                        modifier = Modifier
+                            .size(300.dp)
+                            .background(Color.Gray),
+                        contentScale = ContentScale.Fit,
+                        bitmap = takenPhoto.value!!,
+                        contentDescription = null
+                    )
+
+//                    Image(
+//                        modifier = Modifier
+//                            .size(300.dp)
+//                            .background(Color.Gray),
+//                        contentScale = ContentScale.Fit,
+//                        bitmap = mask.value!!,
+//                        contentDescription = null
+//                    )
+                }
             }
         }
     }
