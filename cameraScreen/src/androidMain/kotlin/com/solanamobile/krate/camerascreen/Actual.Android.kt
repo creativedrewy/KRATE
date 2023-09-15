@@ -22,7 +22,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
@@ -98,42 +103,76 @@ actual fun CameraPreview(
         preview.setSurfaceProvider(previewView.surfaceProvider)
     }
 
-    Box {
-        AndroidView(
-            modifier = Modifier.fillMaxSize(),
-            factory = { previewView },
-        )
+    var (screenWidth, screenHeight) = remember { Pair(0, 0) }
 
-        Button(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(
-                    bottom = 16.dp
-                )
-                .navBarBottomPadding()
-                .size(84.dp),
-            shape = CircleShape,
-            contentPadding = PaddingValues(4.dp),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = MaterialTheme.colors.primary,
-                contentColor = Color.White
-            ),
-            onClick = {
-                imageCapture.takePicture(executor, object : ImageCapture.OnImageCapturedCallback() {
-                    override fun onCaptureSuccess(image: ImageProxy) {
-                        val byteArray: ByteArray = image.planes[0].buffer.moveToByteArray()
-
-                        val imageBitmap = byteArray.toImageBitmap()
-                        image.close()
-                    }
-
-                })
+    Box(
+        modifier = Modifier
+            .onSizeChanged {
+                screenWidth = it.width
+                screenHeight = it.height
             }
-        ) {
-            Text(
-                text = "START",
-                style = MaterialTheme.typography.h6
+            .drawWithContent {
+                drawContent()
+
+                drawRect(
+                    Color.Black,
+                    alpha = 0.3f
+                )
+
+                val ovalW = 180.dp.toPx()
+                val ovalH = 265.dp.toPx()
+
+                drawOval(
+                    color = Color.Red,
+                    size = Size(
+                        width = ovalW,
+                        height = ovalH
+                    ),
+                    topLeft = Offset(
+                        x = (screenWidth / 2) - (ovalW / 2),
+                        y = (screenHeight / 2) - (ovalH / 2)
+                    ),
+                    blendMode = BlendMode.Clear
+                )
+            }
+    ) {
+        Box {
+            AndroidView(
+                modifier = Modifier.fillMaxSize(),
+                factory = { previewView },
             )
+
+            Button(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(
+                        bottom = 16.dp
+                    )
+                    .navBarBottomPadding()
+                    .size(84.dp),
+                shape = CircleShape,
+                contentPadding = PaddingValues(4.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.primary,
+                    contentColor = Color.White
+                ),
+                onClick = {
+                    imageCapture.takePicture(executor, object : ImageCapture.OnImageCapturedCallback() {
+                        override fun onCaptureSuccess(image: ImageProxy) {
+                            val byteArray: ByteArray = image.planes[0].buffer.moveToByteArray()
+
+                            val imageBitmap = byteArray.toImageBitmap()
+                            image.close()
+                        }
+
+                    })
+                }
+            ) {
+                Text(
+                    text = "START",
+                    style = MaterialTheme.typography.h6
+                )
+            }
         }
     }
 }

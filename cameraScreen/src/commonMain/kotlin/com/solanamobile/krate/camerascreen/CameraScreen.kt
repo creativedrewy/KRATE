@@ -12,14 +12,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
@@ -82,41 +76,7 @@ fun CameraScreenContent() {
                 )
             }
         } else {
-            var (screenWidth, screenHeight) = remember { Pair(0, 0) }
-
-            Box(
-                modifier = Modifier
-                    .onSizeChanged {
-                        screenWidth = it.width
-                        screenHeight = it.height
-                    }
-                    .drawWithContent {
-                        drawContent()
-
-                        drawRect(
-                            Color.Black,
-                            alpha = 0.3f
-                        )
-
-                        val ovalW = 180.dp.toPx()
-                        val ovalH = 265.dp.toPx()
-
-                        drawOval(
-                            color = Color.Red,
-                            size = Size(
-                                width = ovalW,
-                                height = ovalH
-                            ),
-                            topLeft = Offset(
-                                x = (screenWidth / 2) - (ovalW / 2),
-                                y = (screenHeight / 2) - (ovalH / 2)
-                            ),
-                            blendMode = BlendMode.Clear
-                        )
-                    }
-            ) {
-                CameraPreview()
-            }
+            CameraPreview()
         }
     }
 }
