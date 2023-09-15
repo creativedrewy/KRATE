@@ -1,6 +1,9 @@
 package com.solanamobile.krate.camerascreen
 
 import android.Manifest
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageProxy
@@ -27,6 +30,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -34,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.solanamobile.krate.extension.graphics.toImageBitmap
 import com.solanamobile.krate.extension.ui.navBarBottomPadding
 import io.ktor.util.moveToByteArray
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -73,7 +77,7 @@ private val executor = Executors.newSingleThreadExecutor()
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 actual fun CameraPreview(
-
+    photoTaken: (ImageBitmap) -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -161,8 +165,24 @@ actual fun CameraPreview(
                         override fun onCaptureSuccess(image: ImageProxy) {
                             val byteArray: ByteArray = image.planes[0].buffer.moveToByteArray()
 
-                            val imageBitmap = byteArray.toImageBitmap()
+                            val srcPhoto = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+
+                            val rotatedBmp = if (srcPhoto.height > srcPhoto.width) {
+                                val rotMat = Matrix()
+                                rotMat.setRotate(90f)
+
+                                Bitmap.createBitmap(srcPhoto, 0, 0, srcPhoto.width, srcPhoto.height, rotMat, false)
+                            } else {
+                                srcPhoto
+                            }
+
+                            val (w, h) = rotatedBmp.width to rotatedBmp.height
+                            val squareImg = Bitmap.createBitmap(rotatedBmp, 0, ((h.toDouble() - w.toDouble()) / 2).toInt(), w, w)
+
+                            val imageBitmap = squareImg.asImageBitmap()
                             image.close()
+
+                            photoTaken(imageBitmap)
                         }
 
                     })

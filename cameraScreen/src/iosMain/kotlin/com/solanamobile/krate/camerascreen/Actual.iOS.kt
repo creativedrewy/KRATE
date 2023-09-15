@@ -1,6 +1,7 @@
 package com.solanamobile.krate.camerascreen
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.ImageBitmap
 
 actual class PermissionState {
     actual val allGranted: Boolean = false
@@ -14,6 +15,8 @@ actual fun getPermissionState(): PermissionState {
 }
 
 @Composable
-actual fun CameraPreview() {
+actual fun CameraPreview(
+    photoTaken: (ImageBitmap) -> Unit
+) {
     TODO()
 }

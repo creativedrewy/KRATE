@@ -1,5 +1,6 @@
 package com.solanamobile.krate.camerascreen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -12,8 +13,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
@@ -30,6 +35,9 @@ class CameraScreen: Screen {
 @Composable
 fun CameraScreenContent() {
     val permissionState = getPermissionState()
+
+    var isPhotoTaken = remember { mutableStateOf(false) }
+    var takenPhoto = remember { mutableStateOf<ImageBitmap?>(null) }
 
     Box(
         modifier = Modifier
@@ -75,8 +83,25 @@ fun CameraScreenContent() {
                     resourceName = "ok_lines.png"
                 )
             }
+        } else if (!isPhotoTaken.value) {
+            CameraPreview(
+                photoTaken = {
+                    takenPhoto.value = it
+
+                    isPhotoTaken.value = true
+                }
+            )
         } else {
-            CameraPreview()
+            takenPhoto.value?.let {
+                Image(
+                    modifier = Modifier
+                        .size(300.dp)
+                        .background(Color.Gray),
+                    contentScale = ContentScale.Fit,
+                    bitmap = it,
+                    contentDescription = null
+                )
+            }
         }
     }
 }
@@ -90,4 +115,6 @@ expect class PermissionState {
 expect fun getPermissionState(): PermissionState
 
 @Composable
-expect fun CameraPreview()
+expect fun CameraPreview(
+    photoTaken: (ImageBitmap) -> Unit
+)
