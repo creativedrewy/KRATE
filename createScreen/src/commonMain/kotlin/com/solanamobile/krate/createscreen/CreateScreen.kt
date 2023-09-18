@@ -114,10 +114,9 @@ class CreateScreen(
                 //viewModel.generateImageFromPrompt(txt)
 
                 scope.launch {
-                    val srcImage = resLocator.getResourceBytes("me_src.png")
-                    val maskImg = resLocator.getResourceBytes("me_mask.png")
+                    val maskImg = resLocator.getResourceBytes("mask.png")
 
-                    viewModel.inpaintImageFromPrompt(txt, srcImage, maskImg)
+                    viewModel.inpaintImageFromPrompt(txt, userImage!!, maskImg)
                 }
 
             },

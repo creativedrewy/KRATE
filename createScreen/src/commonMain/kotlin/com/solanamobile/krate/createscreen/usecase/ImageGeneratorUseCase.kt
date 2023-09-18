@@ -34,9 +34,8 @@ class ImageGeneratorUseCase(
     }
 
     @OptIn(ExperimentalEncodingApi::class)
-    suspend fun inpaintImage(prompt: String, srcImg: ByteArray, maskImg: ByteArray): List<ImageData> {
-        val bitmaps = (0..< 2).map {
-
+    suspend fun inpaintImage(prompt: String, srcImg: ByteArray, maskImg: ByteArray, imageCount: Int = 4): List<ImageData> {
+        val bitmaps = (0..< imageCount).map {
             val source = Base64.encode(srcImg)
             val mask = Base64.encode(maskImg)
 
