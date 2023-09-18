@@ -1,6 +1,5 @@
 package com.solanamobile.krate.camerascreen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -19,10 +18,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.solanamobile.krate.extension.NavScreenProvider
 import com.solanamobile.krate.extension.compositionlocal.LocalResourceLocator
 import com.solanamobile.krate.extension.ui.ResourceImage
 import kotlinx.coroutines.launch
@@ -40,10 +42,8 @@ fun CameraScreenContent() {
     val permissionState = getPermissionState()
 
     val scope = rememberCoroutineScope()
-    var isPhotoTaken = remember { mutableStateOf(false) }
-    var takenPhoto = remember { mutableStateOf<ImageBitmap?>(null) }
-
     val resources = LocalResourceLocator.current
+    val navigator = LocalNavigator.currentOrThrow
 
     val mask = remember { mutableStateOf<ImageBitmap?>(null) }
     scope.launch {
@@ -94,29 +94,16 @@ fun CameraScreenContent() {
                     resourceName = "ok_lines.png"
                 )
             }
-        } else if (!isPhotoTaken.value) {
+        } else {
             mask.value?.let { maskImage ->
                 CameraPreview(
                     maskImage = maskImage,
-                    photoTaken = {
-                        takenPhoto.value = it
+                    photoTaken = { img ->
+                        val screenProps = NavScreenProvider.CreateScreen(NavScreenProvider.CreateMode.Teleport, img)
 
-                        isPhotoTaken.value = true
+                        navigator.push(ScreenRegistry.get(screenProps))
                     }
                 )
-            }
-        } else {
-            takenPhoto.value?.let { photo ->
-                Box {
-                    Image(
-                        modifier = Modifier
-                            .size(300.dp)
-                            .background(Color.Gray),
-                        contentScale = ContentScale.Fit,
-                        bitmap = takenPhoto.value!!,
-                        contentDescription = null
-                    )
-                }
             }
         }
     }

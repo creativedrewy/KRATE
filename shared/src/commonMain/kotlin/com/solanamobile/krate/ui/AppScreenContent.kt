@@ -23,7 +23,10 @@ fun AppScreenContent() {
             CameraScreen()
         }
         register<NavScreenProvider.CreateScreen> {
-            CreateScreen()
+            CreateScreen(
+                createMode = it.createMode,
+                userImage = it.userImage
+            )
         }
         register<NavScreenProvider.ProfileScreen> {
             ProfileScreen

@@ -72,6 +72,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.lerp
@@ -92,7 +93,10 @@ import com.solanamobile.krate.extension.ui.navBarBottomPadding
 import com.solanamobile.krate.extension.ui.statusBarTopPadding
 import kotlinx.coroutines.launch
 
-class CreateScreen: Screen {
+class CreateScreen(
+    val createMode: NavScreenProvider.CreateMode,
+    val userImage: ImageBitmap? = null
+): Screen {
 
     @Composable
     override fun Content() {
