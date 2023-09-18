@@ -119,12 +119,8 @@ actual fun CameraPreview(
     ) {
         AndroidView(
             modifier = Modifier
-                .padding(
-                    start = 20.dp,
-                    end = 20.dp
-                )
                 .align(Alignment.Center)
-                .fillMaxWidth(),
+                .fillMaxSize(),
             factory = { previewView },
         )
 
@@ -155,22 +151,23 @@ actual fun CameraPreview(
                 imageCapture.takePicture(executor, object : ImageCapture.OnImageCapturedCallback() {
                     override fun onCaptureSuccess(image: ImageProxy) {
                         val byteArray: ByteArray = image.planes[0].buffer.moveToByteArray()
-
                         val srcPhoto = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 
                         val portraitBmp = if (srcPhoto.width > srcPhoto.height) {
+                            val downScaleFactor = screenHeight.toFloat() / srcPhoto.width.toFloat() // Need to use width as photo is un-rotated
+
                             val rotMat = Matrix()
                             rotMat.setRotate(90f)
 
-                            Bitmap.createBitmap(srcPhoto, 0, 0, srcPhoto.width, srcPhoto.height, rotMat, false)
+                            val rot = Bitmap.createBitmap(srcPhoto, 0, 0, srcPhoto.width, srcPhoto.height, rotMat, false)
+                            Bitmap.createScaledBitmap(rot, (rot.width * downScaleFactor).toInt(), (rot.height * downScaleFactor).toInt(), true)
                         } else {
-                            srcPhoto
+                            throw Exception("App does not currently handle cameras with hardware configured as portrait")
                         }
 
                         val (w, h) = portraitBmp.width to portraitBmp.height
                         val trimmedBmp = if (w > screenWidth) {
-//                            Bitmap.createBitmap(portraitBmp, ((w.toDouble() - screenWidth.toDouble()) / 2).toInt(), 0, screenWidth, h)
-                            portraitBmp
+                            Bitmap.createBitmap(portraitBmp, ((w.toDouble() - screenWidth.toDouble()) / 2).toInt(), 0, screenWidth, h)
                         } else {
                             portraitBmp
                         }

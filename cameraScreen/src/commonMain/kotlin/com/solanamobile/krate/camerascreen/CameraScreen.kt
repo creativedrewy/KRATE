@@ -116,15 +116,6 @@ fun CameraScreenContent() {
                         bitmap = takenPhoto.value!!,
                         contentDescription = null
                     )
-
-//                    Image(
-//                        modifier = Modifier
-//                            .size(300.dp)
-//                            .background(Color.Gray),
-//                        contentScale = ContentScale.Fit,
-//                        bitmap = mask.value!!,
-//                        contentDescription = null
-//                    )
                 }
             }
         }
