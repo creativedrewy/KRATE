@@ -5,6 +5,7 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.extensions.ApiKeys
 import com.solanamobile.krate.localstorage.UserAccountUseCase
+import com.solanamobile.krate.profilescreen.ProfileAuthenticator
 import com.underdogprotocol.api.UnderdogApiV2
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -15,16 +16,32 @@ sealed class ProfileViewState {
     object Loading: ProfileViewState()
 
     data class Loaded(
+        val isProfileClaimed: Boolean = false,
         val images: List<String> = listOf()
     ): ProfileViewState()
 }
 
 @Provides
 class ProfileScreenViewModel(
-    private val acctUseCase: UserAccountUseCase
+    private val acctUseCase: UserAccountUseCase,
+    val authenticator: ProfileAuthenticator
 ): StateScreenModel<ProfileViewState>(ProfileViewState.Default) {
 
     private val api = UnderdogApiV2(true)
+
+    fun setup() {
+        authenticator.init()
+    }
+
+    fun login() {
+        authenticator.authenticate()
+
+        mutableState.update {
+            (it as? ProfileViewState.Loaded)?.copy(
+                isProfileClaimed = true
+            ) ?: throw IllegalStateException("Shouldn't be possible to call this in invalid state")
+        }
+    }
 
     fun loadMintedNfts() {
         coroutineScope.launch {
