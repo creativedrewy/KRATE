@@ -149,21 +149,34 @@ fun ProfileScreenContent(
                         resourceName = "profile_top.png"
                     )
 
-                    Button(
-                        modifier = Modifier
-                            .padding(
-                                top = 14.dp
+                    if (state is ProfileViewState.Loaded && !state.isProfileClaimed) {
+                        Button(
+                            modifier = Modifier
+                                .padding(
+                                    top = 14.dp
+                                ),
+                            onClick = {
+                                claimProfile()
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.primary,
+                                disabledBackgroundColor = MaterialTheme.colors.primary
                             ),
-                        onClick = {
-                            claimProfile()
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = MaterialTheme.colors.primary,
-                            disabledBackgroundColor = MaterialTheme.colors.primary
-                        )
-                    ) {
+                            enabled = state is ProfileViewState.Loaded
+                        ) {
+                            Text(
+                                text = "Claim Profile",
+                                color = Color(0xFF0D1F33),
+                                style = MaterialTheme.typography.h6
+                            )
+                        }
+                    } else if (state is ProfileViewState.Loaded && state.isProfileClaimed) {
                         Text(
-                            text = "Claim Profile",
+                            modifier = Modifier
+                                .padding(
+                                    top = 14.dp
+                                ),
+                            text = "Profile Claimed!",
                             color = Color(0xFF0D1F33),
                             style = MaterialTheme.typography.h6
                         )

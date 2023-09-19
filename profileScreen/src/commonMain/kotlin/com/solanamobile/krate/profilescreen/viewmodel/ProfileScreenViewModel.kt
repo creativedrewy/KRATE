@@ -16,6 +16,7 @@ sealed class ProfileViewState {
     object Loading: ProfileViewState()
 
     data class Loaded(
+        val isProfileClaimed: Boolean = false,
         val images: List<String> = listOf()
     ): ProfileViewState()
 }
@@ -34,6 +35,12 @@ class ProfileScreenViewModel(
 
     fun login() {
         authenticator.authenticate()
+
+        mutableState.update {
+            (it as? ProfileViewState.Loaded)?.copy(
+                isProfileClaimed = true
+            ) ?: throw IllegalStateException("Shouldn't be possible to call this in invalid state")
+        }
     }
 
     fun loadMintedNfts() {
