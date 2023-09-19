@@ -50,6 +50,8 @@ actual class ProfileAuthenticator() {
     actual fun authenticate() {
         oneTapClient.beginSignIn(signInRequest)
             .addOnSuccessListener { result ->
+                Helper.activity!!.startIntentSenderForResult(result.pendingIntent.intentSender, 2, null, 0, 0, 0, null)
+
                 Log.d("Andrew", "Login attempt successful")
             }
             .addOnFailureListener { e ->
