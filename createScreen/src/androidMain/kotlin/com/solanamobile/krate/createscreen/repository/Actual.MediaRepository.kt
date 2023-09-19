@@ -9,14 +9,28 @@ import android.provider.MediaStore
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import com.moriatsushi.koject.Provides
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 
 @Provides
 actual class MediaRepository(
     private val context: Context
 ) {
+    actual fun imageBitmapToByteArray(bmp: ImageBitmap): ByteArray {
+        val androidBitmap = bmp.asAndroidBitmap()
+
+        val stream = ByteArrayOutputStream()
+        androidBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+
+        val bytes = stream.toByteArray()
+        androidBitmap.recycle()
+
+        return bytes
+    }
+
     actual fun saveBitmap(bmp: ImageBitmap) {
         val filename = "KRATE_${getDateTimeString()}.png"
 

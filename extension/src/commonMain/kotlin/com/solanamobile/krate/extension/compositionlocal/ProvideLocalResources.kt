@@ -7,11 +7,16 @@ import androidx.compose.ui.graphics.ImageBitmap
 
 interface ResourceLocator {
     suspend fun getImageBitmap(name: String): ImageBitmap
+    suspend fun getResourceBytes(name: String): ByteArray
 }
 
 val LocalResourceLocator = compositionLocalOf<ResourceLocator> {
     object: ResourceLocator {
         override suspend fun getImageBitmap(name: String): ImageBitmap {
+            throw NotImplementedError("Please provide ResourceLocator implementation")
+        }
+
+        override suspend fun getResourceBytes(name: String): ByteArray {
             throw NotImplementedError("Please provide ResourceLocator implementation")
         }
     }

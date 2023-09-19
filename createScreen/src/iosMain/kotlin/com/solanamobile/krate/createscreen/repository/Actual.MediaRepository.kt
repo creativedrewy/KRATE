@@ -38,4 +38,8 @@ actual class MediaRepository {
     fun ByteArray.toNSData(): NSData = usePinned {
         NSData.create(bytes = it.addressOf(0), this.size.convert())
     }
+
+    actual fun imageBitmapToByteArray(bmp: ImageBitmap): ByteArray {
+        TODO("Final implementation required")
+    }
 }

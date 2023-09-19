@@ -72,6 +72,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.lerp
@@ -84,6 +85,7 @@ import com.solanamobile.krate.createscreen.viewmodel.CreateScreenViewModel
 import com.solanamobile.krate.createscreen.viewmodel.SavingState
 import com.solanamobile.krate.createscreen.viewmodel.ViewState
 import com.solanamobile.krate.extension.NavScreenProvider
+import com.solanamobile.krate.extension.compositionlocal.LocalResourceLocator
 import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.extension.ui.ResourceImage
 import com.solanamobile.krate.extension.ui.keyboardBottomPadding
@@ -91,7 +93,10 @@ import com.solanamobile.krate.extension.ui.navBarBottomPadding
 import com.solanamobile.krate.extension.ui.statusBarTopPadding
 import kotlinx.coroutines.launch
 
-class CreateScreen: Screen {
+class CreateScreen(
+    val createMode: NavScreenProvider.CreateMode,
+    val userImage: ImageBitmap? = null
+): Screen {
 
     @Composable
     override fun Content() {
@@ -99,11 +104,27 @@ class CreateScreen: Screen {
         val state by viewModel.state.collectAsState()
         val savingState by viewModel.savingState.collectAsState()
 
+        val resLocator = LocalResourceLocator.current
+        val scope = rememberCoroutineScope()
+
         CreateScreenContent(
             state = state,
             savingState = savingState,
+            createMode = createMode,
             onSubmitPrompt = { txt ->
-                viewModel.generateImageFromPrompt(txt)
+                when (createMode) {
+                    NavScreenProvider.CreateMode.Text2Img -> {
+                        viewModel.generateImageFromPrompt(txt)
+                    }
+                    NavScreenProvider.CreateMode.Teleport -> {
+                        scope.launch {
+                            val maskImg = resLocator.getResourceBytes("mask.png")
+                            val userImage = userImage ?: throw IllegalArgumentException("A valid image should have been provided in this scenario")
+
+                            viewModel.inpaintImageFromPrompt(txt, userImage, maskImg)
+                        }
+                    }
+                }
             },
             resetState = {
                 viewModel.resetState()
@@ -128,6 +149,7 @@ class CreateScreen: Screen {
 fun CreateScreenContent(
     state: ViewState,
     savingState: SavingState,
+    createMode: NavScreenProvider.CreateMode,
     onSubmitPrompt: (text: String) -> Unit = { },
     resetState: () -> Unit = { },
     finishSave: () -> Unit = { },
@@ -311,7 +333,11 @@ fun CreateScreenContent(
                         .background(MaterialTheme.colors.background),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val startString = "What do you want to create today?"
+                    val startString = if (createMode == NavScreenProvider.CreateMode.Text2Img) {
+                        "What do you want to create today?"
+                    } else {
+                        "Where do you want us to teleport you?"
+                    }
                     var promptText by rememberSaveable { mutableStateOf(startString) }
 
                     val headingAnimation = remember { Animatable(0f) }

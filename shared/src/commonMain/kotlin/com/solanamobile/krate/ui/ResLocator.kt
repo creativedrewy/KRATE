@@ -20,4 +20,9 @@ val resLocator = object : ResourceLocator {
             bmp
         }
     }
+
+    override suspend fun getResourceBytes(name: String): ByteArray {
+        return resource(name).readBytes()
+    }
+
 }
