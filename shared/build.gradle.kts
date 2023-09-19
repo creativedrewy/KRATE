@@ -41,6 +41,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(projects.createScreen)
+                implementation(projects.chooserScreen)
                 implementation(projects.cameraScreen)
                 implementation(projects.profileScreen)
                 implementation(projects.startScreen)

@@ -6,6 +6,8 @@ import cafe.adriel.voyager.core.registry.ScreenProvider
 sealed class NavScreenProvider: ScreenProvider {
     object StartScreen: NavScreenProvider()
 
+    object ChooserScreen: NavScreenProvider()
+
     object CameraScreen: NavScreenProvider()
 
     enum class CreateMode {

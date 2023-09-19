@@ -137,7 +137,7 @@ fun StartScreenContents(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-                    navigator.replace(ScreenRegistry.get(NavScreenProvider.CameraScreen))
+                    navigator.replace(ScreenRegistry.get(NavScreenProvider.ChooserScreen))
                 },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center

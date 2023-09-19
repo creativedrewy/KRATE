@@ -6,6 +6,7 @@ import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.solanamobile.krate.camerascreen.CameraScreen
+import com.solanamobile.krate.chooserscreen.ChooserScreen
 import com.solanamobile.krate.createscreen.CreateScreen
 import com.solanamobile.krate.extension.NavScreenProvider
 import com.solanamobile.krate.extension.compositionlocal.ProvideResourceLocator
@@ -18,6 +19,9 @@ fun AppScreenContent() {
     ScreenRegistry {
         register<NavScreenProvider.StartScreen> {
             StartScreen()
+        }
+        register<NavScreenProvider.ChooserScreen> {
+            ChooserScreen()
         }
         register<NavScreenProvider.CameraScreen> {
             CameraScreen()
