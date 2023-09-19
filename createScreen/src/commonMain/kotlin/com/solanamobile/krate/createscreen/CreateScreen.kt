@@ -110,15 +110,21 @@ class CreateScreen(
         CreateScreenContent(
             state = state,
             savingState = savingState,
+            createMode = createMode,
             onSubmitPrompt = { txt ->
-                //viewModel.generateImageFromPrompt(txt)
+                when (createMode) {
+                    NavScreenProvider.CreateMode.Text2Img -> {
+                        viewModel.generateImageFromPrompt(txt)
+                    }
+                    NavScreenProvider.CreateMode.Teleport -> {
+                        scope.launch {
+                            val maskImg = resLocator.getResourceBytes("mask.png")
+                            val userImage = userImage ?: throw IllegalArgumentException("A valid image should have been provided in this scenario")
 
-                scope.launch {
-                    val maskImg = resLocator.getResourceBytes("mask.png")
-
-                    viewModel.inpaintImageFromPrompt(txt, userImage!!, maskImg)
+                            viewModel.inpaintImageFromPrompt(txt, userImage, maskImg)
+                        }
+                    }
                 }
-
             },
             resetState = {
                 viewModel.resetState()
@@ -143,6 +149,7 @@ class CreateScreen(
 fun CreateScreenContent(
     state: ViewState,
     savingState: SavingState,
+    createMode: NavScreenProvider.CreateMode,
     onSubmitPrompt: (text: String) -> Unit = { },
     resetState: () -> Unit = { },
     finishSave: () -> Unit = { },
@@ -326,7 +333,11 @@ fun CreateScreenContent(
                         .background(MaterialTheme.colors.background),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val startString = "What do you want to create today?"
+                    val startString = if (createMode == NavScreenProvider.CreateMode.Text2Img) {
+                        "What do you want to create today?"
+                    } else {
+                        "Where do you want us to teleport you?"
+                    }
                     var promptText by rememberSaveable { mutableStateOf(startString) }
 
                     val headingAnimation = remember { Animatable(0f) }
