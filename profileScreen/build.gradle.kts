@@ -70,6 +70,8 @@ kotlin {
                 api(libs.activity.compose)
                 api(libs.appcompat)
                 api(libs.core.ktx)
+
+                implementation("com.google.android.gms:play-services-auth:20.7.0")
             }
         }
 

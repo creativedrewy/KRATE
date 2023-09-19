@@ -5,6 +5,7 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.extensions.ApiKeys
 import com.solanamobile.krate.localstorage.UserAccountUseCase
+import com.solanamobile.krate.profilescreen.ProfileAuthenticator
 import com.underdogprotocol.api.UnderdogApiV2
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -21,10 +22,19 @@ sealed class ProfileViewState {
 
 @Provides
 class ProfileScreenViewModel(
-    private val acctUseCase: UserAccountUseCase
+    private val acctUseCase: UserAccountUseCase,
+    val authenticator: ProfileAuthenticator
 ): StateScreenModel<ProfileViewState>(ProfileViewState.Default) {
 
     private val api = UnderdogApiV2(true)
+
+    fun setup() {
+        authenticator.init()
+    }
+
+    fun login() {
+        authenticator.authenticate()
+    }
 
     fun loadMintedNfts() {
         coroutineScope.launch {

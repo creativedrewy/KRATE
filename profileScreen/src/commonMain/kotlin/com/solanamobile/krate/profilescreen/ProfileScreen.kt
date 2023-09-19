@@ -54,6 +54,9 @@ import com.solanamobile.placeholder.PlaceholderHighlight
 import com.solanamobile.placeholder.placeholder
 import com.solanamobile.placeholder.shimmer
 
+@Composable
+expect fun configureScreen(vm: ProfileScreenViewModel)
+
 object ProfileScreen: Screen {
 
     @Composable
@@ -61,12 +64,18 @@ object ProfileScreen: Screen {
         val viewModel: ProfileScreenViewModel = getScreenModel()
         val state by viewModel.state.collectAsState()
 
+        configureScreen(viewModel)
+
         LaunchedEffect(Unit) {
+            viewModel.setup()
             viewModel.loadMintedNfts()
         }
 
         ProfileScreenContent(
-            state = state
+            state = state,
+            claimProfile = {
+                viewModel.login()
+            }
         )
     }
 
@@ -75,7 +84,8 @@ object ProfileScreen: Screen {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProfileScreenContent(
-    state: ProfileViewState
+    state: ProfileViewState,
+    claimProfile: () -> Unit
 ) {
     val navigator = LocalNavigator.currentOrThrow
 
@@ -144,12 +154,13 @@ fun ProfileScreenContent(
                             .padding(
                                 top = 14.dp
                             ),
-                        onClick = { },
+                        onClick = {
+                            claimProfile()
+                        },
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = MaterialTheme.colors.primary,
                             disabledBackgroundColor = MaterialTheme.colors.primary
-                        ),
-                        enabled = false
+                        )
                     ) {
                         Text(
                             text = "Claim Profile",
@@ -157,16 +168,6 @@ fun ProfileScreenContent(
                             style = MaterialTheme.typography.h6
                         )
                     }
-
-                    Text(
-                        modifier = Modifier
-                            .padding(
-                                top = 8.dp
-                            ),
-                        text = "(Coming Soon)",
-                        color = Color.Black,
-                        style = MaterialTheme.typography.h6
-                    )
                 }
             }
 
