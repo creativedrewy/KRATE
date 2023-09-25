@@ -177,7 +177,9 @@ private fun BoxScope.RealDeviceCamera(
                 if (photoData != null) {
 
                     val uiImage = UIImage(photoData)
-                    uiImage.toSkiaImage()?.let {
+                    val croppedImage = cropToSquare(uiImage)
+
+                    croppedImage.toSkiaImage()?.let {
                         photoTaken(it.toComposeImageBitmap())
                     }
                 }
