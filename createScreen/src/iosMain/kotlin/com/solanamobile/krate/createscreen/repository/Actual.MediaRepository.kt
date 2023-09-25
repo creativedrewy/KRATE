@@ -40,6 +40,6 @@ actual class MediaRepository {
     }
 
     actual fun imageBitmapToByteArray(bmp: ImageBitmap): ByteArray {
-        TODO("Final implementation required")
+        return Image.makeFromBitmap(bmp.asSkiaBitmap()).encodeToData()!!.bytes
     }
 }

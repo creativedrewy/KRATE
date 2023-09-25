@@ -3,18 +3,29 @@ package com.solanamobile.krate.camerascreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.interop.UIKitView
+import androidx.compose.ui.unit.dp
+import com.solanamobile.krate.extension.ui.navBarBottomPadding
 import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.AVFoundation.AVAuthorizationStatusAuthorized
@@ -33,13 +44,17 @@ import platform.AVFoundation.AVCaptureDeviceTypeBuiltInWideAngleCamera
 import platform.AVFoundation.AVCapturePhoto
 import platform.AVFoundation.AVCapturePhotoCaptureDelegateProtocol
 import platform.AVFoundation.AVCapturePhotoOutput
+import platform.AVFoundation.AVCapturePhotoSettings
 import platform.AVFoundation.AVCaptureSession
 import platform.AVFoundation.AVCaptureSessionPresetPhoto
 import platform.AVFoundation.AVCaptureVideoPreviewLayer
 import platform.AVFoundation.AVLayerVideoGravityResizeAspectFill
 import platform.AVFoundation.AVMediaTypeVideo
+import platform.AVFoundation.AVVideoCodecKey
+import platform.AVFoundation.AVVideoCodecTypeJPEG
 import platform.AVFoundation.authorizationStatusForMediaType
 import platform.AVFoundation.fileDataRepresentation
+import platform.AVFoundation.position
 import platform.AVFoundation.requestAccessForMediaType
 import platform.CoreGraphics.CGRect
 import platform.Foundation.NSError
@@ -122,7 +137,8 @@ actual fun CameraPreview(
 
         camera?.let {
             RealDeviceCamera(
-                camera = it
+                camera = it,
+                photoTaken = photoTaken
             )
         }
     }
@@ -132,6 +148,7 @@ actual fun CameraPreview(
 @Composable
 private fun BoxScope.RealDeviceCamera(
     camera: AVCaptureDevice,
+    photoTaken: (ImageBitmap) -> Unit
 ) {
     val capturePhotoOutput = remember { AVCapturePhotoOutput() }
     var capturePhotoStarted by remember { mutableStateOf(false) }
@@ -160,6 +177,9 @@ private fun BoxScope.RealDeviceCamera(
                 if (photoData != null) {
 
                     val uiImage = UIImage(photoData)
+                    uiImage.toSkiaImage()?.let {
+                        photoTaken(it.toComposeImageBitmap())
+                    }
                 }
 
                 capturePhotoStarted = false
@@ -188,18 +208,40 @@ private fun BoxScope.RealDeviceCamera(
         },
     )
 
-//capturePhotoStarted = true
-//val photoSettings = AVCapturePhotoSettings.photoSettingsWithFormat(
-//    format = mapOf(AVVideoCodecKey to AVVideoCodecTypeJPEG)
-//)
-//
-//if (camera.position == AVCaptureDevicePositionFront) {
-//    capturePhotoOutput.connectionWithMediaType(AVMediaTypeVideo)?.automaticallyAdjustsVideoMirroring = false
-//    capturePhotoOutput.connectionWithMediaType(AVMediaTypeVideo)?.videoMirrored = true
-//}
-//
-//capturePhotoOutput.capturePhotoWithSettings(
-//    settings = photoSettings,
-//    delegate = photoCaptureDelegate
-//)
+    Button(
+        modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .padding(
+                bottom = 16.dp
+            )
+            .navBarBottomPadding()
+            .size(84.dp),
+        shape = CircleShape,
+        contentPadding = PaddingValues(4.dp),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = MaterialTheme.colors.primary,
+            contentColor = Color.White
+        ),
+        onClick = {
+            capturePhotoStarted = true
+            val photoSettings = AVCapturePhotoSettings.photoSettingsWithFormat(
+                format = mapOf(AVVideoCodecKey to AVVideoCodecTypeJPEG)
+            )
+
+            if (camera.position == AVCaptureDevicePositionFront) {
+                capturePhotoOutput.connectionWithMediaType(AVMediaTypeVideo)?.automaticallyAdjustsVideoMirroring = false
+                capturePhotoOutput.connectionWithMediaType(AVMediaTypeVideo)?.videoMirrored = true
+            }
+
+            capturePhotoOutput.capturePhotoWithSettings(
+                settings = photoSettings,
+                delegate = photoCaptureDelegate
+            )
+        }
+    ) {
+        Text(
+            text = "START",
+            style = MaterialTheme.typography.h6
+        )
+    }
 }
