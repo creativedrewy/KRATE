@@ -1,5 +1,6 @@
 package com.solanamobile.krate.camerascreen
 
+import co.touchlab.kermit.Logger
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.get
 import org.jetbrains.skia.ColorAlphaType
@@ -59,15 +60,18 @@ import platform.UIKit.UIImage
 
 @OptIn(ExperimentalForeignApi::class)
 internal fun cropToSquare(uiImage: UIImage): UIImage {
-    val imageRef = CGImageCreateCopyWithColorSpace(uiImage.CGImage, CGColorSpaceCreateDeviceRGB())
+    val cgImage = uiImage.CGImage!!
 
-    val width = CGImageGetWidth(imageRef).toDouble()
-    val height = CGImageGetHeight(imageRef).toDouble()
+    val width = CGImageGetWidth(cgImage).toDouble()
+    val height = CGImageGetHeight(cgImage).toDouble()
 
-    val rect = CGRectMake(0.0, (height- width) / 2, width, width)
-    val croppedImage = CGImageCreateWithImageInRect(imageRef, rect)
+    Logger.v { "::: Your dimensions: $width, $height" }
 
-    val img = UIImage(croppedImage)
+    //val rect = CGRectMake(0.0, (height - width) / 2, width, width)
+    val rect = CGRectMake((width - height) / 2, 0.0, height, height)
+    val croppedImage = CGImageCreateWithImageInRect(cgImage, rect)
+
+    val img = UIImage.imageWithCGImage(croppedImage)
     return img
 }
 

@@ -1,5 +1,6 @@
 package com.solanamobile.krate.camerascreen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -135,11 +136,26 @@ actual fun CameraPreview(
             ).devices.firstOrNull() as? AVCaptureDevice
         }
 
-        camera?.let {
-            RealDeviceCamera(
-                camera = it,
-                photoTaken = photoTaken
-            )
+        var img = remember { mutableStateOf<ImageBitmap?>(null) }
+
+        if (img.value == null) {
+            camera?.let {
+                RealDeviceCamera(
+                    camera = it,
+                    photoTaken = {
+                        img.value = it
+                    }
+                )
+            }
+        } else {
+            img.value?.let {
+                Image(
+                    modifier = Modifier
+                        .align(Alignment.Center),
+                    bitmap = it,
+                    contentDescription = null
+                )
+            }
         }
     }
 }
