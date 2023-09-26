@@ -1,8 +1,10 @@
 package com.solanamobile.krate.camerascreen
 
 import co.touchlab.kermit.Logger
+import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.get
+import kotlinx.cinterop.useContents
 import org.jetbrains.skia.ColorAlphaType
 import org.jetbrains.skia.ColorType
 import org.jetbrains.skia.Image
@@ -11,6 +13,8 @@ import platform.CoreFoundation.CFDataGetBytePtr
 import platform.CoreFoundation.CFDataGetLength
 import platform.CoreFoundation.CFRelease
 import platform.CoreGraphics.CGColorSpaceCreateDeviceRGB
+import platform.CoreGraphics.CGContextRotateCTM
+import platform.CoreGraphics.CGContextTranslateCTM
 import platform.CoreGraphics.CGDataProviderCopyData
 import platform.CoreGraphics.CGImageAlphaInfo
 import platform.CoreGraphics.CGImageCreateCopyWithColorSpace
@@ -21,7 +25,14 @@ import platform.CoreGraphics.CGImageGetDataProvider
 import platform.CoreGraphics.CGImageGetHeight
 import platform.CoreGraphics.CGImageGetWidth
 import platform.CoreGraphics.CGRectMake
+import platform.CoreGraphics.CGSize
+import platform.CoreGraphics.CGSizeMake
+import platform.UIKit.UIGraphicsBeginImageContextWithOptions
+import platform.UIKit.UIGraphicsEndImageContext
+import platform.UIKit.UIGraphicsGetCurrentContext
+import platform.UIKit.UIGraphicsGetImageFromCurrentImageContext
 import platform.UIKit.UIImage
+import kotlin.math.PI
 
 //import UIKit
 //
@@ -65,14 +76,76 @@ internal fun cropToSquare(uiImage: UIImage): UIImage {
     val width = CGImageGetWidth(cgImage).toDouble()
     val height = CGImageGetHeight(cgImage).toDouble()
 
-    Logger.v { "::: Your dimensions: $width, $height" }
+//    UIGraphicsBeginImageContext(src.size);
+//    CGContextRef context=(UIGraphicsGetCurrentContext());
+//
+//    if (orientation == UIImageOrientationRight) {
+//        CGContextRotateCTM (context, 90/180*M_PI) ;
+//    } else if (orientation == UIImageOrientationLeft) {
+//        CGContextRotateCTM (context, -90/180*M_PI);
+//    } else if (orientation == UIImageOrientationDown) {
+//        // NOTHING
+//    } else if (orientation == UIImageOrientationUp) {
+//        CGContextRotateCTM (context, 90/180*M_PI);
+//    }
+//
+//    [src drawAtPoint:CGPointMake(0, 0)];
+//    UIImage *img=UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//    return img;
 
-    //val rect = CGRectMake(0.0, (height - width) / 2, width, width)
-    val rect = CGRectMake((width - height) / 2, 0.0, height, height)
-    val croppedImage = CGImageCreateWithImageInRect(cgImage, rect)
+    val rotatedImg = if (width > height) {
+        UIGraphicsBeginImageContextWithOptions(uiImage.size, false, uiImage.scale)
+        val gfxContext = UIGraphicsGetCurrentContext()
+
+        CGContextTranslateCTM(gfxContext, width / 2, height / 2)
+        CGContextRotateCTM(gfxContext, PI / 2)
+        CGContextTranslateCTM(gfxContext, -width / 2, -height / 2)
+
+        val rect = CGRectMake(0.0, 0.0, width, height)
+        uiImage.drawInRect(rect)
+
+        val rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        rotatedImage!!.CGImage
+    } else {
+        throw Exception("Invalid image dimensions")
+    }
+
+    val rotW = CGImageGetWidth(rotatedImg).toDouble()
+    val rotH = CGImageGetHeight(rotatedImg).toDouble()
+
+    Logger.v { "::: Your dimensions: $rotW, $rotH" }
+
+    val rect = CGRectMake((rotW - rotH) / 2, 0.0, rotH, rotH)
+    val croppedImage = CGImageCreateWithImageInRect(rotatedImg, rect)
 
     val img = UIImage.imageWithCGImage(croppedImage)
     return img
+}
+
+@OptIn(ExperimentalForeignApi::class)
+private fun UIImage.resize(targetSize: CValue<CGSize>): UIImage {
+    val currentSize = this.size
+
+    val widthRatio = targetSize.useContents { width } / currentSize.useContents { width }
+    val heightRatio = targetSize.useContents { height } / currentSize.useContents { height }
+
+    val newSize: CValue<CGSize> = if (widthRatio > heightRatio) {
+        CGSizeMake(currentSize.useContents { width } * heightRatio, currentSize.useContents { height } * heightRatio)
+    } else {
+        CGSizeMake(currentSize.useContents { width } * widthRatio, currentSize.useContents { height } * widthRatio)
+    }
+
+    val newRect = CGRectMake(0.0, 0.0, newSize.useContents { width }, newSize.useContents { height })
+
+    UIGraphicsBeginImageContextWithOptions(size = newSize, opaque = false, scale = 1.0)
+    this.drawInRect(newRect)
+    val newImage = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+
+    return newImage!!
 }
 
 @OptIn(ExperimentalForeignApi::class)

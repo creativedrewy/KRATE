@@ -142,8 +142,8 @@ actual fun CameraPreview(
             camera?.let {
                 RealDeviceCamera(
                     camera = it,
-                    photoTaken = {
-                        img.value = it
+                    photoTaken = { bmp ->
+                        img.value = bmp
                     }
                 )
             }
