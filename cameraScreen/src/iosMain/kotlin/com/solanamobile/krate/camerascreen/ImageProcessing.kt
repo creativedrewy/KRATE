@@ -12,15 +12,17 @@ import org.jetbrains.skia.ImageInfo
 import platform.CoreFoundation.CFDataGetBytePtr
 import platform.CoreFoundation.CFDataGetLength
 import platform.CoreFoundation.CFRelease
+import platform.CoreGraphics.CGBitmapContextCreate
+import platform.CoreGraphics.CGBitmapContextCreateImage
 import platform.CoreGraphics.CGColorSpaceCreateDeviceRGB
-import platform.CoreGraphics.CGContextRotateCTM
-import platform.CoreGraphics.CGContextTranslateCTM
+import platform.CoreGraphics.CGContextDrawImage
 import platform.CoreGraphics.CGDataProviderCopyData
 import platform.CoreGraphics.CGImageAlphaInfo
 import platform.CoreGraphics.CGImageCreateCopyWithColorSpace
 import platform.CoreGraphics.CGImageCreateWithImageInRect
 import platform.CoreGraphics.CGImageGetAlphaInfo
 import platform.CoreGraphics.CGImageGetBytesPerRow
+import platform.CoreGraphics.CGImageGetColorSpace
 import platform.CoreGraphics.CGImageGetDataProvider
 import platform.CoreGraphics.CGImageGetHeight
 import platform.CoreGraphics.CGImageGetWidth
@@ -29,10 +31,8 @@ import platform.CoreGraphics.CGSize
 import platform.CoreGraphics.CGSizeMake
 import platform.UIKit.UIGraphicsBeginImageContextWithOptions
 import platform.UIKit.UIGraphicsEndImageContext
-import platform.UIKit.UIGraphicsGetCurrentContext
 import platform.UIKit.UIGraphicsGetImageFromCurrentImageContext
 import platform.UIKit.UIImage
-import kotlin.math.PI
 
 //import UIKit
 //
@@ -69,6 +69,12 @@ import kotlin.math.PI
 //    // Close the image or do any cleanup needed
 //}
 
+val Int.uL
+    get() = this.toULong()
+
+val Double.uL
+    get() = this.toULong()
+
 @OptIn(ExperimentalForeignApi::class)
 internal fun cropToSquare(uiImage: UIImage): UIImage {
     val cgImage = uiImage.CGImage!!
@@ -76,39 +82,51 @@ internal fun cropToSquare(uiImage: UIImage): UIImage {
     val width = CGImageGetWidth(cgImage).toDouble()
     val height = CGImageGetHeight(cgImage).toDouble()
 
-//    UIGraphicsBeginImageContext(src.size);
-//    CGContextRef context=(UIGraphicsGetCurrentContext());
-//
-//    if (orientation == UIImageOrientationRight) {
-//        CGContextRotateCTM (context, 90/180*M_PI) ;
-//    } else if (orientation == UIImageOrientationLeft) {
-//        CGContextRotateCTM (context, -90/180*M_PI);
-//    } else if (orientation == UIImageOrientationDown) {
-//        // NOTHING
-//    } else if (orientation == UIImageOrientationUp) {
-//        CGContextRotateCTM (context, 90/180*M_PI);
-//    }
-//
-//    [src drawAtPoint:CGPointMake(0, 0)];
-//    UIImage *img=UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-//    return img;
-
     val rotatedImg = if (width > height) {
-        UIGraphicsBeginImageContextWithOptions(uiImage.size, false, uiImage.scale)
-        val gfxContext = UIGraphicsGetCurrentContext()
 
-        CGContextTranslateCTM(gfxContext, width / 2, height / 2)
-        CGContextRotateCTM(gfxContext, PI / 2)
-        CGContextTranslateCTM(gfxContext, -width / 2, -height / 2)
+//        UIGraphicsBeginImageContext(uiImage.size)
+//        val ctx = UIGraphicsGetCurrentContext()
+//        CGContextSetFillColorSpace(ctx, CGColorSpaceCreateDeviceRGB())
+//
+//        CGContextRotateCTM(ctx, 90 / 180 * PI)
+//        uiImage.drawAtPoint(CGPointMake(0.0, 0.0))
+//
+//        val img = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//
+//        img!!.CGImage
 
-        val rect = CGRectMake(0.0, 0.0, width, height)
-        uiImage.drawInRect(rect)
+//// 1. Setup ctx
+//        CGColorSpaceRef colorSpace = CGImageGetColorSpace(sourceImage.CGImage);
+//        size_t width = CGImageGetWidth(sourceImage.CGImage);
+//        size_t height = CGImageGetHeight(sourceImage.CGImage);
+//        CGContextRef context = CGBitmapContextCreate(NULL, width, height, 8, 0, colorSpace, kCGImageAlphaPremultipliedFirst);
+//
+//// 2. Rotate the image
+//        CGContextTranslateCTM(context, width / 2, height / 2);
+//        CGContextRotateCTM(context, M_PI_2); // Rotate by 90 degrees
+//        CGContextTranslateCTM(context, -width / 2, -height / 2);
+//        CGContextDrawImage(context, CGRectMake(0, 0, width, height), sourceImage.CGImage);
+//
+//// 3. Create a new UIImage from the rotated image context
+//        CGImageRef rotatedImageRef = CGBitmapContextCreateImage(context);
+//        UIImage *rotatedImage = [UIImage imageWithCGImage:rotatedImageRef];
+//
+//// Clean up resources
+//        CGContextRelease(context);
+//        CGImageRelease(rotatedImageRef);
 
-        val rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
+        val colorSpace = CGImageGetColorSpace(cgImage)
+        val context = CGBitmapContextCreate(null, width.uL, height.uL, 8.uL, 0.uL, colorSpace, CGImageAlphaInfo.kCGImageAlphaPremultipliedLast.value)
 
-        rotatedImage!!.CGImage
+//        CGContextTranslateCTM(context, width / 2, height / 2);
+//        CGContextRotateCTM(context, PI / 2);
+//        CGContextTranslateCTM(context, -width / 2, -height / 2);
+        CGContextDrawImage(context, CGRectMake(0.0, 0.0, width, height), cgImage);
+
+        val rotatedImageRef = CGBitmapContextCreateImage(context);
+        rotatedImageRef
+//        uiImage.CGImage
     } else {
         throw Exception("Invalid image dimensions")
     }
