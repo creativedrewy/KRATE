@@ -40,7 +40,7 @@ actual class ProfileAuthenticator() {
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
-                    .setServerClientId("ASERVERCLIENTID")
+                    .setServerClientId("702007604101-nl1ppdsskb8j8uk6rgrveg239shd8dt6.apps.googleusercontent.com")
                     .setFilterByAuthorizedAccounts(false)
                     .build())
             .setAutoSelectEnabled(true)
@@ -51,8 +51,6 @@ actual class ProfileAuthenticator() {
         oneTapClient.beginSignIn(signInRequest)
             .addOnSuccessListener { result ->
                 Helper.activity!!.startIntentSenderForResult(result.pendingIntent.intentSender, 2, null, 0, 0, 0, null)
-
-                Log.d("Andrew", "Login attempt successful")
             }
             .addOnFailureListener { e ->
                 Log.e("Andrew", e.message, e)

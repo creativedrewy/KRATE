@@ -2,6 +2,8 @@ plugins {
     kotlin("multiplatform")
     id("com.android.application")
     id("org.jetbrains.compose")
+
+    id("com.google.gms.google-services")
 }
 
 kotlin {
@@ -41,6 +43,10 @@ android {
     dependencies {
         implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
         implementation("androidx.compose.foundation:foundation:1.3.1")
+
+        implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
+        implementation("com.google.firebase:firebase-auth-ktx")
+        implementation("com.google.android.gms:play-services-auth:20.7.0")
 
         implementation(libs.kotlin.reflect)
         implementation(libs.koject.android.core)

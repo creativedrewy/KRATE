@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "536991134647",
+    "project_id": "krate-2628f",
+    "storage_bucket": "krate-2628f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536991134647:android:522c5deabb8ccfd45dee32",
+        "android_client_info": {
+          "package_name": "com.solanamobile.krate.KrateApplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "536991134647-b5gp50n7brrvlr0qmt4k3ccg27fp7jtr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.solanamobile.krate.KrateApplication",
+            "certificate_hash": "1884d327bcc92b5b3966ad1581513e10f3cd0ab4"
+          }
+        },
+        {
+          "client_id": "536991134647-jm9g88hniq5rcaej1d6heip04umh2ggg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPx2dVJGrauXW46O5izdbeQJxxe0U8c0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "536991134647-jkuk51mn5poj59oi293jl3c62p5n0otd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
