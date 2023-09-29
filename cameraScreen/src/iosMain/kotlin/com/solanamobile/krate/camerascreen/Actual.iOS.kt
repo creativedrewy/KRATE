@@ -151,7 +151,8 @@ actual fun CameraPreview(
             img.value?.let {
                 Image(
                     modifier = Modifier
-                        .align(Alignment.Center),
+                        .align(Alignment.Center)
+                        .background(Color.Red),
                     bitmap = it,
                     contentDescription = null
                 )

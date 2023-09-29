@@ -16,6 +16,8 @@ import platform.CoreGraphics.CGBitmapContextCreate
 import platform.CoreGraphics.CGBitmapContextCreateImage
 import platform.CoreGraphics.CGColorSpaceCreateDeviceRGB
 import platform.CoreGraphics.CGContextDrawImage
+import platform.CoreGraphics.CGContextRotateCTM
+import platform.CoreGraphics.CGContextTranslateCTM
 import platform.CoreGraphics.CGDataProviderCopyData
 import platform.CoreGraphics.CGImageAlphaInfo
 import platform.CoreGraphics.CGImageCreateCopyWithColorSpace
@@ -33,6 +35,8 @@ import platform.UIKit.UIGraphicsBeginImageContextWithOptions
 import platform.UIKit.UIGraphicsEndImageContext
 import platform.UIKit.UIGraphicsGetImageFromCurrentImageContext
 import platform.UIKit.UIImage
+import platform.UIKit.UIImageOrientation
+import kotlin.math.PI
 
 //import UIKit
 //
@@ -77,6 +81,20 @@ val Double.uL
 
 @OptIn(ExperimentalForeignApi::class)
 internal fun cropToSquare(uiImage: UIImage): UIImage {
+//    image.imageOrientation == UIImageOrientation.UIImageOrientationUp
+
+    when(uiImage.imageOrientation) {
+        UIImageOrientation.UIImageOrientationUp -> Logger.v { "::: Image orientation up" }
+        UIImageOrientation.UIImageOrientationUpMirrored -> Logger.v { "::: Image orientation up mirrored" }
+        UIImageOrientation.UIImageOrientationDown -> Logger.v { "::: Image orientation down" }
+        UIImageOrientation.UIImageOrientationDownMirrored -> Logger.v { "::: Image orientation down" }
+        UIImageOrientation.UIImageOrientationRight -> Logger.v { "::: Image orientation right" }
+        UIImageOrientation.UIImageOrientationRightMirrored -> Logger.v { "::: Image orientation right mirrored" }
+        UIImageOrientation.UIImageOrientationLeft -> Logger.v { "::: Image orientation left" }
+        UIImageOrientation.UIImageOrientationLeftMirrored -> Logger.v { "::: Image orientation left mirrored" }
+        else -> Logger.v { "::: THIS MAKES NO SENSE" }
+    }
+
     val cgImage = uiImage.CGImage!!
 
     val width = CGImageGetWidth(cgImage).toDouble()
@@ -88,7 +106,7 @@ internal fun cropToSquare(uiImage: UIImage): UIImage {
 //        val ctx = UIGraphicsGetCurrentContext()
 //        CGContextSetFillColorSpace(ctx, CGColorSpaceCreateDeviceRGB())
 //
-//        CGContextRotateCTM(ctx, 90 / 180 * PI)
+//        CGContextRotateCTM(ctx, -PI / 2)
 //        uiImage.drawAtPoint(CGPointMake(0.0, 0.0))
 //
 //        val img = UIGraphicsGetImageFromCurrentImageContext()
@@ -96,32 +114,12 @@ internal fun cropToSquare(uiImage: UIImage): UIImage {
 //
 //        img!!.CGImage
 
-//// 1. Setup ctx
-//        CGColorSpaceRef colorSpace = CGImageGetColorSpace(sourceImage.CGImage);
-//        size_t width = CGImageGetWidth(sourceImage.CGImage);
-//        size_t height = CGImageGetHeight(sourceImage.CGImage);
-//        CGContextRef context = CGBitmapContextCreate(NULL, width, height, 8, 0, colorSpace, kCGImageAlphaPremultipliedFirst);
-//
-//// 2. Rotate the image
-//        CGContextTranslateCTM(context, width / 2, height / 2);
-//        CGContextRotateCTM(context, M_PI_2); // Rotate by 90 degrees
-//        CGContextTranslateCTM(context, -width / 2, -height / 2);
-//        CGContextDrawImage(context, CGRectMake(0, 0, width, height), sourceImage.CGImage);
-//
-//// 3. Create a new UIImage from the rotated image context
-//        CGImageRef rotatedImageRef = CGBitmapContextCreateImage(context);
-//        UIImage *rotatedImage = [UIImage imageWithCGImage:rotatedImageRef];
-//
-//// Clean up resources
-//        CGContextRelease(context);
-//        CGImageRelease(rotatedImageRef);
-
         val colorSpace = CGImageGetColorSpace(cgImage)
         val context = CGBitmapContextCreate(null, width.uL, height.uL, 8.uL, 0.uL, colorSpace, CGImageAlphaInfo.kCGImageAlphaPremultipliedLast.value)
 
-//        CGContextTranslateCTM(context, width / 2, height / 2);
-//        CGContextRotateCTM(context, PI / 2);
-//        CGContextTranslateCTM(context, -width / 2, -height / 2);
+        CGContextTranslateCTM(context, width / 2, height / 2);
+        CGContextRotateCTM(context, -PI / 2);
+        CGContextTranslateCTM(context, -width / 2, -height / 2);
         CGContextDrawImage(context, CGRectMake(0.0, 0.0, width, height), cgImage);
 
         val rotatedImageRef = CGBitmapContextCreateImage(context);
