@@ -1,6 +1,5 @@
 package com.solanamobile.krate.camerascreen
 
-import co.touchlab.kermit.Logger
 import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.get
@@ -35,41 +34,6 @@ import platform.CoreGraphics.CGSizeMake
 import platform.UIKit.UIImage
 import kotlin.math.PI
 
-//import UIKit
-//
-//// Assuming 'image' is a CVPixelBuffer
-//let byteArray = Array(UnsafeBufferPointer(start: CVPixelBufferGetBaseAddress(image), count: CVPixelBufferGetDataSize(image)))
-//let srcPhoto = UIImage(data: Data(byteArray))
-//
-//if let srcPhoto = srcPhoto {
-//    let portraitBmp: UIImage
-//    if srcPhoto.size.width > srcPhoto.size.height {
-//        let downScaleFactor = screenHeight / srcPhoto.size.width // Need to use width as photo is un-rotated
-//
-//        let rotMat = CGAffineTransform(rotationAngle: .pi / 2)
-//        let rot = srcPhoto.transformed(by: rotMat)
-//        portraitBmp = rot.scaleBy(x: downScaleFactor, y: downScaleFactor)
-//    } else {
-//        fatalError("App does not currently handle cameras with hardware configured as portrait")
-//    }
-//
-//    let w = Int(portraitBmp.size.width)
-//    let h = Int(portraitBmp.size.height)
-//    let trimmedBmp: UIImage
-//    if w > screenWidth {
-//        trimmedBmp = portraitBmp.crop(rect: CGRect(x: (CGFloat(w) - screenWidth) / 2, y: 0, width: CGFloat(screenWidth), height: CGFloat(h)))!
-//    } else {
-//        trimmedBmp = portraitBmp
-//    }
-//
-//    let squareImg = trimmedBmp.crop(rect: CGRect(x: 0, y: (CGFloat(trimmedBmp.size.height) - CGFloat(trimmedBmp.size.width)) / 2, width: CGFloat(trimmedBmp.size.width), height: CGFloat(trimmedBmp.size.width)))!
-//
-//    // Assuming 'image' here represents the result image view
-//    image.image = squareImg
-//
-//    // Close the image or do any cleanup needed
-//}
-
 val Int.uL
     get() = this.toULong()
 
@@ -77,7 +41,7 @@ val Double.uL
     get() = this.toULong()
 
 @OptIn(ExperimentalForeignApi::class)
-internal fun cropToSquare(uiImage: UIImage): UIImage {
+internal fun rotateUprightAndSquareCrop(uiImage: UIImage): UIImage {
     val cgImage = uiImage.CGImage!!
 
     val width = CGImageGetWidth(cgImage).toDouble()
@@ -95,19 +59,16 @@ internal fun cropToSquare(uiImage: UIImage): UIImage {
         val rotatedImageRef = CGBitmapContextCreateImage(context);
         rotatedImageRef
     } else {
-        throw Exception("Invalid image dimensions")
+        throw Exception("Invalid image aspect ratio")
     }
 
     val rotW = CGImageGetWidth(rotatedImg).toDouble()
     val rotH = CGImageGetHeight(rotatedImg).toDouble()
 
-    Logger.v { "::: Your dimensions: $rotW, $rotH" }
-
     val rect = CGRectMake((rotW - rotH) / 2, 0.0, rotH, rotH)
     val croppedImage = CGImageCreateWithImageInRect(rotatedImg, rect)
 
-    val img = UIImage.imageWithCGImage(croppedImage)
-    return img
+    return UIImage.imageWithCGImage(croppedImage)
 }
 
 @OptIn(ExperimentalForeignApi::class)

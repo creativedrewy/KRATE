@@ -5,7 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -136,25 +138,12 @@ actual fun CameraPreview(
             ).devices.firstOrNull() as? AVCaptureDevice
         }
 
-        var img = remember { mutableStateOf<ImageBitmap?>(null) }
-
-        if (img.value == null) {
-            camera?.let {
-                RealDeviceCamera(
-                    camera = it,
-                    photoTaken = photoTaken
-                )
-            }
-        } else {
-            img.value?.let {
-                Image(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .background(Color.Red),
-                    bitmap = it,
-                    contentDescription = null
-                )
-            }
+        camera?.let {
+            RealDeviceCamera(
+                camera = it,
+                maskImage = maskImage,
+                photoTaken = photoTaken
+            )
         }
     }
 }
@@ -163,6 +152,7 @@ actual fun CameraPreview(
 @Composable
 private fun BoxScope.RealDeviceCamera(
     camera: AVCaptureDevice,
+    maskImage: ImageBitmap,
     photoTaken: (ImageBitmap) -> Unit
 ) {
     val capturePhotoOutput = remember { AVCapturePhotoOutput() }
@@ -192,7 +182,7 @@ private fun BoxScope.RealDeviceCamera(
                 if (photoData != null) {
 
                     val uiImage = UIImage(photoData)
-                    val croppedImage = cropToSquare(uiImage)
+                    val croppedImage = rotateUprightAndSquareCrop(uiImage)
 
                     croppedImage.resize(512.0, 512.0).toSkiaImage()?.let {
                         photoTaken(it.toComposeImageBitmap())
@@ -223,6 +213,15 @@ private fun BoxScope.RealDeviceCamera(
             cameraPreviewLayer.setFrame(rect)
             CATransaction.commit()
         },
+    )
+
+    Image(
+        modifier = Modifier
+            .align(Alignment.Center)
+            .fillMaxWidth()
+            .aspectRatio(1f),
+        bitmap = maskImage,
+        contentDescription = null
     )
 
     Button(
