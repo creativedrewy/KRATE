@@ -17,6 +17,7 @@ import platform.CoreGraphics.CGBitmapContextCreateImage
 import platform.CoreGraphics.CGColorSpaceCreateDeviceRGB
 import platform.CoreGraphics.CGContextDrawImage
 import platform.CoreGraphics.CGContextRotateCTM
+import platform.CoreGraphics.CGContextScaleCTM
 import platform.CoreGraphics.CGContextTranslateCTM
 import platform.CoreGraphics.CGDataProviderCopyData
 import platform.CoreGraphics.CGImageAlphaInfo
@@ -31,11 +32,7 @@ import platform.CoreGraphics.CGImageGetWidth
 import platform.CoreGraphics.CGRectMake
 import platform.CoreGraphics.CGSize
 import platform.CoreGraphics.CGSizeMake
-import platform.UIKit.UIGraphicsBeginImageContextWithOptions
-import platform.UIKit.UIGraphicsEndImageContext
-import platform.UIKit.UIGraphicsGetImageFromCurrentImageContext
 import platform.UIKit.UIImage
-import platform.UIKit.UIImageOrientation
 import kotlin.math.PI
 
 //import UIKit
@@ -81,39 +78,12 @@ val Double.uL
 
 @OptIn(ExperimentalForeignApi::class)
 internal fun cropToSquare(uiImage: UIImage): UIImage {
-//    image.imageOrientation == UIImageOrientation.UIImageOrientationUp
-
-    when(uiImage.imageOrientation) {
-        UIImageOrientation.UIImageOrientationUp -> Logger.v { "::: Image orientation up" }
-        UIImageOrientation.UIImageOrientationUpMirrored -> Logger.v { "::: Image orientation up mirrored" }
-        UIImageOrientation.UIImageOrientationDown -> Logger.v { "::: Image orientation down" }
-        UIImageOrientation.UIImageOrientationDownMirrored -> Logger.v { "::: Image orientation down" }
-        UIImageOrientation.UIImageOrientationRight -> Logger.v { "::: Image orientation right" }
-        UIImageOrientation.UIImageOrientationRightMirrored -> Logger.v { "::: Image orientation right mirrored" }
-        UIImageOrientation.UIImageOrientationLeft -> Logger.v { "::: Image orientation left" }
-        UIImageOrientation.UIImageOrientationLeftMirrored -> Logger.v { "::: Image orientation left mirrored" }
-        else -> Logger.v { "::: THIS MAKES NO SENSE" }
-    }
-
     val cgImage = uiImage.CGImage!!
 
     val width = CGImageGetWidth(cgImage).toDouble()
     val height = CGImageGetHeight(cgImage).toDouble()
 
     val rotatedImg = if (width > height) {
-
-//        UIGraphicsBeginImageContext(uiImage.size)
-//        val ctx = UIGraphicsGetCurrentContext()
-//        CGContextSetFillColorSpace(ctx, CGColorSpaceCreateDeviceRGB())
-//
-//        CGContextRotateCTM(ctx, -PI / 2)
-//        uiImage.drawAtPoint(CGPointMake(0.0, 0.0))
-//
-//        val img = UIGraphicsGetImageFromCurrentImageContext()
-//        UIGraphicsEndImageContext()
-//
-//        img!!.CGImage
-
         val colorSpace = CGImageGetColorSpace(cgImage)
         val context = CGBitmapContextCreate(null, width.uL, height.uL, 8.uL, 0.uL, colorSpace, CGImageAlphaInfo.kCGImageAlphaPremultipliedLast.value)
 
@@ -124,7 +94,6 @@ internal fun cropToSquare(uiImage: UIImage): UIImage {
 
         val rotatedImageRef = CGBitmapContextCreateImage(context);
         rotatedImageRef
-//        uiImage.CGImage
     } else {
         throw Exception("Invalid image dimensions")
     }
@@ -142,7 +111,8 @@ internal fun cropToSquare(uiImage: UIImage): UIImage {
 }
 
 @OptIn(ExperimentalForeignApi::class)
-private fun UIImage.resize(targetSize: CValue<CGSize>): UIImage {
+internal fun UIImage.resize(width: Double, height: Double): UIImage {
+    val targetSize = CGSizeMake(width, height)
     val currentSize = this.size
 
     val widthRatio = targetSize.useContents { width } / currentSize.useContents { width }
@@ -154,14 +124,17 @@ private fun UIImage.resize(targetSize: CValue<CGSize>): UIImage {
         CGSizeMake(currentSize.useContents { width } * widthRatio, currentSize.useContents { height } * widthRatio)
     }
 
-    val newRect = CGRectMake(0.0, 0.0, newSize.useContents { width }, newSize.useContents { height })
+    val newW = newSize.useContents { width }
+    val newH = newSize.useContents { height }
 
-    UIGraphicsBeginImageContextWithOptions(size = newSize, opaque = false, scale = 1.0)
-    this.drawInRect(newRect)
-    val newImage = UIGraphicsGetImageFromCurrentImageContext()
-    UIGraphicsEndImageContext()
+    val colorSpace = CGImageGetColorSpace(this.CGImage!!)
+    val context = CGBitmapContextCreate(null, newW.uL, newH.uL, 8.uL, 0.uL, colorSpace, CGImageAlphaInfo.kCGImageAlphaPremultipliedLast.value)
 
-    return newImage!!
+    CGContextScaleCTM(context, widthRatio, heightRatio)
+    CGContextDrawImage(context, CGRectMake(0.0, 0.0, newW, newH), this.CGImage!!);
+
+    val scaledImg = CGBitmapContextCreateImage(context);
+    return UIImage.imageWithCGImage(scaledImg)
 }
 
 @OptIn(ExperimentalForeignApi::class)
