@@ -1,7 +1,6 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    id("org.jetbrains.compose")
     id("kotlinx-serialization")
 
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"

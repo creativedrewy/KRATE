@@ -1,0 +1,6 @@
+
+CREATE TABLE LoggedInUser(
+    id INTEGER PRIMARY KEY NOT NULL,
+    displayName TEXT NOT NULL,
+    imageUrl TEXT NOT NULL
+);

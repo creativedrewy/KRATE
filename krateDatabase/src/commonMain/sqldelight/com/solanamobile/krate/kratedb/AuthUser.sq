@@ -1,0 +1,8 @@
+
+selectAll:
+SELECT *
+FROM LoggedInUser;
+
+insert:
+INSERT INTO LoggedInUser(id, displayName, imageUrl)
+VALUES(?, ?, ?);
