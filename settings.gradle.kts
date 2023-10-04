@@ -3,17 +3,18 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "JungleGym"
 
 include(":androidApp")
-include(":coroutines")
-include(":profileScreen")
-include(":shared")
-include(":startScreen")
 include(":cameraScreen")
 include(":chooserScreen")
+include(":ComposePlaceholder")
+include(":coroutines")
 include(":createScreen")
 include(":extension")
-include(":underdogApi")
-include(":ComposePlaceholder")
+include(":krateDatabase")
 include(":localStorage")
+include(":profileScreen")
+include(":underdogApi")
+include(":shared")
+include(":startScreen")
 
 pluginManagement {
     repositories {
