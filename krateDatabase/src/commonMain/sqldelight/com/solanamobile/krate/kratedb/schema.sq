@@ -1,6 +1,7 @@
 
 CREATE TABLE LoggedInUser(
-    id INTEGER PRIMARY KEY NOT NULL,
+    token TEXT PRIMARY KEY NOT NULL,
+    id TEXT NOT NULL,
     displayName TEXT NOT NULL,
     imageUrl TEXT NOT NULL
 );
