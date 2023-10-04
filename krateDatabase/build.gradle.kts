@@ -1,24 +1,12 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("org.jetbrains.compose")
     id("kotlinx-serialization")
 
-    id("com.github.gmazzo.buildconfig")
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
-}
 
-buildConfig {
-    val getImgApiKey: String = gradleLocalProperties(rootDir).getProperty("getImgApiKey")
-    val underdogApiKey: String = gradleLocalProperties(rootDir).getProperty("underdogApiKey")
-
-    className("ApiKeys")
-    packageName("com.solanamobile.krate.extensions")
-
-    buildConfigField("String", "GETIMG_API_KEY", "\"$getImgApiKey\"")
-    buildConfigField("String", "NFT_API_KEY", "\"$underdogApiKey\"")
+    id("app.cash.sqldelight") version "2.0.0"
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -44,11 +32,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.kotlinx.coroutines.core)
-
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-
                 implementation(libs.koject.core)
                 implementation(libs.koject.compose.core)
 
@@ -59,8 +42,7 @@ kotlin {
         val androidMain by getting {
             dependsOn(commonMain)
             dependencies {
-                api(libs.activity.compose)
-                api(libs.core.ktx)
+                implementation("app.cash.sqldelight:android-driver:2.0.0")
             }
         }
 
@@ -72,6 +54,18 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+
+            dependencies {
+                implementation("app.cash.sqldelight:native-driver:2.0.0")
+            }
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("Database") {
+            packageName.set("com.solanamobile.krate.kratedb")
         }
     }
 }

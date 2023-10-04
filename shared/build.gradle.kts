@@ -45,6 +45,7 @@ kotlin {
                 implementation(projects.cameraScreen)
                 implementation(projects.profileScreen)
                 implementation(projects.startScreen)
+                implementation(projects.krateDatabase)
                 implementation(projects.extension)
                 api(projects.coroutines)
 
