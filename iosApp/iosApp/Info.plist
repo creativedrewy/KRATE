@@ -23,7 +23,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-    <string>This app uses camera for capturing photos</string>
+	<string>This app uses camera for capturing photos</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Add photos to library</string>
 	<key>NSPhotoLibraryUsageDescription</key>
