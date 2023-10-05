@@ -8,7 +8,8 @@ import com.solanamobile.krate.kratedb.repository.UserStorageRepository
 import com.solanamobile.krate.localstorage.UserAccountUseCase
 import com.solanamobile.krate.profilescreen.ProfileAuthenticator
 import com.underdogprotocol.api.UnderdogApiV2
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -23,6 +24,15 @@ sealed class ProfileViewState {
     ): ProfileViewState()
 }
 
+sealed class AuthViewState {
+    object NotLoggedIn: AuthViewState()
+
+    class LoggedIn(
+        val name: String,
+        val imageUrl: String
+    ): AuthViewState()
+}
+
 @Provides
 class ProfileScreenViewModel(
     private val acctUseCase: UserAccountUseCase,
@@ -32,27 +42,22 @@ class ProfileScreenViewModel(
 
     private val api = UnderdogApiV2(true)
 
+    val authState: Flow<AuthViewState> =
+        userStorageRepository.loggedInUser.map { user ->
+            user?.let {
+                AuthViewState.LoggedIn(
+                    name = it.displayName,
+                    imageUrl = it.imageUrl
+                )
+            } ?: AuthViewState.NotLoggedIn
+        }
+
     fun setup() {
         authenticator.init()
     }
 
     fun login() {
-//        authenticator.authenticate()
-//
-//        mutableState.update {
-//            (it as? ProfileViewState.Loaded)?.copy(
-//                isProfileClaimed = true
-//            ) ?: throw IllegalStateException("Shouldn't be possible to call this in invalid state")
-//        }
-
-        coroutineScope.launch {
-            mutableState.update {
-                ProfileViewState.Loaded(
-                    isProfileClaimed = userStorageRepository.loggedInUser.first() != null,
-                    images = listOf()
-                )
-            }
-        }
+        authenticator.authenticate()
     }
 
     fun loadMintedNfts() {

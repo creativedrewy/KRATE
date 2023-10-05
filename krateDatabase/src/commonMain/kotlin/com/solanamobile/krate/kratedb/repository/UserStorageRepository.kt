@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Provides
 class UserStorageRepository(
-    private val driverFactory: DriverFactory
+    driverFactory: DriverFactory
 ) {
 
     private val db: Database = Database(driverFactory.createDriver())
@@ -23,8 +23,13 @@ class UserStorageRepository(
             .asFlow()
             .mapToOneOrNull(Dispatchers.IO)
 
-    fun saveLoggedInUser() {
-
+    fun saveLoggedInUser(
+        token: String,
+        id: String,
+        displayName: String,
+        imageUrl: String,
+    ) {
+        db.authUserQueries.insert(token, id, displayName, imageUrl)
     }
 
     fun clearLoggedInUser() {
