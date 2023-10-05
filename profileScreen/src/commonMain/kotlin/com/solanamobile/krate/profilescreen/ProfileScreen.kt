@@ -64,7 +64,7 @@ object ProfileScreen: Screen {
     override fun Content() {
         val viewModel: ProfileScreenViewModel = getScreenModel()
         val nftState by viewModel.state.collectAsState()
-        val authState by viewModel.authState.collectAsState(AuthViewState.NotLoggedIn)
+        val authState by viewModel.authState.collectAsState()
 
         configureScreen(viewModel)
 

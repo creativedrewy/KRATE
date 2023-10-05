@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                     val idToken = credential.googleIdToken
 
                     Log.v("Andrew", "::: ${credential.displayName}")
-                    Log.v("Andrew", "::: ${credential.id}")
+                    Log.v("Andrew", "::: ${credential.id}") //This is user email
                     Log.v("Andrew", "::: ${credential.familyName}")
                     Log.v("Andrew", "::: ${credential.givenName}")
                     Log.v("Andrew", "::: ${credential.password}")

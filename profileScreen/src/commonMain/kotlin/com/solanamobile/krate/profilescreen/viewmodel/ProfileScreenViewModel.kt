@@ -9,8 +9,10 @@ import com.solanamobile.krate.kratedb.repository.UserStorageRepository
 import com.solanamobile.krate.localstorage.UserAccountUseCase
 import com.solanamobile.krate.profilescreen.ProfileAuthenticator
 import com.underdogprotocol.api.UnderdogApiV2
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -48,20 +50,24 @@ class ProfileScreenViewModel(
 
     private val api = UnderdogApiV2(true)
 
-    val authState: Flow<AuthViewState> =
+    val authState: StateFlow<AuthViewState> =
         userStorageRepository.loggedInUser
-            .map { user ->
-                Logger.v { "::: Your user: $user" }
+            .map { entries ->
+                Logger.v { "::: Your user: $entries" }
 
-                user?.let {
+                if (entries.isEmpty()) {
+                    AuthViewState.NotLoggedIn
+                } else {
+                    val user = entries.first()
                     Logger.v { "::: YOU ARE LOGGED IN AND STUFF" }
 
                     AuthViewState.LoggedIn(
-                        name = it.displayName,
-                        imageUrl = it.imageUrl
+                        name = user.displayName,
+                        imageUrl = user.imageUrl
                     )
-                } ?: AuthViewState.NotLoggedIn
+                }
             }
+            .stateIn(coroutineScope, SharingStarted.WhileSubscribed(5000), AuthViewState.NotLoggedIn)
 
     fun setup() {
         authenticator.init()

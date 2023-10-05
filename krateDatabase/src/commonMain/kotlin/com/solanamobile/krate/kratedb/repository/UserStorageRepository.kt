@@ -1,8 +1,9 @@
 package com.solanamobile.krate.kratedb.repository
 
 import app.cash.sqldelight.coroutines.asFlow
-import app.cash.sqldelight.coroutines.mapToOneOrNull
+import app.cash.sqldelight.coroutines.mapToList
 import com.moriatsushi.koject.Provides
+import com.moriatsushi.koject.Singleton
 import com.solanamobile.krate.kratedb.Database
 import com.solanamobile.krate.kratedb.DriverFactory
 import com.solanamobile.krate.kratedb.LoggedInUser
@@ -10,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 
+@Singleton
 @Provides
 class UserStorageRepository(
     driverFactory: DriverFactory
@@ -17,11 +19,11 @@ class UserStorageRepository(
 
     private val db: Database = Database(driverFactory.createDriver())
 
-    val loggedInUser: Flow<LoggedInUser?> =
+    val loggedInUser: Flow<List<LoggedInUser>> =
         db.authUserQueries
             .selectAll()
             .asFlow()
-            .mapToOneOrNull(Dispatchers.IO)
+            .mapToList(Dispatchers.IO)
 
     fun saveLoggedInUser(
         token: String,
