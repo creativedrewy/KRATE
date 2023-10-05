@@ -40,7 +40,7 @@ actual class ProfileAuthenticator() {
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
-                    .setServerClientId("702007604101-nl1ppdsskb8j8uk6rgrveg239shd8dt6.apps.googleusercontent.com")
+                    .setServerClientId("112725153547-ri9qm0lc17eui0q6l7tpgsk77j50jgh5.apps.googleusercontent.com")
                     .setFilterByAuthorizedAccounts(false)
                     .build())
             .setAutoSelectEnabled(true)

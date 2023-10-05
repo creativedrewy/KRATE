@@ -48,6 +48,7 @@ import com.seiko.imageloader.rememberImagePainter
 import com.solanamobile.krate.extension.getScreenModel
 import com.solanamobile.krate.extension.ui.ResourceImage
 import com.solanamobile.krate.extension.ui.statusBarTopPadding
+import com.solanamobile.krate.profilescreen.viewmodel.AuthViewState
 import com.solanamobile.krate.profilescreen.viewmodel.ProfileScreenViewModel
 import com.solanamobile.krate.profilescreen.viewmodel.ProfileViewState
 import com.solanamobile.placeholder.PlaceholderHighlight
@@ -62,7 +63,8 @@ object ProfileScreen: Screen {
     @Composable
     override fun Content() {
         val viewModel: ProfileScreenViewModel = getScreenModel()
-        val state by viewModel.state.collectAsState()
+        val nftState by viewModel.state.collectAsState()
+        val authState by viewModel.authState.collectAsState(AuthViewState.NotLoggedIn)
 
         configureScreen(viewModel)
 
@@ -72,7 +74,8 @@ object ProfileScreen: Screen {
         }
 
         ProfileScreenContent(
-            state = state,
+            nftState = nftState,
+            authViewState = authState,
             claimProfile = {
                 viewModel.login()
             }
@@ -84,7 +87,8 @@ object ProfileScreen: Screen {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProfileScreenContent(
-    state: ProfileViewState,
+    nftState: ProfileViewState,
+    authViewState: AuthViewState,
     claimProfile: () -> Unit
 ) {
     val navigator = LocalNavigator.currentOrThrow
@@ -149,7 +153,7 @@ fun ProfileScreenContent(
                         resourceName = "profile_top.png"
                     )
 
-                    if (state is ProfileViewState.Loaded && !state.isProfileClaimed) {
+                    if (authViewState is AuthViewState.NotLoggedIn) {
                         Button(
                             modifier = Modifier
                                 .padding(
@@ -162,21 +166,21 @@ fun ProfileScreenContent(
                                 backgroundColor = MaterialTheme.colors.primary,
                                 disabledBackgroundColor = MaterialTheme.colors.primary
                             ),
-                            enabled = state is ProfileViewState.Loaded
+                            enabled = nftState is ProfileViewState.Loaded
                         ) {
                             Text(
-                                text = "Claim Profile",
+                                text = "Login",
                                 color = Color(0xFF0D1F33),
                                 style = MaterialTheme.typography.h6
                             )
                         }
-                    } else if (state is ProfileViewState.Loaded && state.isProfileClaimed) {
+                    } else if (authViewState is AuthViewState.LoggedIn) {
                         Text(
                             modifier = Modifier
                                 .padding(
                                     top = 14.dp
                                 ),
-                            text = "Profile Claimed!",
+                            text = authViewState.name,
                             color = Color(0xFF0D1F33),
                             style = MaterialTheme.typography.h6
                         )
@@ -224,10 +228,10 @@ fun ProfileScreenContent(
                 state = pagerState,
                 verticalAlignment = Alignment.Top
             ) { _ ->
-                val images = if (state !is ProfileViewState.Loaded) {
+                val images = if (nftState !is ProfileViewState.Loaded) {
                     listOf("", "")
                 } else {
-                    state.images
+                    nftState.images
                 }
 
                 LazyVerticalGrid(
@@ -241,7 +245,7 @@ fun ProfileScreenContent(
                         items(images) { img ->
                             ProfileImageCard(
                                 imgPath = img,
-                                isLoading = state is ProfileViewState.Loading
+                                isLoading = nftState is ProfileViewState.Loading
                             )
                         }
                     }
