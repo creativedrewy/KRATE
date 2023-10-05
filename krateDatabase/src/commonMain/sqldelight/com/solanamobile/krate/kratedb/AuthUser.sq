@@ -6,3 +6,6 @@ FROM LoggedInUser;
 insert:
 INSERT INTO LoggedInUser(token, id, displayName, imageUrl)
 VALUES(?, ?, ?, ?);
+
+clear:
+DELETE FROM LoggedInUser;
