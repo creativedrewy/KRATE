@@ -35,6 +35,8 @@ kotlin {
                 implementation(libs.koject.compose.core)
 
                 implementation(libs.voyager.navigator)
+
+                implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
             }
         }
 
