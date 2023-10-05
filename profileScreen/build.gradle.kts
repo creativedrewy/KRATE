@@ -34,6 +34,7 @@ kotlin {
                 implementation(projects.underdogApi)
                 implementation(projects.extension)
                 api(projects.localStorage)
+                api(projects.krateDatabase)
 
                 implementation(libs.kotlinx.coroutines.core)
 

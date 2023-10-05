@@ -16,10 +16,14 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.moriatsushi.koject.lazyInject
+import com.solanamobile.krate.kratedb.repository.UserStorageRepository
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var oneTapClient: SignInClient
+
+    private val userStorageRepository: UserStorageRepository by lazyInject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +82,8 @@ class MainActivity : AppCompatActivity() {
                             val cred = GoogleAuthProvider.getCredential(idToken,null)
                             Log.d("Andrew", "::: Your Cred: ${cred.provider}")
                             Log.d("Andrew", "::: Your Cred: ${cred.signInMethod}")
+
+//                            userStorageRepository.
                         }
 
                         else -> {

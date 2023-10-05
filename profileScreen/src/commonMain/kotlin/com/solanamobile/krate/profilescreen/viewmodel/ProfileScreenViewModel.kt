@@ -4,9 +4,11 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.extensions.ApiKeys
+import com.solanamobile.krate.kratedb.repository.UserStorageRepository
 import com.solanamobile.krate.localstorage.UserAccountUseCase
 import com.solanamobile.krate.profilescreen.ProfileAuthenticator
 import com.underdogprotocol.api.UnderdogApiV2
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -24,6 +26,7 @@ sealed class ProfileViewState {
 @Provides
 class ProfileScreenViewModel(
     private val acctUseCase: UserAccountUseCase,
+    private val userStorageRepository: UserStorageRepository,
     val authenticator: ProfileAuthenticator
 ): StateScreenModel<ProfileViewState>(ProfileViewState.Default) {
 
@@ -34,12 +37,21 @@ class ProfileScreenViewModel(
     }
 
     fun login() {
-        authenticator.authenticate()
+//        authenticator.authenticate()
+//
+//        mutableState.update {
+//            (it as? ProfileViewState.Loaded)?.copy(
+//                isProfileClaimed = true
+//            ) ?: throw IllegalStateException("Shouldn't be possible to call this in invalid state")
+//        }
 
-        mutableState.update {
-            (it as? ProfileViewState.Loaded)?.copy(
-                isProfileClaimed = true
-            ) ?: throw IllegalStateException("Shouldn't be possible to call this in invalid state")
+        coroutineScope.launch {
+            mutableState.update {
+                ProfileViewState.Loaded(
+                    isProfileClaimed = userStorageRepository.loggedInUser.first() != null,
+                    images = listOf()
+                )
+            }
         }
     }
 

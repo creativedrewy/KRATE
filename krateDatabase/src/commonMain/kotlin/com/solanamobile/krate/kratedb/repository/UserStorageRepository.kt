@@ -1,7 +1,7 @@
 package com.solanamobile.krate.kratedb.repository
 
 import app.cash.sqldelight.coroutines.asFlow
-import app.cash.sqldelight.coroutines.mapToOne
+import app.cash.sqldelight.coroutines.mapToOneOrNull
 import com.moriatsushi.koject.Provides
 import com.solanamobile.krate.kratedb.Database
 import com.solanamobile.krate.kratedb.DriverFactory
@@ -17,11 +17,11 @@ class UserStorageRepository(
 
     private val db: Database = Database(driverFactory.createDriver())
 
-    val loggedInUser: Flow<LoggedInUser> =
+    val loggedInUser: Flow<LoggedInUser?> =
         db.authUserQueries
             .selectAll()
             .asFlow()
-            .mapToOne(Dispatchers.IO)
+            .mapToOneOrNull(Dispatchers.IO)
 
     fun saveLoggedInUser() {
 
